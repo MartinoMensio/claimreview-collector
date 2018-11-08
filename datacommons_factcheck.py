@@ -9,7 +9,7 @@ import itertools
 import utils
 
 subfolder_name = 'datacommons_factcheck'
-source_file_path = utils.location / subfolder_name / 'source' / 'fact_checks_20180930.txt'
+source_file_path = utils.data_location / subfolder_name / 'source' / 'fact_checks_20180930.txt'
 
 with open(source_file_path) as f:
     content = f.read()
@@ -34,7 +34,8 @@ extracted_claims_and_rev = [{
     'url': el['url']
 } for el in claims]
 
-#with open('exported.json', 'w') as f:
-#    json.dump(extracted_claims_and_rev, f, indent=2)
+with open('exported.json', 'w') as f:
+    json.dump(extracted_claims_and_rev, f, indent=2)
+utils.write_json_with_path(extracted_claims_and_rev, utils.data_location / subfolder_name / 'intermediate', 'claims.json')
 
 print(labels_by_sources['Snopes.com'])
