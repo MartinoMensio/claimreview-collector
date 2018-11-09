@@ -20,11 +20,11 @@ def read_tsv(input_path, with_header=True, delimiter='\t'):
             results.append(row)
     return results
 
-def write_json_with_path(content, path, filename):
+def write_json_with_path(content, path, filename, indent=2):
     if not os.path.isdir(path):
         os.makedirs(path)
     with open(path / filename, 'w') as f:
-        json.dump(content, f, indent=2)
+        json.dump(content, f, indent=indent)
 
 def write_file_with_path(content, path, filename):
     if not os.path.isdir(path):
