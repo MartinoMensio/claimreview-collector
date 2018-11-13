@@ -3,6 +3,7 @@
 import requests
 import glob
 import re
+import os
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from lxml import etree
@@ -22,11 +23,14 @@ data = {el['post_id']: {'url': el['Post URL'], 'label': el['Rating']} for el in 
 # TODO should filter there the interesting classes?
 
 print(len(data))
-"""
+
+# download the facebook page
 for id, el in data.items():
-    response = requests.get(el['url'])
-    utils.write_file_with_path(response.text, folder / 'intermediate', '{}.html'.format(id))
-"""
+    file_path = folder / 'intermediate' / '{}.html'.format(id)
+    if not os.path.isfile(file_path):
+        response = requests.get(el['url'])
+        utils.write_file_with_path(response.text, folder / 'intermediate', '{}.html'.format(id))
+
 
 unfiltered = []
 results = []
@@ -49,7 +53,7 @@ for file_location in glob.glob(str(folder / 'intermediate/*.html')):
     unique = {u for sublist in real_urls for u in sublist}
     #print(unique)
     if len(unique) != 1:
-        print(file_location)
+        print(file_location, unique)
         continue
     id = file_location.split('/')[-1].split('.')[0]
     url = unique.pop()
@@ -59,6 +63,9 @@ for file_location in glob.glob(str(folder / 'intermediate/*.html')):
     if label_binary:
         results.append({'url': url, 'label': label_binary, 'source': 'buzzface'})
 
-utils.write_json_with_path(results, folder / 'intermediate', 'unfiltered.json')
-utils.write_json_with_path(results, folder, 'result.json')
+utils.write_json_with_path(unfiltered, folder / 'intermediate', 'unfiltered.json')
+utils.write_json_with_path(results, folder, 'urls.json')
+
+by_domain = utils.compute_by_domain(results)
+utils.write_json_with_path(by_domain, folder, 'domains.json')
 

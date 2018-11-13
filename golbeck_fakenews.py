@@ -13,4 +13,8 @@ url_with_labels = {list(el.items())[1][1]: list(el.items())[2][1].strip().lower(
 
 result = [{'url': k, 'label': v, 'source': 'golbeck_fakenews'} for k,v  in url_with_labels.items() if v == 'fake']
 
-utils.write_json_with_path(result, directory, 'result.json')
+utils.write_json_with_path(result, directory, 'urls.json')
+
+by_domain = utils.compute_by_domain(result)
+
+utils.write_json_with_path(by_domain, directory, 'domains.json')
