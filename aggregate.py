@@ -45,6 +45,22 @@ choice = {
     'rbutr': {
         'urls': False, # which class to assign them?
         'domains': False
+    },
+    'hyperpartisan': {
+        'urls': True,
+        'domains': False
+    },
+    'wikipedia': {
+        'urls': False,
+        'domains': True
+    },
+    'domain_list': {
+        'urls': False,
+        'domains': True
+    },
+    'melissa_zimdars': {
+        'urls': False,
+        'domains': True
     }
 }
 
@@ -65,9 +81,15 @@ fake_domains_cnt = len([el for el in all_domains if el['label'] == 'fake'])
 print('#urls', urls_cnt, ': fake', fake_urls_cnt, 'true', urls_cnt - fake_urls_cnt)
 print('#domains', domains_cnt, ': fake', fake_domains_cnt, 'true', domains_cnt - fake_domains_cnt)
 
-utils.write_json_with_path(all_urls, utils.data_location, 'all_urls.json')
-utils.write_json_with_path(all_domains, utils.data_location, 'all_domains.json')
+aggregated_urls = utils.aggregate(all_urls)
+aggregated_domains = utils.aggregate(all_domains, 'domain')
+
+utils.write_json_with_path(aggregated_urls, utils.data_location, 'aggregated_urls.json')
+utils.write_json_with_path(aggregated_domains, utils.data_location, 'aggregated_domains.json')
 
 # copy to backend
-utils.write_json_with_path(all_urls, Path('../backend'), 'all_urls.json')
-utils.write_json_with_path(all_domains, Path('../backend'), 'all_domains.json')
+utils.write_json_with_path(aggregated_urls, Path('../backend'), 'aggregated_urls.json')
+utils.write_json_with_path(aggregated_domains, Path('../backend'), 'aggregated_domains.json')
+
+utils.print_stats(aggregated_urls)
+utils.print_stats(aggregated_domains)
