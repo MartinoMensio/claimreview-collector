@@ -2,11 +2,14 @@
 
 # puts together all the datasets
 
+import os
+import json
 import glob
 import shutil
 from pathlib import Path
 
 import utils
+import unshortener
 
 # decide here what to aggregate
 choice = {
@@ -93,3 +96,15 @@ utils.write_json_with_path(aggregated_domains, Path('../backend'), 'aggregated_d
 
 utils.print_stats(aggregated_urls)
 utils.print_stats(aggregated_domains)
+
+print('updating mappings, it may take a while')
+mappings_file = utils.data_location / 'mappings.json'
+mappings = {}
+if os.path.isfile(mappings_file):
+    with open(mappings_file) as f:
+        mappings = json.load(f)
+unshortener.unshorten_multiprocess(aggregated_urls.keys(), mappings)
+
+# save those damn mappings
+with open(mappings_file, 'w') as f:
+    json.dump(mappings)

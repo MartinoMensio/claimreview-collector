@@ -1,3 +1,4 @@
 extruct
 pylint
 requests
+tqdm
