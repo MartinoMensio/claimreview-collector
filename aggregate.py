@@ -6,6 +6,7 @@ import os
 import json
 import glob
 import shutil
+import signal
 from pathlib import Path
 
 import utils
@@ -50,7 +51,7 @@ choice = {
         'domains': False
     },
     'hyperpartisan': {
-        'urls': True,
+        'urls': False,
         'domains': False
     },
     'wikipedia': {
@@ -99,12 +100,22 @@ utils.print_stats(aggregated_domains)
 
 print('updating mappings, it may take a while')
 mappings_file = utils.data_location / 'mappings.json'
+
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    with open(mappings_file, 'w') as f:
+        mappings = json.dump(mappings, f, indent=2)
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 mappings = {}
 if os.path.isfile(mappings_file):
     with open(mappings_file) as f:
         mappings = json.load(f)
-unshortener.unshorten_multiprocess(aggregated_urls.keys(), mappings)
-
+try:
+    unshortener.unshorten_multiprocess(aggregated_urls.keys(), mappings)
+except Exception as e:
+    print('gotcha')
 # save those damn mappings
 with open(mappings_file, 'w') as f:
-    json.dump(mappings)
+    mappings = json.dump(mappings, f, indent=2)

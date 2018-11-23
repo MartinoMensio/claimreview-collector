@@ -63,9 +63,9 @@ def signal_handler(sig, frame):
         mappings = json.dump(mappings, f, indent=2)
     sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal_handler)
     with open('data/aggregated_urls.json') as f:
         data = json.load(f)
     urls = data.keys()
