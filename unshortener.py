@@ -48,11 +48,13 @@ def unshorten_multiprocess(url_list, mappings={}, pool_size=4):
     unshorteners =  [Unshortener(mappings) for _ in range(pool_size)]
     args = [(url, unshorteners[idx % pool_size]) for (idx,url) in enumerate(url_list)]
     with multiprocessing.Pool(pool_size) as pool:
-        all_res = {}
+        # one-to-one with the url_list
+        specific_results = {}
         for result in tqdm.tqdm(pool.imap_unordered(func, args), total=len(args)):
             url, resolved = result
             mappings[url] = resolved
-    return mappings
+            specific_results[url] = resolved
+    return specific_results
 
 mappings_file = 'data/mappings.json'
 mappings = {}
