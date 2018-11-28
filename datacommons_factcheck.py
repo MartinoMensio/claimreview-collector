@@ -11,7 +11,7 @@ import utils
 subfolder_path = utils.data_location / 'datacommons_factcheck'
 source_file_path =  subfolder_path / 'source' / 'fact_checks_20180930.txt'
 intermediate_path = subfolder_path / 'intermediate'
-intermediate_file = intermediate_path / 'claims.json'
+intermediate_file = intermediate_path / 'claimReviews.json'
 
 def stage_1():
     with open(source_file_path) as f:
@@ -31,15 +31,14 @@ def stage_1():
     print('sources', {k:len(v) for k,v in labels_by_sources.items()})
 
 
+    extracted_claims = claims
     extracted_claims_and_rev = [{
         'claim': el['claimReviewed'],
         'review': el['reviewRating']['alternateName'],
         'url': el['url']
     } for el in claims]
 
-    with open('exported.json', 'w') as f:
-        json.dump(extracted_claims_and_rev, f, indent=2)
-    utils.write_json_with_path(extracted_claims_and_rev, intermediate_path, 'claims.json')
+    utils.write_json_with_path(extracted_claims, intermediate_path, 'claimReviews.json')
 
     print(labels_by_sources['Snopes.com'])
 

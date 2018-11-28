@@ -21,7 +21,7 @@ class Unshortener(object):
         self.csrf = csrf
         self.mappings = mappings
 
-    def unshorten(self, url):
+    def unshorten(self, url, handle_error=True):
         if url not in self.mappings:
             res_text = self.session.post(resolver_url, headers={'Referer': resolver_url}, data={'csrfmiddlewaretoken': self.csrf, 'url': url}).text
             soup = BeautifulSoup(res_text, 'html.parser')
@@ -29,7 +29,10 @@ class Unshortener(object):
                 source_url = soup.select('section[id="features"] h3 code')[0].get_text()
             except:
                 print('ERROR for', url)
-                source_url = url
+                if handle_error:
+                    source_url = url
+                else:
+                    source_url = None
             m = (url, source_url)
             #print(m)
             self.mappings[m[0]] = m[1]

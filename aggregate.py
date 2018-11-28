@@ -7,6 +7,7 @@ import json
 import glob
 import shutil
 import signal
+import sys
 from pathlib import Path
 
 import utils
@@ -51,7 +52,7 @@ choice = {
         'domains': False
     },
     'hyperpartisan': {
-        'urls': False,
+        'urls': False, # hyperpartisan does not mean fake
         'domains': False
     },
     'wikipedia': {
@@ -65,6 +66,10 @@ choice = {
     'melissa_zimdars': {
         'urls': False,
         'domains': True
+    },
+    'jruvika_fakenews': {
+        'urls': True,
+        'domains': False
     }
 }
 
@@ -101,21 +106,24 @@ utils.print_stats(aggregated_domains)
 print('updating mappings, it may take a while')
 mappings_file = utils.data_location / 'mappings.json'
 
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C!')
-    with open(mappings_file, 'w') as f:
-        mappings = json.dump(mappings, f, indent=2)
-    sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
-
 mappings = {}
 if os.path.isfile(mappings_file):
     with open(mappings_file) as f:
         mappings = json.load(f)
+
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    with open(mappings_file, 'w') as f:
+        json.dump(mappings, f, indent=2)
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
+
+to_be_mapped = [url for url in aggregated_urls.keys() if url not in mappings]
 try:
-    unshortener.unshorten_multiprocess(aggregated_urls.keys(), mappings)
+    unshortener.unshorten_multiprocess(to_be_mapped, mappings)
 except Exception as e:
     print('gotcha')
 # save those damn mappings
 with open(mappings_file, 'w') as f:
-    mappings = json.dump(mappings, f, indent=2)
+    json.dump(mappings, f, indent=2)

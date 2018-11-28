@@ -44,7 +44,7 @@ def get_url_domain(url):
 def print_stats(data):
     by_label_fn = lambda el: el[1]['label']
     by_label = itertools.groupby(sorted(data.items(), key=by_label_fn), key=by_label_fn)
-    print({k: len(list(v)) for k,v in by_label})
+    print({k: len(list(v)) for k,v in by_label}, 'total', len(data))
 
 def aggregate(data_list, key='url'):
     """returns a dict, grouping the data by the key (url/domain)"""
