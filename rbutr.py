@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import os
+from collections import defaultdict
 from tqdm import tqdm
 
 import utils
@@ -17,6 +18,13 @@ utils.write_json_with_path(results, location, 'urls.json')
 domains = utils.compute_by_domain(results)
 
 utils.write_json_with_path(results, location, 'domains.json')
+
+
+rebuttals = defaultdict(list)
+for row in data:
+    rebuttals[row['sourcepage']].append(row['rebuttalpage'])
+
+utils.write_json_with_path(rebuttals, location, 'rebuttals.json')
 
 # check which urls still exist
 

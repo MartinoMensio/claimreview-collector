@@ -8,6 +8,7 @@ import glob
 import shutil
 import signal
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 import utils
@@ -17,64 +18,79 @@ import unshortener
 choice = {
     'datacommons_factcheck': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'datacommons_feeds': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'mrisdal_fakenews': {
         'urls': False,
-        'domains': True
+        'domains': True,
+        'rebuttals': False
     },
     'golbeck_fakenews': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': True
     },
     'liar': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'buzzface': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'opensources': {
         'urls': False,
-        'domains': True
+        'domains': True,
+        'rebuttals': False
     },
     'fakenewsnet': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'rbutr': {
         'urls': False, # which class to assign them?
-        'domains': False
+        'domains': False,
+        'rebuttals': True
     },
     'hyperpartisan': {
         'urls': False, # hyperpartisan does not mean fake
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     },
     'wikipedia': {
         'urls': False,
-        'domains': True
+        'domains': True,
+        'rebuttals': False
     },
     'domain_list': {
         'urls': False,
-        'domains': True
+        'domains': True,
+        'rebuttals': False
     },
     'melissa_zimdars': {
         'urls': False,
-        'domains': True
+        'domains': True,
+        'rebuttals': False
     },
     'jruvika_fakenews': {
         'urls': True,
-        'domains': False
+        'domains': False,
+        'rebuttals': False
     }
 }
 
 all_urls = []
 all_domains = []
+all_rebuttals = defaultdict(list)
 for subfolder, config in choice.items():
     if config['urls']:
         urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
@@ -82,6 +98,10 @@ for subfolder, config in choice.items():
     if config['domains']:
         domains = utils.read_json(utils.data_location / subfolder / 'domains.json')
         all_domains.extend(domains)
+    if config['rebuttals']:
+        rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
+        for k, v in rebuttals.items():
+            all_rebuttals[k].extend(v)
 
 urls_cnt = len(all_urls)
 domains_cnt = len(all_domains)
@@ -95,10 +115,12 @@ aggregated_domains = utils.aggregate(all_domains, 'domain')
 
 utils.write_json_with_path(aggregated_urls, utils.data_location, 'aggregated_urls.json')
 utils.write_json_with_path(aggregated_domains, utils.data_location, 'aggregated_domains.json')
+utils.write_json_with_path(all_rebuttals, utils.data_location, 'aggregated_rebuttals.json')
 
 # copy to backend
 utils.write_json_with_path(aggregated_urls, Path('../backend'), 'aggregated_urls.json')
 utils.write_json_with_path(aggregated_domains, Path('../backend'), 'aggregated_domains.json')
+utils.write_json_with_path(all_rebuttals, Path('../backend'), 'aggregated_rebuttals.json')
 
 utils.print_stats(aggregated_urls)
 utils.print_stats(aggregated_domains)
