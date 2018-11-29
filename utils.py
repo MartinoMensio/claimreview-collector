@@ -3,6 +3,7 @@ import os
 import json
 import sys
 import itertools
+import hashlib
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -85,3 +86,6 @@ def compute_by_domain(url_based_data, decision_mode='all_agree'):
         raise ValueError('decision_mode not supported')
 
     return result
+
+def string_to_md5(string):
+    return hashlib.md5(string.encode()).hexdigest()
