@@ -39,7 +39,7 @@ def string_to_md5(string):
 def url_to_filename(url):
     return '{}.cache'.format(string_to_md5(url))
 
-def get(url, unshorten=False, force_refresh=False):
+def get(url, unshorten=False, force_refresh=False, headers={}):
     if unshorten:
         raise NotImplementedError()
     filename = url_to_filename(url)
@@ -48,7 +48,7 @@ def get(url, unshorten=False, force_refresh=False):
         return read_file(web_pages_path / filename)
     else:
         # new
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         if response.status_code != 200:
             print('WARN', response.status_code, 'for', url)
         body = response.text

@@ -20,9 +20,9 @@ domains = utils.compute_by_domain(results)
 utils.write_json_with_path(results, location, 'domains.json')
 
 
-rebuttals = defaultdict(list)
+rebuttals = defaultdict(lambda: defaultdict(list))
 for row in data:
-    rebuttals[row['sourcepage']].append(row['rebuttalpage'])
+    rebuttals[row['sourcepage']][row['rebuttalpage']].append('rbutr')
 
 utils.write_json_with_path(rebuttals, location, 'rebuttals.json')
 

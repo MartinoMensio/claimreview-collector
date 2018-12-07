@@ -19,7 +19,7 @@ choice = {
     'datacommons_factcheck': {
         'urls': True,
         'domains': False,
-        'rebuttals': False
+        'rebuttals': True
     },
     'datacommons_feeds': {
         'urls': True,
@@ -85,12 +85,17 @@ choice = {
         'urls': True,
         'domains': False,
         'rebuttals': False
+    },
+    'factcheckni_list': {
+        'urls': True,
+        'domains': False,
+        'rebuttals': True
     }
 }
 
 all_urls = []
 all_domains = []
-all_rebuttals = defaultdict(list)
+all_rebuttals = defaultdict(lambda: defaultdict(list))
 for subfolder, config in choice.items():
     if config['urls']:
         urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
@@ -100,8 +105,9 @@ for subfolder, config in choice.items():
         all_domains.extend(domains)
     if config['rebuttals']:
         rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
-        for k, v in rebuttals.items():
-            all_rebuttals[k].extend(v)
+        for source_url, rebuttal_l in rebuttals.items():
+            for rebuttal_url, source in rebuttal_l.items():
+                all_rebuttals[source_url][rebuttal_url].append(source)
 
 urls_cnt = len(all_urls)
 domains_cnt = len(all_domains)

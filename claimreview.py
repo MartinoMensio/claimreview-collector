@@ -26,6 +26,8 @@ def get_corrected_url(url):
 def fix_page(page):
     page = re.sub('"claimReviewed": ""([^"]*)""', r'"claimReviewed": "\1"', page)
     page = re.sub('}"itemReviewed"', '}, "itemReviewed"', page)
+    # CDATA error
+    page = re.sub('<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>', 'false', page)
     return page
 
 def retrieve_claimreview(url):
@@ -33,13 +35,13 @@ def retrieve_claimreview(url):
     domain = utils.get_url_domain(url_fixed)
     parser = _domain_parser_map[domain]
     # download the page
-    page_text = cache_manager.get(url_fixed)
+    page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'})
     page_text = fix_page(page_text)
     try:
         result = parser(page_text)
     except Exception as e:
         print(url)
-        print(page_text)
+        #print(page_text)
         raise e
     return url_fixed, result
 
@@ -89,16 +91,38 @@ _domain_parser_map = {
 
 def get_claim_urls(claimReview):
     result = None
-    itemReviewed = claimReview.get('itemReviewed', None)
+    itemReviewed = claimReview.get('properties', {}).get('itemReviewed', None)
     if itemReviewed:
         author = itemReviewed.get('properties', {}).get('author', None)
         if author:
-            print(author)
             #exit(0)
-            sameAs = author.get('properties', {}, None).get('sameAs', None)
+            sameAs = author.get('properties', {}).get('sameAs', None)
+            #if sameAs:
+            #    print(sameAs)
             result = sameAs
-
+    # TODO also return sameAs if present on the claim directly, other links there!!
     return result
+
+def get_claim_rating(claimReview):
+    # what to do with these labels? for now returns None so the claims are discarded
+    # {'Known since 2008', 'Lacks context', 'Unproven claim', 'Tactics look typical', 'Cannot Be Verified', 'Shift from past position', 'Easily beats the market', 'Includes Hispanic Other Black', 'More words than action', 'By Some Counts Yes', 'Roe grants federal right', 'Not a Muslim migrant', 'Polls depend on wording', 'Had seat at table', "Record doesn't say that", 'Coverage has limits', 'Wrong', 'Not accurate', 'Photo is real', 'Misleads', 'Met half of them', 'Mostly entered before Obama', 'No evidence', 'Wrong use of word', 'Mis- leading', 'Lie of the Year', 'Other spending nears $200M', 'Too soon to say', 'Possible but risky', 'White House not studio', 'Obama Called in 2012', 'Trump ordered new probe', 'Disputed Claim', 'Clinton role still unclear', 'Flip- flop', 'False', 'They are not eligible', 'No such plan', 'Not what GM says', 'In dispute', 'Trump deserves some credit', 'Can still be deported', 'Spinning the facts', 'Revised after backlash', 'Personal tweet taken down', "It's Calif. law", "Japan's leader acted first", 'Mostly false', 'Study in Dispute', 'Salary not only factor', 'No contact', 'Needs Context', 'Old stat', "He's very close", 'Flip- Flop', 'Rates are even higher', 'Staff error', 'In effect since 1965', 'Far from clear', 'Number not that high', 'Claim omits key facts', "Didn't use that word", 'Ignores US GDP size', 'Needs context', 'U.S. has trade surplus', 'Depends on the metric', 'Not the Whole Story', 'Way early to say', 'Numbers are close', 'Trump role emerged later', 'Depends on source', 'No way to verify', 'Effect not clear', 'No way to know', 'Result of Trump policy', 'Twitter fixed a glitch', 'Ignores all tax hikes', 'Vetted by State Dept.', 'His numbers are outdated', 'Fuzzy math', 'Latino numbers much higher', 'Not the same thing', 'Not what Pelosi said', 'Not the whole story', 'Experts question wall impact', 'Flynn talked Russia sanction', 'Lacks Context', 'Under Dispute', 'Supports border tech security', 'Unlikely but possible', 'Could be much worse', 'Lacks Evidence', 'No MS-13 removal data', 'Legal rules unclear', 'She told law schools', 'Not Missouri students', "Don't count your chickens", 'Depends on intent', 'Not that clear cut', 'History poses big hurdle', 'But little impact yet'}
+    rating = claimReview['properties']['reviewRating']
+    try:
+        best = int(rating['properties']['bestRating'])
+        worst = int(rating['properties']['worstRating'])
+        value = int(rating['properties']['ratingValue'])
+        score = value / (best - worst)
+    except:
+        score = None
+    if not score:
+        # TODO map textual label to score
+        #score = rating['properties']['alternateName']
+        return None
+        #raise NotImplementedError()
+    return score
+
+
+
 
 if __name__ == "__main__":
     res = plac.call(retrieve_claimreview)

@@ -17,6 +17,6 @@ by_domain = utils.compute_by_domain(result)
 
 utils.write_json_with_path(by_domain, directory, 'domains.json')
 
-rebuttals = {el['URL of article']: [u.strip() for u in el['URL of rebutting article'].split('; ')] for el in data}
+rebuttals = {el['URL of article']: {u.strip(): ['golbeck_fakenews'] for u in el['URL of rebutting article'].split('; ')} for el in data}
 
 utils.write_json_with_path(rebuttals, directory, 'rebuttals.json')
