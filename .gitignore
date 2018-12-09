@@ -1,4 +1,5 @@
 data/**
+!data/.gitkeep
 cache/**
 
 # Byte-compiled / optimized / DLL files
