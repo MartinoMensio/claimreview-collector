@@ -91,12 +91,18 @@ _domain_parser_map = {
 
 def get_claim_urls(claimReview):
     result = None
-    itemReviewed = claimReview.get('properties', {}).get('itemReviewed', None)
+    itemReviewed = claimReview.get('itemReviewed', None)
+    if not itemReviewed:
+        itemReviewed = claimReview.get('properties', {}).get('itemReviewed', None)
     if itemReviewed:
-        author = itemReviewed.get('properties', {}).get('author', None)
+        author = itemReviewed.get('author', None)
+        if not author:
+            author = itemReviewed.get('properties', {}).get('author', None)
         if author:
             #exit(0)
-            sameAs = author.get('properties', {}).get('sameAs', None)
+            sameAs = author.get('sameAs', None)
+            if not sameAs:
+                sameAs = author.get('properties', {}).get('sameAs', None)
             #if sameAs:
             #    print(sameAs)
             result = sameAs
@@ -106,11 +112,15 @@ def get_claim_urls(claimReview):
 def get_claim_rating(claimReview):
     # what to do with these labels? for now returns None so the claims are discarded
     # {'Known since 2008', 'Lacks context', 'Unproven claim', 'Tactics look typical', 'Cannot Be Verified', 'Shift from past position', 'Easily beats the market', 'Includes Hispanic Other Black', 'More words than action', 'By Some Counts Yes', 'Roe grants federal right', 'Not a Muslim migrant', 'Polls depend on wording', 'Had seat at table', "Record doesn't say that", 'Coverage has limits', 'Wrong', 'Not accurate', 'Photo is real', 'Misleads', 'Met half of them', 'Mostly entered before Obama', 'No evidence', 'Wrong use of word', 'Mis- leading', 'Lie of the Year', 'Other spending nears $200M', 'Too soon to say', 'Possible but risky', 'White House not studio', 'Obama Called in 2012', 'Trump ordered new probe', 'Disputed Claim', 'Clinton role still unclear', 'Flip- flop', 'False', 'They are not eligible', 'No such plan', 'Not what GM says', 'In dispute', 'Trump deserves some credit', 'Can still be deported', 'Spinning the facts', 'Revised after backlash', 'Personal tweet taken down', "It's Calif. law", "Japan's leader acted first", 'Mostly false', 'Study in Dispute', 'Salary not only factor', 'No contact', 'Needs Context', 'Old stat', "He's very close", 'Flip- Flop', 'Rates are even higher', 'Staff error', 'In effect since 1965', 'Far from clear', 'Number not that high', 'Claim omits key facts', "Didn't use that word", 'Ignores US GDP size', 'Needs context', 'U.S. has trade surplus', 'Depends on the metric', 'Not the Whole Story', 'Way early to say', 'Numbers are close', 'Trump role emerged later', 'Depends on source', 'No way to verify', 'Effect not clear', 'No way to know', 'Result of Trump policy', 'Twitter fixed a glitch', 'Ignores all tax hikes', 'Vetted by State Dept.', 'His numbers are outdated', 'Fuzzy math', 'Latino numbers much higher', 'Not the same thing', 'Not what Pelosi said', 'Not the whole story', 'Experts question wall impact', 'Flynn talked Russia sanction', 'Lacks Context', 'Under Dispute', 'Supports border tech security', 'Unlikely but possible', 'Could be much worse', 'Lacks Evidence', 'No MS-13 removal data', 'Legal rules unclear', 'She told law schools', 'Not Missouri students', "Don't count your chickens", 'Depends on intent', 'Not that clear cut', 'History poses big hurdle', 'But little impact yet'}
-    rating = claimReview['properties']['reviewRating']
+    reviewRating = claimReview.get('reviewRating', None)
+    if not reviewRating:
+        reviewRating = claimReview.get('properties', {}).get('reviewRating', None)
     try:
-        best = int(rating['properties']['bestRating'])
-        worst = int(rating['properties']['worstRating'])
-        value = int(rating['properties']['ratingValue'])
+        if 'properties' in reviewRating:
+            reviewRating = reviewRating['properties']
+        best = int(reviewRating['bestRating'])
+        worst = int(reviewRating['worstRating'])
+        value = int(reviewRating['ratingValue'])
         score = value / (best - worst)
     except:
         score = None
