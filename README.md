@@ -1,3 +1,4 @@
+
 # Datasets
 
 This folder contains the different datasets that we collected.
@@ -9,6 +10,12 @@ For this purpose we use a binary lable (true or fake).
 We select from the datasets only items that are (almost) completely true or fake, removing the variations in the middle.
 
 Goal: have a list of URL labelled with `fake` / `true`
+
+## `datacommons_factcheck`
+
+source url: `https://www.datacommons.org/factcheck/download`
+
+This is a collection of claimReviews. The problem is that they contain fewer attributes than the claimReviews that are published on the fact-checking websites. For this reason the fact checker websites are scraped to obtain the full claimReview.
 
 ## datacommons_feeds
 
@@ -34,9 +41,6 @@ labels are ok
 
 source urls: not present in the dataset, but there are links to politifacts
 
-## `datacommons_factcheck`
-
-## `datacommons_feeds`
 
 ## `golbeck_fakenews`
 
