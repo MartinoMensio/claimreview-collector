@@ -62,7 +62,9 @@ def _microdata_parser(page):
     #
     data = extruct.extract(page)
     microdata = data['microdata']
-    claimReviews = _to_jsonld(microdata)
+    jsonld = _to_jsonld(microdata)
+    # get only the ClaimReview, not other microdata
+    claimReviews = [el for el in jsonld if ('@type' in el and 'ClaimReview' in el['@type'])]
     return claimReviews
 
 def _snopes_parser(page):
@@ -143,7 +145,7 @@ def _to_jsonld(microdata):
         for key in data.keys():
             value = data[key]
             if context in value:
-                value = value.replace(context+"/","") 
+                value = value.replace(context+"/","")
             if(properties in key):
                 keyn = key.replace(properties,"")
                 jsonld_data[keyn] = value
