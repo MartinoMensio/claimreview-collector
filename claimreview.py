@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 import utils
 import unshortener
 import cache_manager
+import flatten_json
+
 
 def get_corrected_url(url):
     corrections = {
@@ -60,8 +62,9 @@ def _microdata_parser(page):
     #
     data = extruct.extract(page)
     microdata = data['microdata']
-    claimReviews = [el for el in microdata if 'ClaimReview' in el['type']]
-    # TODO should divide @context and @type from type?
+    jsonld = _to_jsonld(microdata)
+    # get only the ClaimReview, not other microdata
+    claimReviews = [el for el in jsonld if ('@type' in el and 'ClaimReview' in el['@type'])]
     return claimReviews
 
 def _snopes_parser(page):
@@ -131,8 +134,30 @@ def get_claim_rating(claimReview):
         #raise NotImplementedError()
     return score
 
-
-
+def _to_jsonld(microdata):
+    context = 'http://schema.org'
+    properties = 'properties_'
+    typestr = 'type'
+    jsonld_data = {}
+    jsonld_data["@context"] = context
+    for data in microdata:
+        data = flatten_json.flatten(data)
+        for key in data.keys():
+            value = data[key]
+            if context in value:
+                value = value.replace(context+"/","")
+            if(properties in key):
+                keyn = key.replace(properties,"")
+                jsonld_data[keyn] = value
+                if(typestr in keyn):
+                    keyn = keyn.replace(typestr,"@"+typestr)
+                    jsonld_data[keyn] = value
+            if(typestr is key):
+                keyn = key.replace(typestr,"@"+typestr)
+                jsonld_data[keyn] = value
+        del data
+    jsonld_data = flatten_json.unflatten(jsonld_data)
+    return [jsonld_data]
 
 if __name__ == "__main__":
     res = plac.call(retrieve_claimreview)

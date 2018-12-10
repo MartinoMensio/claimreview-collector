@@ -3,3 +3,4 @@ pylint
 requests
 tqdm
 plac
+flatten_json
