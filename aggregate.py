@@ -90,6 +90,11 @@ choice = {
         'urls': True,
         'domains': False,
         'rebuttals': True
+    },
+    'google_factcheck_explorer': {
+        'urls': True,
+        'domains': False,
+        'rebuttals': True
     }
 }
 
