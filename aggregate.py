@@ -95,6 +95,11 @@ choice = {
         'urls': True,
         'domains': False,
         'rebuttals': True
+    },
+    'buzzfeednews': {
+        'urls': False,
+        'domains': True,
+        'rebuttals': False
     }
 }
 
