@@ -37,7 +37,7 @@ def retrieve_claimreview(url):
     domain = utils.get_url_domain(url_fixed)
     parser = _domain_parser_map[domain]
     # download the page
-    page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'})
+    page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
     page_text = fix_page(page_text)
     try:
         result = parser(page_text)
@@ -118,20 +118,28 @@ def get_claim_rating(claimReview):
     reviewRating = claimReview.get('reviewRating', None)
     if not reviewRating:
         reviewRating = claimReview.get('properties', {}).get('reviewRating', None)
+    if not reviewRating:
+        return None
     try:
         if 'properties' in reviewRating:
             reviewRating = reviewRating['properties']
         best = int(reviewRating['bestRating'])
         worst = int(reviewRating['worstRating'])
         value = int(reviewRating['ratingValue'])
-        score = value / (best - worst)
+        if best == -1 and worst == -1:
+            score = None
+        else:
+            score = value / (best - worst)
     except:
         score = None
     if not score:
         # TODO map textual label to score
-        #score = rating['properties']['alternateName']
-        return None
-        #raise NotImplementedError()
+        score = None
+        scoreTxt = reviewRating.get('alternateName', None) or reviewRating['properties']['alternateName']
+        if scoreTxt in ['True', 'Accurate']:
+            score = 1.
+        elif scoreTxt in ['False', 'Inaccurate', 'Wrong', 'Not accurate', 'Lie of the Year', 'Mostly false']:
+            score = 0.
     return score
 
 def _to_jsonld(microdata):
