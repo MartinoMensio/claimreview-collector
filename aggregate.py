@@ -100,6 +100,11 @@ choice = {
         'urls': False,
         'domains': True,
         'rebuttals': False
+    },
+    'pontes_fakenewssample': {
+        'urls': True,
+        'domains': False,
+        'rebuttals': False
     }
 }
 
