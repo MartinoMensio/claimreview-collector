@@ -1,0 +1,730 @@
+{
+    "datasets": {
+        "datacommons_factcheck": {
+            "name": "Fact Check Data from datacommons.org",
+            "url": "https://www.datacommons.org/factcheck/download",
+            "description": "The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field \"url\" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers' sites.",
+            "author": "https://www.datacommons.org/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": true,
+                "textual_claims": true
+            }
+        },
+        "datacommons_feeds": {
+            "name": "Fact Check Data from Datacommons feeds",
+            "url": "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json",
+            "description": "As the Fact Check Data from datacommons.org (https://www.datacommons.org/factcheck/download), this dataset is a collection of ClaimReview items. The dataset is not documented and we don't know where these items come from. Probably is a small sample from datacommons.org",
+            "author": "https://www.datacommons.org/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "mrisdal_fakenews": {
+            "name": "Getting Real about Fake News",
+            "url": "https://www.kaggle.com/mrisdal/fake-news",
+            "description": "Text & metadata from fake & biased news sources around the web. The dataset contains text and metadata from 244 websites and represents 12,999 posts in total from the past 30 days. The data was pulled using the webhose.io API; because it's coming from their crawler, not all websites identified by the BS Detector are present in this dataset. Each website was labeled according to the BS Detector as documented here. Data sources that were missing a label were simply assigned a label of \"bs\". There are (ostensibly) no genuine, reliable, or trustworthy news sources represented in this dataset (so far), so don't trust anything you read. https://github.com/mrisdal/bs-news-scraper",
+            "author": "https://www.kaggle.com/mrisdal",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "golbeck_fakenews": {
+            "name": "Fake News vs Satire: a Data Set and Analysis",
+            "url": "https://github.com/jgolbeck/fakenews",
+            "description": "Fake news has become a major societal issue and a technical challenge for social media companies to identify. This content is difficult to identify because the term \"fake news\" covers intentionally false, deceptive stories as well as factual errors, satire, and sometimes, stories that a person just does not like. Addressing the problem requires clear definitions and examples. In this work, we present a dataset of fake news and satire stories that are hand coded, verified, and, in the case of fake news, include rebutting stories. We also include a thematic content analysis of the articles, identifying major themes that include hyperbolic support or condemnation of a figure, conspiracy theories, racist themes, and discrediting of reliable sources. In addition to releasing this dataset for research use, we analyze it and show results based on language that are promising for classification purposes. Overall, our contribution of a dataset and initial analysis are designed to support future work by fake news researchers.",
+            "author": "https://ischool.umd.edu/faculty-staff/jennifer-golbeck",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": true,
+                "textual_claims": true
+            }
+        },
+        "liar": {
+            "name": "Liar: a benchmark dataset for fake news detection",
+            "url": "https://www.cs.ucsb.edu/~william/data/liar_dataset.zip",
+            "description": "A new, publicly available dataset for fake news detection. We collected a decade-long, 12.8K manually labeled short statements in various contexts from POLITIFACT.COM, which provides detailed analysis report and links to source documents for each case. This dataset can be used for fact-checking research as well. Notably, this new dataset is an order of magnitude larger than previously largest public fake news datasets of similar type.",
+            "author": "https://www.cs.ucsb.edu/~william/index.html",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "buzzface": {
+            "name": "Hyperpartisan Facebook Pages Are Publishing False And Misleading Information At An Alarming Rate",
+            "url": "https://github.com/BuzzFeedNews/2016-10-facebook-fact-check",
+            "description": "This dataset comprises a complete sample of news published in Facebook from 9 news agencies over a week close to the 2016 U.S. election from September 19 to 23 and September 26 and 27. Every post and the linked article were fact-checked claim-by-claim by 5 BuzzFeed ournalists. It contains 1,627 articles 826 mainstream, 356 left-wing, and 545 right-wing articles.",
+            "author": "https://www.buzzfeednews.com/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "opensources": {
+            "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+            "url": "https://github.com/OpenSourcesGroup/opensources",
+            "description": "OpenSources is a curated resource for assessing online information sources, available for public use. Websites in this resource range from credible news sources to misleading and outright fake websites. Headed by Melissa Zimdars of Merrimack College, our research team is dedicated to preserving the integrity and enhancing the transparency of information on the internet.",
+            "author": "http://www.opensources.co/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "fakenewsnet": {
+            "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+            "url": "https://www.kaggle.com/mdepak/fakenewsnet",
+            "description": "This is a repository for an ongoing data collection project for fake news research at ASU. We describe and compare FakeNewsNet with other existing datasets in Fake News Detection on Social Media: A Data Mining Perspective. We also perform a detail analysis of FakeNewsNet dataset, and build a fake news detection model on this dataset in Exploiting Tri-Relationship for Fake News Detection. https://github.com/KaiDMML/FakeNewsNet",
+            "author": "http://www.public.asu.edu/~skai2/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "rbutr": {
+            "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+            "url": "http://rbutr.com/rbutr/WebsiteServlet?requestType=browse",
+            "description": "rbutr is a community-driven app which connects webpages together on the basis that one page argues against the other. Visit a rebutted page and you will be told \"There are rebuttals to this page.\" You can then open up the rebutting article(s). Found a great rebuttal? Connect it to the page(s) it rebuts so that people reading those articles can know about it. Want a rebuttal for a page you have found? Submit a request to the community.",
+            "author": "http://rbutr.com/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": false,
+                "rebuttal_suggestion": true,
+                "textual_claims": false
+            }
+        },
+        "hyperpartisan": {
+            "name": "Hyperpartisan News Detection",
+            "url": "https://pan.webis.de/semeval19/semeval19-web/",
+            "description": "The dataset contains 1 million articles. It is split in training (200,000 left, 400,000 least, 200,000 right) and validation (50,000 left, 100,000 least, 50,000 right), where no publisher that occurs in the training set also occurs in the validation set. All articles are labeled by the overall bias of the publisher as provided by BuzzFeed journalists or MediaBiasFactCheck.com.",
+            "author": "https://factmata.com/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "wikipedia": {
+            "name": "Wikipedia List of fake news websites",
+            "url": "https://en.wikipedia.org/wiki/List_of_fake_news_websites",
+            "description": "This is a list of fake news sites. These sites intentionally, but not necessarily solely, publish hoaxes and disinformation for purposes other than news satire. Some of these sites use homograph spoofing attacks, typosquatting and other deceptive strategies similar to those used in phishing attacks to resemble genuine news outlets.",
+            "author": "https://www.wikipedia.org/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_cbsnews": {
+            "name": "CBS News",
+            "url": "http://www.cbsnews.com/pictures/dont-get-fooled-by-these-fake-news-sites/",
+            "description": "List of fake news sites by CBS news",
+            "author": "http://www.cbsnews.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_dailydot": {
+            "name": "Daily Dot",
+            "url": "https://www.dailydot.com/layer8/fake-news-sites-list-facebook/",
+            "description": "List of fake news sites by Daily Dot",
+            "author": "https://www.dailydot.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_fakenewswatch": {
+            "name": "Fake News Watch",
+            "url": "https://web.archive.org/web/20180213181029/http://fakenewswatch.com/",
+            "description": "List of fake news sites by Fake News Watch",
+            "author": "http://fakenewswatch.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_newrepublic": {
+            "name": "New Republic",
+            "url": "https://newrepublic.com/article/118013/satire-news-websites-are-cashing-gullible-outraged-readers",
+            "description": "List of fake news sites by New Republic",
+            "author": "https://newrepublic.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_npr": {
+            "name": "NPR",
+            "url": "https://www.npr.org/sections/alltechconsidered/2016/11/23/503146770/npr-finds-the-head-of-a-covert-fake-news-operation-in-the-suburbs",
+            "description": "List of fake news sites by NPR",
+            "author": "https://www.npr.org/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_snopes": {
+            "name": "Snopes",
+            "url": "https://www.snopes.com/news/2016/01/14/fake-news-sites/",
+            "description": "List of fake news sites by Snopes",
+            "author": "https://www.snopes.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_thoughtco": {
+            "name": "ThoughtCo",
+            "url": "https://www.thoughtco.com/guide-to-fake-news-websites-3298824",
+            "description": "List of fake news sites by ThoughtCo",
+            "author": "https://www.thoughtco.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "domain_list_usnews": {
+            "name": "US News",
+            "url": "http://www.usnews.com/news/national-news/articles/2016-11-14/avoid-these-fake-news-sites-at-all-costs",
+            "description": "List of fake news sites by US News",
+            "author": "http://www.usnews.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "melissa_zimdars": {
+            "name": "False, Misleading, Clickbait-y, and/or Satirical \"News\" Sources",
+            "url": "https://docs.google.com/spreadsheets/d/1o3FFiCB_W2sCLH7g6iPwzC9lmfIj7ojlA-htvQCJhaw/",
+            "description": "The below list of websites is a combination of my original list in this google document, numerous other lists on the internet, and suggestions from readers/internet users. All tagged websites have been analyzed by myself or one of the librarians I’m working with on OpenSources. All websites tagged as “unknown”  still need to be analyzed, and some of them may be removed entirely from the resource for various reasons (i.e. it doesn’t circulate “news” or the website no longer exists). Finally, please remember that all tags may be subject to revision based on feedback, discussion, continued analysis, or website changes etc. https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/preview",
+            "author": "https://www.merrimack.edu/live/profiles/586-melissa-mish-zimdars/_p/f",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "jruvika_fakenews": {
+            "name": "Kaggle Fake News detection",
+            "url": "https://www.kaggle.com/jruvika/fake-news-detection",
+            "description": "Fake News detection",
+            "author": "https://www.kaggle.com/jruvika",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        },
+        "factcheckni_list": {
+            "name": "FactCheckNI Articles",
+            "url": "https://factcheckni.org/",
+            "description": "FactCheckNI Articles",
+            "author": "https://factcheckni.org/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": true,
+                "textual_claims": true
+            }
+        },
+        "google_factcheck_explorer": {
+            "name": "Google Fact Check Tools Explorer",
+            "url": "https://toolbox.google.com/factcheck/explorer",
+            "description": "This tool allows you to easily browse and search for fact checks. For example, you can search for a politician's statement, or for a topic. You can also restrict results to a specific publisher.",
+            "author": "https://www.google.com/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": true,
+                "textual_claims": true
+            }
+        },
+        "buzzfeednews": {
+            "name": "Analysis of fake news sites and viral posts, 2016 - 2018",
+            "url": "https://github.com/BuzzFeedNews/2018-12-fake-news-top-50",
+            "description": "Over the past four years, BuzzFeed News has maintained lists of sites that publish completely fabricated stories. As we encounter new ones and debunk their content, we add them to the list. To produce this story, we used this list as well as some sites brought to our attention by fact-checking website, Lead Stories.",
+            "author": "https://www.buzzfeednews.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false
+            }
+        },
+        "pontes_fakenewssample": {
+            "name": "Fake News Sample",
+            "url": "https://www.kaggle.com/pontes/fake-news-sample",
+            "description": "Fake News Sample",
+            "author": "https://www.kaggle.com/pontes",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": true
+            }
+        }
+    },
+    "fact_checkers": {
+        "snopes": {
+            "name": "Snopes",
+            "url": "https://www.snopes.com/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "politifact": {
+            "name": "Politifact",
+            "url": "https://www.politifact.com/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "weeklystandard": {
+            "name": "The Weekly Standard Fact Check",
+            "url": "https://www.weeklystandard.com/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "washingtonpost": {
+            "name": "The Washington Post Fact-Checker",
+            "url": "https://www.washingtonpost.com/news/fact-checker/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+
+        "ferret": {
+            "name": "Ferret Fact Service",
+            "url": "https://theferret.scot/",
+            "description": "",
+            "nationality": "UK",
+            "properties": {
+                "belongs_to_ifcn": false,
+                "uses_claimreview": false
+            }
+        },
+        "lavoce": {
+            "name": "La Voce",
+            "url": "https://www.lavoce.info/archives/category/rubriche/fact-checking/",
+            "description": "",
+            "nationality": "IT",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "pagellapolitica": {
+            "name": "Pagella Politica",
+            "url": "https://pagellapolitica.it/",
+            "description": "",
+            "nationality": "IT",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "checkyourfact": {
+            "name": "Check Your Fact",
+            "url": "http://checkyourfact.com/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": false,
+                "uses_claimreview": false
+            }
+        },
+        "leadstories": {
+            "name": "Lead Stories",
+            "url": "https://leadstories.com/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "newtral": {
+            "name": "Newtral",
+            "url": "https://newtral.es/fact-check/",
+            "description": "",
+            "nationality": "ES",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "lemonde": {
+            "name": "Le Monde - Les Décodeurs",
+            "url": "https://www.lemonde.fr/verification/",
+            "description": "",
+            "nationality": "FR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "truthorfiction": {
+            "name": "Truth Or Fiction",
+            "url": "https://www.truthorfiction.com/",
+            "description": "",
+            "nationality": "FR",
+            "properties": {
+                "belongs_to_ifcn": false,
+                "uses_claimreview": true
+            }
+        },
+        "metro_se": {
+            "name": "Metro Viralgranskaren",
+            "url": "https://www.metro.se/viralgranskaren",
+            "description": "",
+            "nationality": "SE",
+            "properties": {
+                "belongs_to_ifcn": false,
+                "uses_claimreview": false
+            }
+        },
+        "faktistfakt": {
+            "name": "Metro Viralgranskaren",
+            "url": "https://www.faktistfakt.com/faktencheck/",
+            "description": "",
+            "nationality": "AT",
+            "properties": {
+                "belongs_to_ifcn": false,
+                "uses_claimreview": true
+            }
+        },
+        "20minutes": {
+            "name": "20 Minutes Fake off",
+            "url": "https://www.20minutes.fr/societe/desintox/",
+            "description": "",
+            "nationality": "FR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "afp": {
+            "name": "AFP Factuel",
+            "url": "https://factcheck.afp.com/",
+            "description": "",
+            "nationality": "FR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "ap": {
+            "name": "AP Fact Check",
+            "url": "https://www.apnews.com/APFactCheck",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "africacheck": {
+            "name": "Africa Check",
+            "url": "https://africacheck.org/geofocus/south-africa/",
+            "description": "",
+            "nationality": "ZA",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "agencialupa": {
+            "name": "Agência Lupa",
+            "url": "https://piaui.folha.uol.com.br/lupa/",
+            "description": "",
+            "nationality": "BR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "agenciapublica": {
+            "name": "Agência Pública - Truco",
+            "url": "http://apublica.org/checagem/",
+            "description": "",
+            "nationality": "BR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "animalpolitico": {
+            "name": "Animal Político - El Sabueso",
+            "url": "https://www.animalpolitico.com/elsabueso/",
+            "description": "",
+            "nationality": "MX",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "aosfatos": {
+            "name": "Aos Fatos",
+            "url": "https://aosfatos.org/",
+            "description": "",
+            "nationality": "BR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "boom": {
+            "name": "BOOM",
+            "url": "https://www.boomlive.in/",
+            "description": "",
+            "nationality": "IN",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "correktiv": {
+            "name": "CORREKTIV.ORG",
+            "url": "https://correctiv.org/thema/faktencheck/",
+            "description": "",
+            "nationality": "DE",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "chequeado": {
+            "name": "Chequeado",
+            "url": "https://chequeado.com/",
+            "description": "",
+            "nationality": "AR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "climatefeedback": {
+            "name": "Climate Feedback",
+            "url": "https://climatefeedback.org/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "colombiacheck": {
+            "name": "Colombiacheck",
+            "url": "https://colombiacheck.com/",
+            "description": "",
+            "nationality": "CO",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "dn_se": {
+            "name": "Dagens Nyheter",
+            "url": "https://www.dn.se/",
+            "description": "",
+            "nationality": "SE",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "demagog": {
+            "name": "Demagog.cz",
+            "url": "https://demagog.cz/",
+            "description": "",
+            "nationality": "CZ",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "dogruluk": {
+            "name": "Doğruluk Payı",
+            "url": "https://www.dogrulukpayi.com/",
+            "description": "",
+            "nationality": "TR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "dubawa": {
+            "name": "Dubawa - Premium Times Center for Investigative Journalism",
+            "url": "https://dubawa.org/tag/fact-check/",
+            "description": "",
+            "nationality": "NG",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "ecuador_chequea": {
+            "name": "Ecuador Chequea",
+            "url": "http://www.ecuadorchequea.com/",
+            "description": "",
+            "nationality": "EC",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factly": {
+            "name": "FACTLY MEDIA & RESEARCH",
+            "url": "https://factly.in/category/fact-check/",
+            "description": "",
+            "nationality": "IN",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factcheck_ge": {
+            "name": "FactCheck Georgia",
+            "url": "http://factcheck.ge/ka",
+            "description": "",
+            "nationality": "GE",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factcheckni": {
+            "name": "FactCheckNI",
+            "url": "https://factcheckni.org/",
+            "description": "",
+            "nationality": "UK",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factcrescendo": {
+            "name": "FactCrescendo",
+            "url": "https://factcrescendo.com/",
+            "description": "",
+            "nationality": "IN",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factcheck_kz": {
+            "name": "Factcheck.kz",
+            "url": "https://factcheck.kz/",
+            "description": "",
+            "nationality": "KZ",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "factcheck_org": {
+            "name": "Fact Check",
+            "url": "https://www.factcheck.org/",
+            "description": "",
+            "nationality": "US",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "fatisk": {
+            "name": "Faktisk.no",
+            "url": "https://www.faktisk.no/",
+            "description": "",
+            "nationality": "NO",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        },
+        "faktograf": {
+            "name": "Faktograf.hr",
+            "url": "https://faktograf.hr/",
+            "description": "",
+            "nationality": "HR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "observers": {
+            "name": "France 24 - Les Observateurs",
+            "url": "https://observers.france24.com/fr/tag/intox",
+            "description": "",
+            "nationality": "FR",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": false
+            }
+        },
+        "fullfact": {
+            "name": "Full Fact",
+            "url": "https://fullfact.org/",
+            "description": "",
+            "nationality": "UK",
+            "properties": {
+                "belongs_to_ifcn": true,
+                "uses_claimreview": true
+            }
+        }
+
+
+
+    }
+}

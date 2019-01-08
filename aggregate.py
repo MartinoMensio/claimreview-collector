@@ -15,7 +15,12 @@ import utils
 import unshortener
 
 # decide here what to aggregate
-choice = {
+choice = {k if 'domain_list_' not in k else 'domain_list': {
+    'urls': el['contains']['url_classification'],
+    'domains': el['contains']['domain_classification'],
+    'rebuttals': el['contains']['rebuttal_suggestion']
+} for k, el in utils.read_json('sources.json')['datasets'].items()}
+""" {
     'datacommons_factcheck': {
         'urls': True,
         'domains': False,
@@ -37,7 +42,7 @@ choice = {
         'rebuttals': True
     },
     'liar': {
-        'urls': True,
+        'urls': False,
         'domains': False,
         'rebuttals': False
     },
@@ -107,7 +112,7 @@ choice = {
         'rebuttals': False
     }
 }
-
+"""
 all_urls = []
 all_domains = []
 all_rebuttals = defaultdict(lambda: defaultdict(list))
