@@ -116,7 +116,7 @@ choice = {k if 'domain_list_' not in k else 'domain_list': {
 """
 all_urls = []
 all_domains = []
-all_rebuttals = defaultdict(lambda: defaultdict(list))
+all_rebuttals = defaultdict(list)
 all_claimreviews = []
 for subfolder, config in choice.items():
     if config['urls']:
@@ -129,7 +129,10 @@ for subfolder, config in choice.items():
         rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
         for source_url, rebuttal_l in rebuttals.items():
             for rebuttal_url, source in rebuttal_l.items():
-                all_rebuttals[source_url][rebuttal_url].append(source)
+                all_rebuttals[source_url].append({
+                    'url': rebuttal_url,
+                    'source': source
+                })
     if config['claimReviews']:
         claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
         all_claimreviews.extend(claimReview)

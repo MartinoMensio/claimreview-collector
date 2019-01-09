@@ -15,6 +15,7 @@ db = client['test_coinform']
 
 domains_collection = db['domains']
 urls_collection = db['urls']
+rebuttals_collection = db['rebuttals']
 datasets_collection = db['datasets']
 fact_checkers_collection = db['fact_checkers']
 claimReviews_collection = db['claim_reviews']
@@ -23,6 +24,7 @@ url_redirects_collection = db['url_redirects']
 def clean_db():
     domains_collection.drop()
     urls_collection.drop()
+    rebuttals_collection.drop()
     datasets_collection.drop()
     fact_checkers_collection.drop()
     claimReviews_collection.drop()
@@ -57,6 +59,15 @@ def load_urls():
             'score': data
         })
 
+def load_rebuttals():
+    rebuttals = utils.read_json(utils.data_location / 'aggregated_rebuttals.json')
+    for u, data in rebuttals.items():
+        rebuttals_collection.insert_one({
+            '_id': u,
+            'url': u,
+            'rebuttals': data
+        })
+
 def load_claimReviews():
     claimReviews = utils.read_json(utils.data_location / 'aggregated_claimReviews.json')
     for claimReview in claimReviews:
@@ -80,4 +91,6 @@ if __name__ == "__main__":
     load_sources()
     load_domains()
     load_urls()
+    load_rebuttals()
     load_claimReviews()
+
