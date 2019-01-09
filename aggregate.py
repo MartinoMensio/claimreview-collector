@@ -18,7 +18,8 @@ import unshortener
 choice = {k if 'domain_list_' not in k else 'domain_list': {
     'urls': el['contains']['url_classification'],
     'domains': el['contains']['domain_classification'],
-    'rebuttals': el['contains']['rebuttal_suggestion']
+    'rebuttals': el['contains']['rebuttal_suggestion'],
+    'claimReviews': el['contains']['claimReviews']
 } for k, el in utils.read_json('sources.json')['datasets'].items()}
 """ {
     'datacommons_factcheck': {
@@ -116,6 +117,7 @@ choice = {k if 'domain_list_' not in k else 'domain_list': {
 all_urls = []
 all_domains = []
 all_rebuttals = defaultdict(lambda: defaultdict(list))
+all_claimreviews = []
 for subfolder, config in choice.items():
     if config['urls']:
         urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
@@ -128,6 +130,9 @@ for subfolder, config in choice.items():
         for source_url, rebuttal_l in rebuttals.items():
             for rebuttal_url, source in rebuttal_l.items():
                 all_rebuttals[source_url][rebuttal_url].append(source)
+    if config['claimReviews']:
+        claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
+        all_claimreviews.extend(claimReview)
 
 urls_cnt = len(all_urls)
 domains_cnt = len(all_domains)
@@ -142,11 +147,13 @@ aggregated_domains = utils.aggregate(all_domains, 'domain')
 utils.write_json_with_path(aggregated_urls, utils.data_location, 'aggregated_urls.json')
 utils.write_json_with_path(aggregated_domains, utils.data_location, 'aggregated_domains.json')
 utils.write_json_with_path(all_rebuttals, utils.data_location, 'aggregated_rebuttals.json')
+utils.write_json_with_path(all_claimreviews, utils.data_location, 'aggregated_claimReviews.json')
 
 # copy to backend
 utils.write_json_with_path(aggregated_urls, Path('../backend'), 'aggregated_urls.json')
 utils.write_json_with_path(aggregated_domains, Path('../backend'), 'aggregated_domains.json')
 utils.write_json_with_path(all_rebuttals, Path('../backend'), 'aggregated_rebuttals.json')
+utils.write_json_with_path(all_claimreviews, Path('../backend'), 'aggregated_claimReviews.json')
 
 utils.print_stats(aggregated_urls)
 utils.print_stats(aggregated_domains)

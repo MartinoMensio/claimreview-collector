@@ -9,7 +9,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": true,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": true
             }
         },
         "datacommons_feeds": {
@@ -21,7 +22,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "mrisdal_fakenews": {
@@ -33,7 +35,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "golbeck_fakenews": {
@@ -45,7 +48,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": true,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": true
             }
         },
         "liar": {
@@ -57,7 +61,8 @@
                 "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "buzzface": {
@@ -69,7 +74,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "opensources": {
@@ -81,7 +87,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "fakenewsnet": {
@@ -93,7 +100,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "rbutr": {
@@ -105,7 +113,8 @@
                 "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": true,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "hyperpartisan": {
@@ -117,7 +126,8 @@
                 "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "wikipedia": {
@@ -129,7 +139,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_cbsnews": {
@@ -141,7 +152,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_dailydot": {
@@ -153,7 +165,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_fakenewswatch": {
@@ -165,7 +178,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_newrepublic": {
@@ -177,7 +191,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_npr": {
@@ -189,7 +204,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_snopes": {
@@ -201,7 +217,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_thoughtco": {
@@ -213,7 +230,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "domain_list_usnews": {
@@ -225,7 +243,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "melissa_zimdars": {
@@ -237,7 +256,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "jruvika_fakenews": {
@@ -249,7 +269,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "factcheckni_list": {
@@ -261,7 +282,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": true,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "google_factcheck_explorer": {
@@ -273,7 +295,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": true,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         },
         "buzzfeednews": {
@@ -285,7 +308,8 @@
                 "domain_classification": true,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": false
+                "textual_claims": false,
+                "claimReviews": false
             }
         },
         "pontes_fakenewssample": {
@@ -297,7 +321,8 @@
                 "domain_classification": false,
                 "url_classification": true,
                 "rebuttal_suggestion": false,
-                "textual_claims": true
+                "textual_claims": true,
+                "claimReviews": false
             }
         }
     },

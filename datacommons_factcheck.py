@@ -44,7 +44,7 @@ def load_jsonld():
     return claimReviews
 
 def get_claimreviews_from_factcheckers(original_claimReviews):
-    result = {}
+    result = []
 
     # retrieve the full claimReview from the fact checking website
     for idx, c in enumerate(tqdm(claimReviews)):
@@ -71,7 +71,8 @@ def get_claimreviews_from_factcheckers(original_claimReviews):
             # there can be multiple claimReviews in a single fact checking page
             for j, claimReview in enumerate(partial):
                 # save this in the result
-                result['{}::{}'.format(fixed_url, j)] = claimReview
+                #result['{}::{}'.format(fixed_url, j)] = claimReview
+                result.append(claimReview)
 
     return result
 
@@ -89,7 +90,7 @@ if __name__ == '__main__':
 
     # rebuttals is a dict that associates each URL with other URLs that are related. In this case it is for suggesting to read the fact checking article
     rebuttals = defaultdict(lambda: defaultdict(list))
-    for key, claimReview in claimReviews_full.items():
+    for claimReview in claimReviews_full:
         # retrieve the URL of the source of the claim (not always there)
         claim_urls = claimreview.get_claim_urls(claimReview)
         if claim_urls:

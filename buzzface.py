@@ -24,8 +24,15 @@ data = {el['post_id']: {'url': el['Post URL'], 'label': el['Rating']} for el in 
 
 print(len(data))
 
+results = []
+label_mapping = {'mostly true': 'true', 'mostly false': 'fake'}
+
 # download the facebook page
 for id, el in data.items():
+    # add the facebook URL to the output urls
+    label_binary = label_mapping.get(el['label'], None)
+    if label_binary:
+        results.append({'url': el['url'], 'label': label_binary, 'source': 'buzzface'})
     file_path = folder / 'intermediate' / '{}.html'.format(id)
     if not os.path.isfile(file_path):
         response = requests.get(el['url'])
@@ -33,7 +40,6 @@ for id, el in data.items():
 
 
 unfiltered = []
-results = []
 
 for file_location in glob.glob(str(folder / 'intermediate/*.html')):
     #print(file_location)
@@ -58,7 +64,7 @@ for file_location in glob.glob(str(folder / 'intermediate/*.html')):
     id = file_location.split('/')[-1].split('.')[0]
     url = unique.pop()
     label = data[id]['label']
-    label_binary = {'mostly true': 'true', 'mostly false': 'fake'}.get(label, None)
+    label_binary = label_mapping.get(label, None)
     unfiltered.append({'url': url, 'label': label, 'source': 'buzzface'})
     if label_binary:
         results.append({'url': url, 'label': label_binary, 'source': 'buzzface'})

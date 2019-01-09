@@ -98,18 +98,26 @@ def get_claim_urls(claimReview):
     if not itemReviewed:
         itemReviewed = claimReview.get('properties', {}).get('itemReviewed', None)
     if itemReviewed:
-        author = itemReviewed.get('author', None)
-        if not author:
-            author = itemReviewed.get('properties', {}).get('author', None)
-        if author:
-            #exit(0)
-            sameAs = author.get('sameAs', None)
-            if not sameAs:
-                sameAs = author.get('properties', {}).get('sameAs', None)
-            #if sameAs:
-            #    print(sameAs)
+        sameAs = itemReviewed.get('sameAs', None)
+        if sameAs:
+            result = itemReviewed['sameAs']
+        else:
+            author = itemReviewed.get('author', None)
+            if not author:
+                author = itemReviewed.get('properties', {}).get('author', None)
+            if author:
+                #exit(0)
+                sameAs = author.get('sameAs', None)
+                if not sameAs:
+                    sameAs = author.get('properties', {}).get('sameAs', None)
+                #if sameAs:
+                #    print(sameAs)
             result = sameAs
     # TODO also return sameAs if present on the claim directly, other links there!!
+
+    # remove the "mm:ss mark of URL" that is used for some videos
+    if result:
+        result = re.sub(r'.*\s+mark(\sof)?\s+(.+)', r'\2', result)
     return result
 
 def get_claim_rating(claimReview):
