@@ -247,6 +247,19 @@
                 "claimReviews": false
             }
         },
+        "domain_list_politifact": {
+            "name": "Politifact",
+            "url": "https://www.politifact.com/punditfact/article/2017/apr/20/politifacts-guide-fake-news-websites-and-what-they/",
+            "description": "List of fake news sites by Politifact",
+            "author": "https://www.politifact.com/",
+            "contains": {
+                "domain_classification": true,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
+                "claimReviews": false
+            }
+        },
         "melissa_zimdars": {
             "name": "False, Misleading, Clickbait-y, and/or Satirical \"News\" Sources",
             "url": "https://docs.google.com/spreadsheets/d/1o3FFiCB_W2sCLH7g6iPwzC9lmfIj7ojlA-htvQCJhaw/",

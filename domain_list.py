@@ -23,6 +23,12 @@ def usnews_mapping():
     default['fake_vals'] = ['hoax']
     return default
 
+def politifact_mapping():
+    default = default_mapping()
+    default['label_col'] = 'Type of site'
+    default['fake_vals'] = ['Fake news', 'Imposter site']
+    return default
+
 filecolumns = {
     'cbsnews': default_mapping(),
     'dailydot': default_mapping(),
@@ -31,7 +37,8 @@ filecolumns = {
     'npr': default_mapping(),
     'snopes': default_mapping(),
     'thoughtco': default_mapping(),
-    'usnews': usnews_mapping()
+    'usnews': usnews_mapping(),
+    'politifact': politifact_mapping()
 }
 
 all_domains = []
@@ -39,7 +46,7 @@ for source, mappings in filecolumns.items():
     data = utils.read_tsv(location / 'intermediate' / '{}.tsv'.format(source))
     print(source)
     domains = [{
-        'domain': el[mappings['domain_col']],
+        'domain': el[mappings['domain_col']].lower(),
         'label': 'true' if el[mappings['label_col']] in mappings['true_vals'] else 'fake',
         'source': 'domain_list_{}'.format(source)
     } for el in data if el[mappings['label_col']] in mappings['true_vals']+mappings['fake_vals']]
