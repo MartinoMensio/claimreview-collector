@@ -309,7 +309,7 @@
                 "url_classification": true,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
-                "claimReviews": false
+                "claimReviews": true
             }
         },
         "buzzfeednews": {

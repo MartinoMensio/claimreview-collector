@@ -161,27 +161,5 @@ utils.write_json_with_path(all_claimreviews, Path('../backend'), 'aggregated_cla
 utils.print_stats(aggregated_urls)
 utils.print_stats(aggregated_domains)
 
-print('updating mappings, it may take a while')
-mappings_file = utils.data_location / 'mappings.json'
-
-mappings = {}
-if os.path.isfile(mappings_file):
-    with open(mappings_file) as f:
-        mappings = json.load(f)
-
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C!')
-    with open(mappings_file, 'w') as f:
-        json.dump(mappings, f, indent=2)
-    sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
-
-
-to_be_mapped = [url for url in aggregated_urls.keys() if url not in mappings]
-try:
-    unshortener.unshorten_multiprocess(to_be_mapped, mappings)
-except Exception as e:
-    print('gotcha')
-# save those damn mappings
-with open(mappings_file, 'w') as f:
-    json.dump(mappings, f, indent=2)
+to_be_mapped = [url for url in aggregated_urls.keys()]
+unshortener.unshorten_multiprocess(to_be_mapped)

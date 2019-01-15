@@ -6,3 +6,5 @@ plac
 flatten_json
 python-dotenv
 pymongo
+validators
+tldextract

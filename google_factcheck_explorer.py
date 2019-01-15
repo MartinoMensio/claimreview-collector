@@ -35,6 +35,8 @@ def get_recent(lang='', offset=0, num_results=200000, query='list:recent'):
     if response.status_code != 200:
         raise ValueError(response.status_code)
     #print(response.text)
+    #text = response.text[5:].encode().decode('utf-8', 'ignore')
+
     content = json.loads(response.text[5:])
     reviews = content[0][1]
     #with open('test.json', 'w') as f:
