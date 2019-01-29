@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 # puts together all the datasets
 

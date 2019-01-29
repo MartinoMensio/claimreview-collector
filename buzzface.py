@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 import requests
 import glob
@@ -74,4 +74,3 @@ utils.write_json_with_path(results, folder, 'urls.json')
 
 by_domain = utils.compute_by_domain(results)
 utils.write_json_with_path(by_domain, folder, 'domains.json')
-

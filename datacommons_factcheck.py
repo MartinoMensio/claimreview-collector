@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 import extruct
 import json
@@ -125,5 +125,3 @@ if __name__ == '__main__':
     # aggregate by domain
     by_domain = utils.compute_by_domain(urls)
     utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
-
-

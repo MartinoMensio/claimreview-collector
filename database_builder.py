@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 """
 This script is responsible to store into a DBMS all the datasets preprocessed.

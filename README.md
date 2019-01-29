@@ -46,6 +46,10 @@ source urls: not present in the dataset, but there are links to politifacts
 
 success!
 
+## google_factcheck_explorer
+
+Requires env variable `GOOGLE_FACTCHECK_EXPLORER_COOKIE` in the `.env` file. Just inspect from your browser and copy it.
+
 ## `fever`
 
 No URLs, just claims as text
@@ -65,4 +69,3 @@ success!
 ## `several27_fakenews_corpus`
 
 source: https://github.com/several27/FakeNewsCorpus --> http://researchably-fake-news-recognition.s3.amazonaws.com/public_corpus/news_cleaned_2018_02_13.csv.zip
-

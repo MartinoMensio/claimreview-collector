@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 import json
 import csv
@@ -24,4 +24,3 @@ with open(input_path) as f:
             utils.write_json_with_path(results, output_path, 'unfiltered_{}.json'.format(chunk_n), indent=None)
             results = []
             chunk_n += 1
-
