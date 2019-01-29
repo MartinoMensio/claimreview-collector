@@ -8,3 +8,4 @@ python-dotenv
 pymongo
 validators
 tldextract
+beautifulsoup4
