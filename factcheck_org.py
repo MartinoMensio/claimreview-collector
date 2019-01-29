@@ -4,9 +4,9 @@ import utils
 import requests
 from bs4 import BeautifulSoup
 
-LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
+LIST_URL = 'https://www.factcheck.org/page/{}/'
 
-my_path = utils.data_location / 'snopes'
+my_path = utils.data_location / 'factcheck_org'
 
 page = 1
 all_statements = []
@@ -17,22 +17,15 @@ while True:
     if response.status_code != 200:
         print('status code', response.status_code)
         break
-    #print(response.text)
+
     soup = BeautifulSoup(response.text, 'lxml')
 
-    for s in soup.select('main.main article.list-group-item'):
-        link = s.select('a.fact_check')[0]['href']
-        title = s.select('h2.card-title')[0].text.strip()
-        subtitle = s.select('p.card-subtitle')
-        if subtitle:
-            subtitle = subtitle[0].text.strip()
-        else:
-            subtitle = None
-        date = s.select('p.card-subtitle span.date')
-        if date:
-            date = date[0].text.strip()
-        else:
-            date = None
+    for s in soup.select('main#main article'):
+        link = s.select('h3.entry-title a')[0]['href']
+        title = s.select('h3.entry-title a')[0].text.strip()
+        subtitle = s.select('div.entry-content p')[0].text.strip()
+        date = s.select('header.entry-header div.entry-meta')[0].text.strip()
+
 
         all_statements.append({
             'link': link,
@@ -41,8 +34,9 @@ while True:
             'date': date
         })
 
-    page += 1
     print(len(all_statements))
+    page += 1
+
 
 
 utils.write_json_with_path(all_statements, my_path, 'statements.json')

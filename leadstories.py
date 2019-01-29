@@ -2,11 +2,12 @@
 
 import utils
 import requests
+import re
 from bs4 import BeautifulSoup
 
-LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
+LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
 
-my_path = utils.data_location / 'snopes'
+my_path = utils.data_location / 'leadstories'
 
 page = 1
 all_statements = []
@@ -17,22 +18,19 @@ while True:
     if response.status_code != 200:
         print('status code', response.status_code)
         break
-    #print(response.text)
-    soup = BeautifulSoup(response.text, 'lxml')
 
-    for s in soup.select('main.main article.list-group-item'):
-        link = s.select('a.fact_check')[0]['href']
-        title = s.select('h2.card-title')[0].text.strip()
-        subtitle = s.select('p.card-subtitle')
-        if subtitle:
-            subtitle = subtitle[0].text.strip()
-        else:
-            subtitle = None
-        date = s.select('p.card-subtitle span.date')
-        if date:
-            date = date[0].text.strip()
-        else:
-            date = None
+    soup = BeautifulSoup(response.text, 'lxml')
+    current_page = soup.select('a.is_current')
+    if not current_page:
+        break
+
+    for s in soup.select('li article'):
+        link = s.select('h1 a')[0]['href']
+        title = s.select('h1 a')[0].text.strip()
+        subtitle = s.select('div.e_descr')[0].text.strip()
+        date = s.select('ul.e_data_list li ')[0].text.strip()
+        date = re.sub(r'.*"([^]]+)".*', r'\1', date)
+
 
         all_statements.append({
             'link': link,
@@ -41,8 +39,10 @@ while True:
             'date': date
         })
 
-    page += 1
     print(len(all_statements))
+    page += 1
+
+
 
 
 utils.write_json_with_path(all_statements, my_path, 'statements.json')

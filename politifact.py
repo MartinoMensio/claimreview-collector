@@ -39,7 +39,7 @@ while True:
 
         #print(link, author, rating)
         all_statements.append({
-            'link': link,
+            'link': 'https://www.politifact.com/' + link,
             'claim': claim,
             'author': author,
             'label': label,
