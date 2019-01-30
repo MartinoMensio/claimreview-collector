@@ -9,3 +9,4 @@ pymongo
 validators
 tldextract
 beautifulsoup4
+dateparser

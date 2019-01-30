@@ -11,6 +11,46 @@ We select from the datasets only items that are (almost) completely true or fake
 
 Goal: have a list of URL labelled with `fake` / `true`
 
+## Types of data
+
+### fact_checking_url
+
+```jsonc
+{
+    "url": "url", // the url to the fact checking article. Required
+    "source": "dataset_name", // where this record comes from. Required
+    "title": "title of fact checking article", // when is already known from the dataset
+    "subtitle": "subtitle or description", // when is already known from the dataset
+    "claim": "the reviewed textual claim", // when is already known from the dataset
+    "label": "label", // when the label is already known from the dataset
+    "reason": "textual reason", // when is already known from the dataset
+    "date": "date in isoformat", // when is already known from the dataset
+    "author": "name of the author", // when is already known from the dataset
+}
+```
+
+### ClaimReview
+
+Only the relevant fields are listed
+
+```jsonc
+{
+    "url": "url", // the url where this ClaimReview belongs, is the fact checking article
+    "claimReviewed": "text", // the specific textual claim that is being reviewed
+    "itemReviewed": {
+        "url": "url", // when available, put here the url of the claim (can come from the author, ...)
+    },
+    "reviewRating": {
+        "ratingValue": -1, // when available, the current value that belongs to the [worstValue, bestValue] interval
+        "worstValue": -1, // inferior bound for ratingValue
+        "bestValue": -1, // superior bound for ratingValue
+        "alternateName": "textual label" // to be used as label, especially when the ratingValue is not available
+    },
+    "author": {
+    }
+}
+```
+
 ## From one type of data to the other
 
 ClaimReview --> UrlLabel (claim url, fact checker url)
@@ -26,7 +66,7 @@ url: https://toolbox.google.com/factcheck/explorer
 
 size: ~28000 items
 
-used for: ClaimReviews, FactCheckerUrls
+used for: ClaimReviews, fact_checking_urls
 
 Requires env variable `GOOGLE_FACTCHECK_EXPLORER_COOKIE` in the `.env` file. Just inspect from your browser and copy it.
 
@@ -38,7 +78,7 @@ url: https://www.datacommons.org/factcheck/download
 
 size: 10564 items
 
-used for: ClaimReviews, FactCheckerUrls
+used for: ClaimReviews, fact_checking_urls
 
 ## `datacommons_feeds`
 
@@ -48,7 +88,7 @@ url: https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.js
 
 size: 43 items
 
-used for: ClaimReviews, FactCheckerUrls
+used for: ClaimReviews, fact_checking_urls
 
 ## `mrisdal_fakenews`
 
@@ -68,7 +108,7 @@ url: https://github.com/jgolbeck/fakenews
 
 size: 493 items
 
-used for: FactCheckerUrls, UrlLabels, Rebuttals
+used for: fact_checking_urls, UrlLabels, Rebuttals
 
 ## `liar`
 
@@ -78,7 +118,7 @@ url: https://www.cs.ucsb.edu/~william/data/liar_dataset.zip
 
 size: 12836 items
 
-used for: FactCheckerUrls, ClaimReviews
+used for: fact_checking_urls, ClaimReviews
 
 ## `rumor`
 
@@ -108,7 +148,7 @@ url: https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/XS
 
 size: 20987211 items
 
-used for: TODO, can be used for FactCheckerUrls
+used for: TODO, can be used for fact_checking_urls
 
 ## `buzzface`
 
@@ -171,13 +211,13 @@ used for: DomainLabels
 
 ## `vlachos_factchecking`
 
-type: TextualClaim list with some FactCheckerUrls (politifact and channel4)
+type: TextualClaim list with some fact_checking_urls (politifact and channel4)
 
 url: https://sites.google.com/site/andreasvlachos/resources/FactChecking_LTCSS2014_release.tsv?attredirects=0
 
 size: 221 items
 
-used for: FactCheckerUrls, TextualClaims
+used for: fact_checking_urls, TextualClaims
 
 ## `hyperpartisan`
 
@@ -341,7 +381,7 @@ url: not available
 
 size: 55 items
 
-used for: FactCheckerUrls
+used for: fact_checking_urls
 
 ## `elections_integrity`
 

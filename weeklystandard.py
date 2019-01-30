@@ -16,9 +16,9 @@ page = 1
 all_statements = []
 next_page_url = LIST_URL
 while True:
-    url = next_page_url
-    print(url)
-    response = requests.get(url, headers=headers)
+    facts_url = next_page_url
+    print(facts_url)
+    response = requests.get(facts_url, headers=headers)
     if response.status_code != 200:
         print('status code', response.status_code)
         break
@@ -35,13 +35,14 @@ while True:
         break
 
     for s in soup.select('li h3.HeroTextBelowPromo-title'):
-        link = s.select('a.Link')[0]['href']
+        url = s.select('a.Link')[0]['href']
         title = s.select('a.Link')[0].text.strip()
 
 
         all_statements.append({
-            'link': link,
-            'title': title
+            'url': url,
+            'title': title,
+            'source': 'weeklystandard'
         })
 
     print(len(all_statements))

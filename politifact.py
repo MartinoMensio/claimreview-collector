@@ -4,6 +4,8 @@ import utils
 import requests
 from bs4 import BeautifulSoup
 
+import dateparser
+
 LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
 STATEMENT_SELECTOR = 'div.statement'
 
@@ -14,9 +16,9 @@ my_path = utils.data_location / 'politifact'
 page = 1
 all_statements = []
 while True:
-    url = LIST_URL.format(page)
-    print(url)
-    response = requests.get(url)
+    facts_url = LIST_URL.format(page)
+    print(facts_url)
+    response = requests.get(facts_url)
     if response.status_code != 200:
         print('status code', response.status_code)
         break
@@ -29,26 +31,28 @@ while True:
     statements = soup.select(STATEMENT_SELECTOR)
     #print(statements)
     for s in statements:
-        link = s.select('p.statement__text a.link')[0]['href']
+        url = s.select('p.statement__text a.link')[0]['href']
         claim = s.select('p.statement__text a.link')[0].text
         author = s.select('div.statement__source a')[0].text
         label = s.select('div.meter img')[0]['alt']
-        review = s.select('div.meter p.quote')[0].text
+        reason = s.select('div.meter p.quote')[0].text
         date = s.select('p.statement__edition span.article__meta')[0].text
+        date = dateparser.parse(date).isoformat()
 
 
         #print(link, author, rating)
         all_statements.append({
-            'link': 'https://www.politifact.com/' + link,
+            'url': 'https://www.politifact.com/' + url,
             'claim': claim,
             'author': author,
             'label': label,
-            'review': review,
-            'date': date
+            'reason': reason,
+            'date': date,
+            'source': 'politifact'
         })
-    page += 1
 
     print(len(all_statements))
+    page += 1
 
 
-utils.write_json_with_path(all_statements, my_path, 'statements.json')
+utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
