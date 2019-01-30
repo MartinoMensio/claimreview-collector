@@ -65,10 +65,23 @@
                 "claimReviews": false
             }
         },
+        "hoaxy": {
+            "name": "The Hoaxy Misinformation and Fact-Checking Diffusion Network",
+            "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/XSEHDL",
+            "description": "A large longitudinal dataset from Twitter, consisting of retweeted messages with links to misinformation and fact-checking articles collected by Hoaxy.",
+            "author": "https://hoaxy.iuni.iu.edu/",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": false,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
+                "claimReviews": false
+            }
+        },
         "buzzface": {
-            "name": "Hyperpartisan Facebook Pages Are Publishing False And Misleading Information At An Alarming Rate",
-            "url": "https://github.com/BuzzFeedNews/2016-10-facebook-fact-check",
-            "description": "This dataset comprises a complete sample of news published in Facebook from 9 news agencies over a week close to the 2016 U.S. election from September 19 to 23 and September 26 and 27. Every post and the linked article were fact-checked claim-by-claim by 5 BuzzFeed ournalists. It contains 1,627 articles 826 mainstream, 356 left-wing, and 545 right-wing articles.",
+            "name": "BuzzFace: a News Veracity Dataset with Facebook User Commentary and Egos",
+            "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/UP05PM",
+            "description": "BuzzFeed took all posts made by the Facebook pages of 9 various news outlets during a 10 day period in September 2016 and annotated them for veracity. This was the basis for a dataset. BuzzFace takes this dataset and expands upon it by giving the user the tools to capture the Facebook commentary, metadata, attachments, and the articles themselves associated with each post. (2018-04-06)",
             "author": "https://www.buzzfeednews.com/",
             "contains": {
                 "domain_classification": false,
@@ -330,6 +343,19 @@
             "url": "https://www.kaggle.com/pontes/fake-news-sample",
             "description": "Fake News Sample",
             "author": "https://www.kaggle.com/pontes",
+            "contains": {
+                "domain_classification": false,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": true,
+                "claimReviews": false
+            }
+        },
+        "vlachos_factchecking": {
+            "name": "Fact checking corpus",
+            "url": "https://sites.google.com/site/andreasvlachos/resources/FactChecking_LTCSS2014_release.tsv?attredirects=0",
+            "description": "collected statements fact checked by journalists on two websites (politifact.com and Channel 4) in order to help us develop an automated fact checking system. As part of this process we recorded for 221 statements the text, the speaker, the time it was made, the verdict assigned by the journalists, the link to the webpage containing the full analysis of the verdict, the sources used and a judgement on whether we deem the statement as suitable for automated fact checking. The corpus is available in .ods and .tsv formats.",
+            "author": "http://andreasvlachos.github.io/",
             "contains": {
                 "domain_classification": false,
                 "url_classification": true,

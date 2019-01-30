@@ -11,52 +11,117 @@ We select from the datasets only items that are (almost) completely true or fake
 
 Goal: have a list of URL labelled with `fake` / `true`
 
-## `datacommons_factcheck`
+## From one type of data to the other
 
-source url: `https://www.datacommons.org/factcheck/download`
+ClaimReview --> UrlLabel (claim url, fact checker url)
+ClaimReview --> TextualClaim
+ClaimReview --> Rebuttal
+TextualClaim --> ClaimReview (use google_factcheck_explorer search)
 
-This is a collection of claimReviews. The problem is that they contain fewer attributes than the claimReviews that are published on the fact-checking websites. For this reason the fact checker websites are scraped to obtain the full claimReview.
+## `google_factcheck_explorer`
 
-## datacommons_feeds
+Type: aggregator of ClaimReview items
 
-source url: `https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json`
+url: https://toolbox.google.com/factcheck/explorer
 
-labels:
+size: ~28000 items
 
-majority: ratingValue between worstRating and bestRating
-factcheckni: alternateName text
-  false: "False.", "Misleading", "This claim is false", "Mostly false."
-  true: "True", "Accurate", "The claim is accurate", "The claim is true"
-  other: "Unproven", "Inaccurate.", "Correct with consideration.", "Partly accurate", "Broadly accurate", "Uncertain"
-
-problem: the URL is to fact checker, not the source
-
-conclusion: not used
-
-## `liar`
-
-source url: `https://www.cs.ucsb.edu/~william/data/liar_dataset.zip`
-
-labels are ok
-
-source urls: not present in the dataset, but there are links to politifacts
-
-
-## `golbeck_fakenews`
-
-success!
-
-## google_factcheck_explorer
+used for: ClaimReviews, FactCheckerUrls
 
 Requires env variable `GOOGLE_FACTCHECK_EXPLORER_COOKIE` in the `.env` file. Just inspect from your browser and copy it.
 
+## `datacommons_factcheck`
+
+type: aggregator of ClaimReview items
+
+url: https://www.datacommons.org/factcheck/download
+
+size: 10564 items
+
+used for: ClaimReviews, FactCheckerUrls
+
+## `datacommons_feeds`
+
+type: aggregator of ClaimReview items
+
+url: https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json
+
+size: 43 items
+
+used for: ClaimReviews, FactCheckerUrls
+
+## `mrisdal_fakenews`
+
+type: articles (title, text, author, date, language, site_url, country, domain_rank, spam_score, facebook_likes&comments&shares) + labels coming from bs_detector
+
+url: https://www.kaggle.com/mrisdal/fake-news
+
+size: 12999 items
+
+used for: TextualClaims, DomainLabels
+
+## `golbeck_fakenews`
+
+type: url labels + rebuttals
+
+url: https://github.com/jgolbeck/fakenews
+
+size: 493 items
+
+used for: FactCheckerUrls, UrlLabels, Rebuttals
+
+## `liar`
+
+type: aggregator of politifact claimReviews. Columns (politifact_id, label, statement, subjects, speaker, speaker_job_title, state_info, party_affiliation, context)
+
+url: https://www.cs.ucsb.edu/~william/data/liar_dataset.zip
+
+size: 12836 items
+
+used for: FactCheckerUrls, ClaimReviews
+
+## `rumor`
+
+type: twitter/weibo posts with label `rumor`/`otherwise`
+
+url: http://alt.qcri.org/~wgao/data/rumdect.zip
+
+size: 992 events
+
+used for: UrlLabels (twitter urls can be built from tweet_id) TODO
+
 ## `fever`
 
-No URLs, just claims as text
+type: aggregation of TextualClaim items with label `supported`/`refuted`/`notEnoughInfo` related to wikipedia page IDs as evidence
+
+url: http://fever.ai/data.html
+
+size: 185445 items
+
+used for: nothing, TODO, can be used for learning relations between evidence and claims
+
+## `hoaxy`
+
+type: twitter retweets with labels `claim`/`fact_checking` related to the link contained
+
+url: https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/XSEHDL
+
+size: 20987211 items
+
+used for: TODO, can be used for FactCheckerUrls
 
 ## `buzzface`
 
-the urls are to facebook.
+type: facebook posts (fb_url, type, rating, shares&likes&comments)
+
+url: https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/UP05PM
+
+size: 2282 items
+
+used for: UrlLabels (both fb urls and source URLs)
+
+Posts have been fact-checked one by one.
+The urls are to facebook. To extract source URLs:
 
 1. filter type='link' in tsv
 2. go to facebook url and parse html
@@ -64,8 +129,236 @@ the urls are to facebook.
 4. take href, select queryParam 'u', unescape it
 5. this is the link
 
-success!
+## `fakenews_challenge`
 
-## `several27_fakenews_corpus`
+type: stance detection: headlines with related full text pages and label `agrees`/`disagrees`/`discusses`/`unrelated`
 
-source: https://github.com/several27/FakeNewsCorpus --> http://researchably-fake-news-recognition.s3.amazonaws.com/public_corpus/news_cleaned_2018_02_13.csv.zip
+url: http://www.fakenewschallenge.org/
+
+size: 300 headlines against 2595 body texts
+
+used for: TODO, can be used to learn to detect unrelated headlines (clickbait?)
+
+## `fakenews_corpus`
+
+type: news articles scraped from the `opensources` list + nytimes + webhose
+
+url: https://github.com/several27/FakeNewsCorpus https://researchably-fake-news-recognition.s3.amazonaws.com/public_corpus/news_cleaned_2018_02_13.csv.zip
+
+size: 9408908 articles
+
+used for: nothing, simply use the domains from `opensources`
+
+## `opensources`
+
+type: DomainLabel list
+
+url: http://www.opensources.co/
+
+size: 834 domains
+
+used for: DomainLabels
+
+## `bs_detector`
+
+type: DomainLabel list
+
+url: https://github.com/bs-detector/bs-detector/blob/dev/ext/data/data.json
+
+size: 722 domains
+
+used for: DomainLabels
+
+## `vlachos_factchecking`
+
+type: TextualClaim list with some FactCheckerUrls (politifact and channel4)
+
+url: https://sites.google.com/site/andreasvlachos/resources/FactChecking_LTCSS2014_release.tsv?attredirects=0
+
+size: 221 items
+
+used for: FactCheckerUrls, TextualClaims
+
+## `hyperpartisan`
+
+type: articles from `left`/`least`/`right` political side and labels (publisher-wise) coming from BuzzFeed journalists and MediaBiasFactCheck.com
+
+url: https://pan.webis.de/semeval19/semeval19-web/
+
+size: 1 milion items
+
+used for: TODO, can be used for DomainLabels related to bias
+
+## `rbutr`
+
+type: urls with label and rebuttal urls
+
+url: http://rbutr.com/
+
+size: 16179 urls
+
+used for: Rebuttals
+
+## `fakenewsnet`
+
+type: articles from buzzfeed and politifact (they are not linked in the data) with (title, url, author, ...)
+
+url: https://github.com/KaiDMML/FakeNewsNet
+
+size: 422 items
+
+used for: UrlLabels, TextualClaims
+
+## `fake_real_news_dataset`
+
+type: articles (title, text, label)
+
+url: https://github.com/GeorgeMcIntire/fake_real_news_dataset (dead)
+
+size: 7795 items
+
+used for: TODO TextualClaims
+
+# `domain_list`
+
+type: DomainLabels
+
+url:
+
+- `fakenewswatch` https://web.archive.org/web/20180213181029/http://fakenewswatch.com/
+- `dailydot` https://www.dailydot.com/layer8/fake-news-sites-list-facebook/
+- `usnwes` http://www.usnews.com/news/national-news/articles/2016-11-14/avoid-these-fake-news-sites-at-all-costs
+- `newsrepublic` https://newrepublic.com/article/118013/satire-news-websites-are-cashing-gullible-outraged-readers
+- `cbsnews` http://www.cbsnews.com/pictures/dont-get-fooled-by-these-fake-news-sites/
+- `thoughtco` https://www.thoughtco.com/guide-to-fake-news-websites-3298824
+- `npr` https://www.npr.org/sections/alltechconsidered/2016/11/23/503146770/npr-finds-the-head-of-a-covert-fake-news-operation-in-the-suburbs
+- `snopes` https://www.snopes.com/news/2016/01/14/fake-news-sites/
+- `politifact` https://www.politifact.com/punditfact/article/2017/apr/20/politifacts-guide-fake-news-websites-and-what-they/
+
+size: 326 domains
+
+used for: DomainLabels
+
+## `melissa_zimdars`
+
+type: DomainLabels
+
+url: https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/preview
+
+size: 1000 domains
+
+used for: DomainLabels
+
+## `wikipedia`
+
+type: DomainLabels
+
+url: https://en.wikipedia.org/wiki/List_of_fake_news_websites
+
+size: 179 domains
+
+used for: DomainLabels
+
+## `credibilitycoalition`
+
+type: ??
+
+url: https://data.world/credibilitycoalition/webconf-2018
+
+size: ??
+
+used for: ??
+
+## `credbank`
+
+type: ??
+
+url: http://compsocial.github.io/CREDBANK-data/
+
+size: ??
+
+used for: ??
+
+## `some_like_it_hoax`
+
+type: ??
+
+url: https://github.com/gabll/some-like-it-hoax
+
+size: ??
+
+used for: ??
+
+Not retrievable because of Facebook API and Cambridge Analytica
+
+## `jruvika_fakenews
+
+type: articles (urls, headline, body, label(1==true,0==fake))
+
+url: https://www.kaggle.com/jruvika/fake-news-detection
+
+size: 4009 items
+
+used for: UrlLabels, TextualClaims
+
+## `pontes_fakenewssample`
+
+type: articles (domain, type, url, content, title, authors, source)
+
+url: https://www.kaggle.com/pontes/fake-news-sample
+
+size: 426550 items
+
+used for: UrlLabels, TextualClaims
+
+TODO see if the label always comes from the domain
+
+## `incongruity`
+
+type: ?? TODO analyse probably article headline and body
+
+url: https://github.com/david-yoon/detecting-incongruity/
+
+size: ??
+
+used for: TextualClaims
+
+## `osf_crowdsourcing`
+
+type: DomainLabels
+
+url: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3118471 https://osf.io/6bptd/
+
+size: 61 domains
+
+used for: DomainLabels
+
+## `factcheckni_list
+
+type: article (title, url, date, claim, claim_url, conclusion, label, fb_stats) related to factcheckni
+
+url: not available
+
+size: 55 items
+
+used for: FactCheckerUrls
+
+## `elections_integrity`
+
+type: 10 milion tweets
+
+url: https://about.twitter.com/en_us/values/elections-integrity.html#data
+
+size: 10 milion tweets
+
+used for: ??
+
+## `buzzfeednews`
+
+type: DomainLabels
+
+url: https://github.com/BuzzFeedNews/2018-12-fake-news-top-50
+
+size: 257 items
+
+used for: DomainLabels
