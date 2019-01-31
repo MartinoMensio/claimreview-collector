@@ -190,10 +190,18 @@ def simplify_label(label):
         "False": 'fake',
         "True": 'true',
         "Mostly True": 'true',
+        #"Half True": "?",
         "Mostly False": 'fake',
         "Pants on Fire!": 'fake',
         # from golbeck_fakenews
-        "Fake": 'fake'
+        "Fake": 'fake',
+        # from liar (politifact-dashed)
+        "false": 'fake',
+        "true": 'true',
+        "mostly-true": 'true',
+        "mostly-false": 'fake',
+        "barely-true": 'fake',
+        "pants-fire": 'fake',
     }
     return label_maps.get(label, None)
 

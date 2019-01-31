@@ -26,9 +26,13 @@ def merge_fact_checking_urls(old, new):
         #if new['source'] not in old['source']:
         if 'label' in new and 'label' in old and new['label'] != old['label']:
             if new['label'] != None and old['label'] != None:
-                print(old)
-                print(new)
-                raise ValueError()
+                if new['claim'] != old['claim']:
+                    raise ValueError('retry')
+                    # TODO this will be fixed shortly
+                else:
+                    print(old)
+                    print(new)
+                    raise ValueError('abort')
         result = {**old, **{k:v for k,v in new.items() if v!=None}}
         print(old['source'], new['source'])
         result['source'] = list(set(old['source'] + [new['source']]))
@@ -69,6 +73,8 @@ for subfolder, config in choice.items():
     if config['fact_checking_urls']:
         fact_checking_urls = utils.read_json(utils.data_location / subfolder / 'fact_checking_urls.json')
         for fcu in fact_checking_urls:
+            if fcu['url'].endswith('#'):
+                pass # TODO manage multiple claims per same url, finding the match with the right anchor
             match = database_builder.get_fact_checking_url(fcu['url'])
             merged = merge_fact_checking_urls(match, fcu)
             database_builder.load_fact_checking_url(merged)

@@ -26,6 +26,7 @@ It is a flat object that contains fields from claimReview
     "claim": "the reviewed textual claim", // when is already known from the dataset
     "claim_url": "the url to the claim",
     "label": "textual label", // when the label is already known from the dataset
+    "original_label": "textual label", // not simplified to 'true'/'fake'
     "reason": "textual reason", // when is already known from the dataset
     "date": "date in isoformat", // when is already known from the dataset
     "author": "name of the author", // when is already known from the dataset
@@ -56,11 +57,19 @@ Only the relevant fields are listed
 
 ## From one type of data to the other
 
-ClaimReview --> fact_checking_url
-fact_checking_url --> url_label (claim_url) url_label(url)
-fact_checking_url --> claim
-fact_checking_url --> Rebuttal(claim_url, url)
-TextualClaim --> ClaimReview (use google_factcheck_explorer search)
+```text
+ClaimReview
+    fact_checking_url
+fact_checking_url
+    if claim_url: url_label(claim_url)
+    url_label(url)
+fact_checking_url
+    if claim_url: claim
+fact_checking_url
+    Rebuttal(claim_url, url)
+TextualClaim
+    ClaimReview (use google_factcheck_explorer search)
+```
 
 ## `google_factcheck_explorer`
 

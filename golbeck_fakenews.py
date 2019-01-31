@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import utils
+import claimreview
 
 directory = utils.data_location / 'golbeck_fakenews'
 
@@ -8,6 +9,23 @@ directory = utils.data_location / 'golbeck_fakenews'
 input_file = directory / 'intermediate' / 'data.tsv'
 
 data = utils.read_tsv(input_file)
+
+fact_checking_urls = []
+
+for row in data:
+    original_label = row['Fake or Satire?'].strip()
+    label = claimreview.simplify_label(original_label)
+    claim_url = row['URL of article']
+    for url in row['URL of rebutting article'].split('; '):
+        fact_checking_urls.append({
+            'url': url,
+            'source': 'golbeck_fakenews',
+            'claim_url': claim_url,
+            'label': label,
+            'original_label': original_label
+        })
+
+utils.write_json_with_path(fact_checking_urls, directory, 'fact_checking_urls.json')
 
 urls = [{'url': row['URL of article'], 'label': 'fake', 'source': 'golbeck_fakenews'} for row  in data if row['Fake or Satire?'].strip() == 'Fake']
 

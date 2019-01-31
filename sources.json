@@ -51,7 +51,8 @@
                 "url_classification": true,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
-                "claimReviews": true
+                "claimReviews": true,
+                "fact_checking_urls": true
             }
         },
         "liar": {
@@ -64,7 +65,8 @@
                 "url_classification": false,
                 "rebuttal_suggestion": false,
                 "textual_claims": true,
-                "claimReviews": false
+                "claimReviews": false,
+                "fact_checking_urls": true
             }
         },
         "hoaxy": {
@@ -311,7 +313,8 @@
                 "url_classification": true,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
-                "claimReviews": false
+                "claimReviews": false,
+                "fact_checking_urls": true
             }
         },
         "google_factcheck_explorer": {
