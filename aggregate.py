@@ -14,110 +14,40 @@ from pathlib import Path
 import utils
 import unshortener
 
+import database_builder
+
+
+def merge_fact_checking_urls(old, new):
+    if not old:
+        result = {**new}
+        result['source'] = [new['source']]
+    else:
+        # TODO fields that cannot be merged
+        #if new['source'] not in old['source']:
+        if 'label' in new and 'label' in old and new['label'] != old['label']:
+            if new['label'] != None and old['label'] != None:
+                print(old)
+                print(new)
+                raise ValueError()
+        result = {**old, **{k:v for k,v in new.items() if v!=None}}
+        print(old['source'], new['source'])
+        result['source'] = list(set(old['source'] + [new['source']]))
+    return result
+
 # decide here what to aggregate
 choice = {k if 'domain_list_' not in k else 'domain_list': {
-    'urls': el['contains']['url_classification'],
-    'domains': el['contains']['domain_classification'],
-    'rebuttals': el['contains']['rebuttal_suggestion'],
-    'claimReviews': el['contains']['claimReviews']
+    'urls': el['contains'].get('url_classification', False), # TODO rename to url_labels
+    'domains': el['contains'].get('domain_classification', False), # TODO rename to domain_labels
+    'rebuttals': el['contains'].get('rebuttal_suggestion', False), # TODO rename to rebuttals
+    'claimReviews': el['contains'].get('claimReviews', False), # TODO rename to claim_reviews
+    'fact_checking_urls': el['contains'].get('fact_checking_urls', False)
 } for k, el in utils.read_json('sources.json')['datasets'].items()}
-""" {
-    'datacommons_factcheck': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': True
-    },
-    'datacommons_feeds': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': False
-    },
-    'mrisdal_fakenews': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'golbeck_fakenews': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': True
-    },
-    'liar': {
-        'urls': False,
-        'domains': False,
-        'rebuttals': False
-    },
-    'buzzface': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': False
-    },
-    'opensources': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'fakenewsnet': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': False
-    },
-    'rbutr': {
-        'urls': False, # which class to assign them?
-        'domains': False,
-        'rebuttals': True
-    },
-    'hyperpartisan': {
-        'urls': False, # hyperpartisan does not mean fake
-        'domains': False,
-        'rebuttals': False
-    },
-    'wikipedia': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'domain_list': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'melissa_zimdars': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'jruvika_fakenews': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': False
-    },
-    'factcheckni_list': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': True
-    },
-    'google_factcheck_explorer': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': True
-    },
-    'buzzfeednews': {
-        'urls': False,
-        'domains': True,
-        'rebuttals': False
-    },
-    'pontes_fakenewssample': {
-        'urls': True,
-        'domains': False,
-        'rebuttals': False
-    }
-}
-"""
+
 all_urls = []
 all_domains = []
 all_rebuttals = defaultdict(list)
 all_claimreviews = []
+all_fact_checking_urls = {}
 for subfolder, config in choice.items():
     if config['urls']:
         urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
@@ -136,6 +66,14 @@ for subfolder, config in choice.items():
     if config['claimReviews']:
         claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
         all_claimreviews.extend(claimReview)
+    if config['fact_checking_urls']:
+        fact_checking_urls = utils.read_json(utils.data_location / subfolder / 'fact_checking_urls.json')
+        for fcu in fact_checking_urls:
+            match = database_builder.get_fact_checking_url(fcu['url'])
+            merged = merge_fact_checking_urls(match, fcu)
+            database_builder.load_fact_checking_url(merged)
+
+# TODO
 
 urls_cnt = len(all_urls)
 domains_cnt = len(all_domains)
@@ -162,4 +100,4 @@ utils.print_stats(aggregated_urls)
 utils.print_stats(aggregated_domains)
 
 to_be_mapped = [url for url in aggregated_urls.keys()]
-unshortener.unshorten_multiprocess(to_be_mapped)
+#unshortener.unshorten_multiprocess(to_be_mapped)

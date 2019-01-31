@@ -83,6 +83,12 @@ if __name__ == '__main__':
     # if you share a fact checking site, the fact checking site is true
     urls = [{'url': c['url'], 'label': 'true', 'source': 'datacommons_factcheck'} for c in claimReviews]
 
+    fact_checking_urls = []
+    for cr in claimReviews:
+        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_factcheck'))
+
+    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
+
     # retrieve the claimReviews with more properties
     claimReviews_full = get_claimreviews_from_factcheckers(claimReviews)
     # save to file

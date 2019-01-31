@@ -17,7 +17,7 @@ import claimreview
 load_dotenv(find_dotenv())
 subfolder_path = utils.data_location / 'google_factcheck_explorer'
 
-def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
+def get_recent(lang='', offset=0, num_results=1000, query='list:recent', helper={}):
     params = {
         'hl': lang, # the language to search
         'num_results': num_results,
@@ -47,6 +47,11 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
 
     results = []
     for idx, r in enumerate(reviews):
+        original_url = r[0][3][0][0][1]
+        url = original_url
+        while url in helper:
+            url += '#'
+        helper[url] = original_url
         #print(idx)
         #pprint(r)
         try:
@@ -59,7 +64,7 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
                 'author': {
                     "@type": "Organization",
                     "name": r[0][3][0][0][0],
-                    "url": r[0][3][0][0][1],
+                    "url": url,
                     #"image": ?,
                     #"sameAs": ?
                 },
@@ -95,9 +100,10 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
 def scrape():
     offset = 0
     claimReviews = []
+    multiple_claim_per_url_helper = {}
     while True:
         print('offset', offset)
-        claims = get_recent(offset=offset)
+        claims = get_recent(offset=offset, helper=multiple_claim_per_url_helper)
         if not claims:
             break
         offset += len(claims)
@@ -109,27 +115,23 @@ def scrape():
 def extract_urls_rebuttals_domains_factcheckers(claimReviews):
     urls = []
     rebuttals = defaultdict(lambda: defaultdict(list))
+    fact_checking_urls = []
+
     for j, claimReview in enumerate(claimReviews):
         claim_urls = claimreview.get_claim_urls(claimReview)
         fixed_url = claimReview['url']
         if claim_urls:
             rebuttals[claim_urls][fixed_url] = ['google_factcheck_explorer']
-            score = claimreview.get_claim_rating(claimReview)
-            print(score)
-            label = None
-            if score != None:
-                # convert to fake/true
-                if score <= 0.30:
-                    label = 'fake'
-                if score >= 0.8:
-                    label = 'true'
+            label = claimreview.get_label(claimReview)
             if label:
                 urls.append({'url': claim_urls, 'label': label, 'source': 'google_factcheck_explorer'})
+        fact_checking_urls.append(claimreview.to_fact_checking_url(claimReview, 'google_factcheck_explorer'))
 
     utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')
     utils.write_json_with_path(urls, subfolder_path, 'urls.json')
     by_domain = utils.compute_by_domain(urls)
     utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
+    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
 
     fact_checkers = list(set([utils.get_url_domain(el['url']) for el in claimReviews]))
     lambda_aggregator = lambda el: utils.get_url_domain(el['url'])

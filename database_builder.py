@@ -13,6 +13,7 @@ import utils
 client = MongoClient()
 
 db = client['test_coinform']
+db_new = client['new_entities']
 
 domains_collection = db['domains']
 urls_collection = db['urls']
@@ -21,6 +22,8 @@ datasets_collection = db['datasets']
 fact_checkers_collection = db['fact_checkers']
 claimReviews_collection = db['claim_reviews']
 url_redirects_collection = db['url_redirects']
+
+fact_checking_urls_collection = db_new['fact_checking_urls']
 
 def clean_db():
     domains_collection.drop()
@@ -115,6 +118,13 @@ def get_url_domain(url):
     ext = tldextract.extract(url)
     result = '.'.join(part for part in ext if part)
     return result.lower()
+
+def get_fact_checking_url(url):
+    return fact_checking_urls_collection.find_one({'_id': url})
+
+def load_fact_checking_url(fact_checking_url):
+    fact_checking_url['_id'] = fact_checking_url['url']
+    return fact_checking_urls_collection.replace_one({'_id': fact_checking_url['_id']}, fact_checking_url, upsert=True)
 
 if __name__ == "__main__":
     #clean_db()

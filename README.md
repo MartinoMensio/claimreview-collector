@@ -15,14 +15,17 @@ Goal: have a list of URL labelled with `fake` / `true`
 
 ### fact_checking_url
 
+It is a flat object that contains fields from claimReview
+
 ```jsonc
 {
-    "url": "url", // the url to the fact checking article. Required
-    "source": "dataset_name", // where this record comes from. Required
+    "url": "url", // the url to the fact checking article. Same as claimReview.url. Required
+    "source": "dataset_name", // where this record comes from. Required. Can also be an array
     "title": "title of fact checking article", // when is already known from the dataset
     "subtitle": "subtitle or description", // when is already known from the dataset
     "claim": "the reviewed textual claim", // when is already known from the dataset
-    "label": "label", // when the label is already known from the dataset
+    "claim_url": "the url to the claim",
+    "label": "textual label", // when the label is already known from the dataset
     "reason": "textual reason", // when is already known from the dataset
     "date": "date in isoformat", // when is already known from the dataset
     "author": "name of the author", // when is already known from the dataset
@@ -53,9 +56,10 @@ Only the relevant fields are listed
 
 ## From one type of data to the other
 
-ClaimReview --> UrlLabel (claim url, fact checker url)
-ClaimReview --> TextualClaim
-ClaimReview --> Rebuttal
+ClaimReview --> fact_checking_url
+fact_checking_url --> url_label (claim_url) url_label(url)
+fact_checking_url --> claim
+fact_checking_url --> Rebuttal(claim_url, url)
 TextualClaim --> ClaimReview (use google_factcheck_explorer search)
 
 ## `google_factcheck_explorer`
@@ -108,7 +112,10 @@ url: https://github.com/jgolbeck/fakenews
 
 size: 493 items
 
-used for: fact_checking_urls, UrlLabels, Rebuttals
+used for:
+- fact_checking_urls: because the rebuttals linked belong to fact checking websites
+- url_labels: because the urls have labels (`fake`/`satire`)
+- Rebuttals
 
 ## `liar`
 
@@ -128,7 +135,7 @@ url: http://alt.qcri.org/~wgao/data/rumdect.zip
 
 size: 992 events
 
-used for: UrlLabels (twitter urls can be built from tweet_id) TODO
+used for: url_labels (twitter urls can be built from tweet_id) TODO
 
 ## `fever`
 
@@ -158,7 +165,7 @@ url: https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/UP
 
 size: 2282 items
 
-used for: UrlLabels (both fb urls and source URLs)
+used for: url_labels (both fb urls and source URLs)
 
 Posts have been fact-checked one by one.
 The urls are to facebook. To extract source URLs:
@@ -247,7 +254,7 @@ url: https://github.com/KaiDMML/FakeNewsNet
 
 size: 422 items
 
-used for: UrlLabels, TextualClaims
+used for: url_labels, TextualClaims
 
 ## `fake_real_news_dataset`
 
@@ -339,7 +346,7 @@ url: https://www.kaggle.com/jruvika/fake-news-detection
 
 size: 4009 items
 
-used for: UrlLabels, TextualClaims
+used for: url_labels, TextualClaims
 
 ## `pontes_fakenewssample`
 
@@ -349,7 +356,7 @@ url: https://www.kaggle.com/pontes/fake-news-sample
 
 size: 426550 items
 
-used for: UrlLabels, TextualClaims
+used for: url_labels, TextualClaims
 
 TODO see if the label always comes from the domain
 
