@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 
 import  utils
+import claimreview
 
 location = utils.data_location / 'factcheckni_list'
 
 data = utils.read_tsv(location / 'source' / 'FactCheckNI Articles - OU Research - Sheet1.tsv')
 
-label_map = {
-    'Accurate': 'true',
-    # 'Unsubstantiated': not true nor folse, no proofs --> discard
-    'Inaccurate': 'fake'
-}
-
-labeled_urls = [{'url': row['Claim URL'], 'label': label_map[row['Label']], 'source': 'factcheckni_list'} for row in data if row['Label'] in label_map]
+labeled_urls = [{'url': row['Claim URL'], 'label': claimreview.simplify_label(row['Label']), 'source': 'factcheckni_list'} for row in data]
+labeled_urls = [el for el in labeled_urls if el['label']]
 
 rebuttals = {row['Claim URL']: {row['Article URL']: ['factcheckni_list']} for row in data}
 

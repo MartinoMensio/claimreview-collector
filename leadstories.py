@@ -5,6 +5,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+import claimreview
+
 LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
 
 my_path = utils.data_location / 'leadstories'
@@ -41,6 +43,7 @@ while True:
         for l in labels_in_title:
             if title.startswith(l):
                 label = l[:-2]
+                label = claimreview.simplify_label(label)
                 break
 
 

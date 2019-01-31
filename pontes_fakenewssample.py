@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import utils
+import claimreview
 
 subfolder = utils.data_location / 'pontes_fakenewssample'
 
@@ -10,14 +11,8 @@ print(len(data))
 print('loaded data')
 types = set([el['type'] for el in data])
 print(types)
-label_maps = {
-    'reliable': 'true',
-    'clickbait': 'fake',
-    'junksci': 'fake',
-    'conspirancy': 'fake',
-    'fake': 'fake'
-}
-urls = [{'url': el['url'], 'label': label_maps[el['type']], 'source': 'pontes_fakenewssample'} for el in data if el['type'] in label_maps]
+urls = [{'url': el['url'], 'label': claimreview.simplify_label(el['type']), 'source': 'pontes_fakenewssample'} for el in data if el['type']]
+urls = [el for el in urls if el['label']]
 
 utils.write_json_with_path(urls, subfolder, 'urls.json')
 del data

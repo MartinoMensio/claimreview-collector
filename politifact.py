@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 import dateparser
+import claimreview
 
 LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
 STATEMENT_SELECTOR = 'div.statement'
@@ -45,7 +46,8 @@ while True:
             'url': 'https://www.politifact.com/' + url,
             'claim': claim,
             'author': author,
-            'label': label,
+            'label': claimreview.simplify_label(label),
+            'original_label': label,
             'reason': reason,
             'date': date,
             'source': 'politifact'

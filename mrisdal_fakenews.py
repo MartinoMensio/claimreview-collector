@@ -4,6 +4,7 @@ import csv
 import itertools
 
 import utils
+import claimreview
 
 subfolder_path = utils.data_location / 'mrisdal_fakenews'
 
@@ -17,23 +18,15 @@ print('types', cnt_by_type)
 by_site_fn = lambda el: el['site_url']
 types_by_domain = {k: set([el['type'] for el in v]) for k,v in itertools.groupby(sorted(data, key=by_site_fn), key=by_site_fn)}
 
-mappings = {
-    'fake': 'fake',
-    'junksci': 'fake',
-    'hate': 'fake',
-    'bs': 'fake',
-    'bias': 'fake',
-    'conspiracy': 'fake'
-}
-
 result = []
 for k, v in types_by_domain.items():
     assert len(v) == 1
     label =  v.pop()
-    if label in mappings:
+    label = claimreview.simplify_label(label)
+    if label:
         result.append({
             'domain': k,
-            'label': mappings[label],
+            'label': label,
             'source': 'mrisdal_fakenews'
         })
 

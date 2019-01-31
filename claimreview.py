@@ -150,6 +150,62 @@ def get_claim_rating(claimReview):
             score = 0.
     return score
 
+def get_label(claimReview):
+    """get a binary label true/fake, very simplified"""
+    score = get_claim_rating(claimReview)
+    result = None
+    if score != None:
+        # convert to fake/true
+        if score <= 0.30:
+            result = 'fake'
+        if score >= 0.8:
+            result = 'true'
+    return result
+
+def simplify_label(label):
+    label_maps = {
+        # from buzzface
+        'mostly true': 'true',
+        'mostly false': 'fake',
+        # from factcheckni
+        'Accurate': 'true',
+        #'Unsubstantiated': not true nor folse, no proofs --> discard
+        'Inaccurate': 'fake',
+        # from mrisdal, opensources, pontes_fakenewssample
+        'fake': 'fake',
+        'bs': 'fake',
+        'bias': 'fake',
+        'conspiracy': 'fake',
+        'junksci': 'fake',
+        'hate': 'fake',
+        'clickbait': 'fake',
+        #'unreliable': 'fake',
+        'reliable': 'true',
+        'conspirancy': 'fake',
+        # from leadstories
+        'Old Fake News': 'fake',
+        'Fake News': 'fake',
+        "Hoax Alert": 'fake',
+        # from politifact
+        "False": 'fake',
+        "True": 'true',
+        "Mostly True": 'true',
+        "Mostly False": 'fake',
+        "Pants on Fire!": 'fake'
+    }
+    return label_maps.get(label, None)
+
+def to_fact_checking_url(claimReview, source='claimReview'):
+    return {
+        'url': claimReview['url'],
+        'source': source,
+        'claim': claimReview.get('claimReviewed', None),
+        'claim_url': get_claim_urls(claimReview),
+        'label': simplify_label(get_label(claimReview)),
+        'date': claimReview.get('datePublished', None),
+        'author': claimReview.get('author', {}).get('name', None)
+    }
+
 def _to_jsonld(microdata):
     context = 'http://schema.org'
     properties = 'properties_'

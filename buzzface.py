@@ -13,6 +13,7 @@ import html.parser as htmlparser
 parser = htmlparser.HTMLParser()
 
 import utils
+import claimreview
 
 folder = utils.data_location / 'buzzface'
 source_file = folder / 'source' / 'facebook-fact-check.tab'
@@ -25,12 +26,11 @@ data = {el['post_id']: {'url': el['Post URL'], 'label': el['Rating']} for el in 
 print(len(data))
 
 results = []
-label_mapping = {'mostly true': 'true', 'mostly false': 'fake'}
 
 # download the facebook page
 for id, el in data.items():
     # add the facebook URL to the output urls
-    label_binary = label_mapping.get(el['label'], None)
+    label_binary = claimreview.simplify_label(el['label'])
     if label_binary:
         results.append({'url': el['url'], 'label': label_binary, 'source': 'buzzface'})
     file_path = folder / 'intermediate' / '{}.html'.format(id)
@@ -64,7 +64,7 @@ for file_location in glob.glob(str(folder / 'intermediate/*.html')):
     id = file_location.split('/')[-1].split('.')[0]
     url = unique.pop()
     label = data[id]['label']
-    label_binary = label_mapping.get(label, None)
+    label_binary = claimreview.simplify_label(label)
     unfiltered.append({'url': url, 'label': label, 'source': 'buzzface'})
     if label_binary:
         results.append({'url': url, 'label': label_binary, 'source': 'buzzface'})

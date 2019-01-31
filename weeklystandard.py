@@ -49,4 +49,4 @@ while True:
 
 
 
-utils.write_json_with_path(all_statements, my_path, 'statements.json')
+utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
