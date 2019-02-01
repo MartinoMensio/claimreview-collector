@@ -61,6 +61,8 @@ Only the relevant fields are listed
 ClaimReview
     fact_checking_url
 fact_checking_url
+    ClaimReview
+fact_checking_url
     if claim_url: url_label(claim_url)
     url_label(url)
 fact_checking_url

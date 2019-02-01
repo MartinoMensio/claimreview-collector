@@ -26,7 +26,6 @@ print('to download:', len(ids_set))
 urls = []
 fact_checking_urls = []
 
-helper = {}
 #Download the links to politifacts
 for f_name in ids_set:
     intermediate_folder = subfolder_path / 'intermediate'
@@ -54,9 +53,6 @@ for f_name in ids_set:
     label = claimreview.simplify_label(original_label)
 
     url = canonical_url
-    while url in helper:
-        url += '#'
-    helper[url] = canonical_url
 
     fact_checking_urls.append({
         'url': url,

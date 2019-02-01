@@ -103,6 +103,8 @@ def add_redirections(input_file_path):
 
 def create_indexes():
     db['twitter_tweets'].create_index('user.id', name='user.id')
+    db_new['fact_checking_urls'].create_index('url', name='url')
+    #db_new['fact_checking_urls'].create_index('claim_url', name='claim_url')
 
 
 def get_url_redirect(url):
@@ -119,12 +121,18 @@ def get_url_domain(url):
     result = '.'.join(part for part in ext if part)
     return result.lower()
 
-def get_fact_checking_url(url):
-    return fact_checking_urls_collection.find_one({'_id': url})
+def get_fact_checking_urls(url):
+    return fact_checking_urls_collection.find({'url': url})
 
 def load_fact_checking_url(fact_checking_url):
-    fact_checking_url['_id'] = fact_checking_url['url']
-    return fact_checking_urls_collection.replace_one({'_id': fact_checking_url['_id']}, fact_checking_url, upsert=True)
+    # fact_checking_url['_id'] = fact_checking_url['url']
+    key = fact_checking_url.get('_id', None)
+    if key:
+        # this is an update
+        return fact_checking_urls_collection.replace_one({'_id': fact_checking_url['_id']}, fact_checking_url, upsert=True)
+    else:
+        # let mongo generate the _id
+        return fact_checking_urls_collection.insert_one(fact_checking_url)
 
 if __name__ == "__main__":
     #clean_db()

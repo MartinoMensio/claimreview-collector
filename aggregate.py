@@ -8,6 +8,8 @@ import glob
 import shutil
 import signal
 import sys
+from dateutil import parser
+from unidecode import unidecode
 from collections import defaultdict
 from pathlib import Path
 
@@ -15,6 +17,69 @@ import utils
 import unshortener
 
 import database_builder
+
+def normalise_str(string):
+    string = unidecode(string)
+    string = string.lower()
+    string = string.replace('"', '')
+    string = string.replace('\'', '')
+    string = string.replace('  ', ' ')
+    return string
+
+def select_best_candidate(fcu, matches):
+    """Determine whether the fact_checking_url should be matched with any of the candidates, otherwise return None"""
+    # the ones that pass the compulsory comparison
+    matching_criteria = []
+    affinities = []
+    for m in matches:
+        # the URL has been already compared
+        if m['url'] == fcu['url']:
+            matching_criteria.append(m)
+            affinities.append(0)
+    for idx, m in enumerate(matching_criteria):
+        for k, v in fcu.items():
+            if k == 'source':
+                # the source has not to be compared
+                continue
+            if v and k in m and m[k]:
+                prev = m[k]
+                cur = v
+                if k == 'claim':
+                    # text normalisation
+                    prev = normalise_str(prev)
+                    cur = normalise_str(cur)
+                if k == 'date':
+                    prev = parser.parse(prev).date()
+                    cur = parser.parse(cur).date()
+                if k == 'original_label':
+                    # ignore this property, too sensitive. There is already the 'label'
+                    continue
+
+                if prev != cur:
+                    # if some values are different, this is a different claimReview
+                    print(k, m['url'], v, m[k])
+                    affinities[idx] = -50
+                else:
+                    affinities[idx] += 1
+
+    # if len(matching_criteria):
+    #     print(len(matching_criteria))
+    #     print(affinities)
+    #print([json.dump({k: v for k,v in el.items() if k != '_id'}, sys.stdout, indent=2) for el in matching_criteria])
+    #exit(0)
+
+    best = None
+    best_affinity = -1
+    for idx, (affinity, m) in enumerate(zip(affinities, matching_criteria)):
+        if affinity >= 0:
+            if affinity > best_affinity:
+                best = m
+                best_affinity = affinity
+
+    # if best:
+    #     print('going to merge', best, fcu)
+
+    return best
 
 
 def merge_fact_checking_urls(old, new):
@@ -73,10 +138,14 @@ for subfolder, config in choice.items():
     if config['fact_checking_urls']:
         fact_checking_urls = utils.read_json(utils.data_location / subfolder / 'fact_checking_urls.json')
         for fcu in fact_checking_urls:
-            if fcu['url'].endswith('#'):
-                pass # TODO manage multiple claims per same url, finding the match with the right anchor
-            match = database_builder.get_fact_checking_url(fcu['url'])
-            merged = merge_fact_checking_urls(match, fcu)
+            # mongo limits on indexed values
+            fcu['url'] = fcu['url'][:1000]
+            if fcu.get('claim_url', None): fcu['claim_url'][:1000]
+
+
+            matches = database_builder.get_fact_checking_urls(fcu['url'])
+            candidate = select_best_candidate(fcu, matches)
+            merged = merge_fact_checking_urls(candidate, fcu)
             database_builder.load_fact_checking_url(merged)
 
 # TODO

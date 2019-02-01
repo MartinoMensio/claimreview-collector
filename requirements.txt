@@ -10,3 +10,4 @@ validators
 tldextract
 beautifulsoup4
 dateparser
+unidecode

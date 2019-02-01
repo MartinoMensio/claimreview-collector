@@ -17,7 +17,7 @@ import claimreview
 load_dotenv(find_dotenv())
 subfolder_path = utils.data_location / 'google_factcheck_explorer'
 
-def get_recent(lang='', offset=0, num_results=1000, query='list:recent', helper={}):
+def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
     params = {
         'hl': lang, # the language to search
         'num_results': num_results,
@@ -46,14 +46,7 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent', helper=
     utils.write_json_with_path(content, subfolder_path / 'intermediate', 'raw_{}.json'.format(offset))
 
     results = []
-    for idx, r in enumerate(reviews):
-        original_url = r[0][3][0][0][1]
-        url = original_url
-        while url in helper:
-            url += '#'
-        helper[url] = original_url
-        #print(idx)
-        #pprint(r)
+    for r in reviews:
         try:
             claimReview = {
                 '@context': "http://schema.org",
@@ -64,7 +57,7 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent', helper=
                 'author': {
                     "@type": "Organization",
                     "name": r[0][3][0][0][0],
-                    "url": url,
+                    "url": r[0][3][0][0][1],
                     #"image": ?,
                     #"sameAs": ?
                 },
@@ -100,10 +93,9 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent', helper=
 def scrape():
     offset = 0
     claimReviews = []
-    multiple_claim_per_url_helper = {}
     while True:
         print('offset', offset)
-        claims = get_recent(offset=offset, helper=multiple_claim_per_url_helper)
+        claims = get_recent(offset=offset)
         if not claims:
             break
         offset += len(claims)
