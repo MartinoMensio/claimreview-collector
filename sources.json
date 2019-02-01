@@ -367,7 +367,8 @@
                 "url_classification": false,
                 "rebuttal_suggestion": false,
                 "textual_claims": false,
-                "claimReviews": false
+                "claimReviews": false,
+                "fact_checking_urls": true
             }
         },
         "factcheckni": {

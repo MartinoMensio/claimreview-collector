@@ -202,6 +202,11 @@ def simplify_label(label):
         "mostly-false": 'fake',
         "barely-true": 'fake',
         "pants-fire": 'fake',
+        # from vlachos_factchecking
+        "TRUE": 'true',
+        "FALSE": 'fake',
+        "MOSTLY TRUE": 'true',
+        "MOSTLY FALSE": 'fake'
     }
     return label_maps.get(label, None)
 
