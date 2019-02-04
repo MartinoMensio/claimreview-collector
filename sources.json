@@ -7,7 +7,7 @@
             "author": "https://www.datacommons.org/",
             "contains": {
                 "domain_classification": false,
-                "url_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
                 "claimReviews": true,
@@ -21,7 +21,7 @@
             "author": "https://www.datacommons.org/",
             "contains": {
                 "domain_classification": false,
-                "url_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": false,
                 "textual_claims": true,
                 "claimReviews": false,
@@ -48,7 +48,7 @@
             "author": "https://ischool.umd.edu/faculty-staff/jennifer-golbeck",
             "contains": {
                 "domain_classification": false,
-                "url_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
                 "claimReviews": true,
@@ -310,7 +310,7 @@
             "author": "https://factcheckni.org/",
             "contains": {
                 "domain_classification": false,
-                "url_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
                 "claimReviews": false,
@@ -324,7 +324,7 @@
             "author": "https://www.google.com/",
             "contains": {
                 "domain_classification": false,
-                "url_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": true,
                 "textual_claims": true,
                 "claimReviews": true,
@@ -369,6 +369,15 @@
                 "textual_claims": false,
                 "claimReviews": false,
                 "fact_checking_urls": true
+            }
+        },
+        "ifcn": {
+            "name": "International Fact-Checking Network",
+            "url": "https://ifcncodeofprinciples.poynter.org/signatories",
+            "description": "This code of principles is for organizations that regularly publish nonpartisan reports on the accuracy of statements by public figures, major institutions, and other widely circulated claims of interest to society. It is the result of consultations among fact-checkers from around the world and offers conscientious practitioners principles to aspire to in their everyday work.",
+            "author": "https://www.poynter.org/",
+            "contains": {
+                "domain_classification": true
             }
         },
         "factcheckni": {
@@ -1126,7 +1135,7 @@
             "nationality": "IL",
             "properties": {
                 "belongs_to_ifcn": true,
-                "valid": true,
+                "valid": false,
                 "uses_claimreview": false
             }
         },
@@ -1158,7 +1167,7 @@
             "description": "",
             "nationality": "SE",
             "properties": {
-                "belongs_to_ifcn": false,
+                "belongs_to_ifcn": true,
                 "valid": true,
                 "uses_claimreview": false
             }
@@ -1169,7 +1178,7 @@
             "description": "",
             "nationality": "IN",
             "properties": {
-                "belongs_to_ifcn": false,
+                "belongs_to_ifcn": true,
                 "valid": true,
                 "uses_claimreview": false
             }
@@ -1180,7 +1189,7 @@
             "description": "",
             "nationality": "UA",
             "properties": {
-                "belongs_to_ifcn": false,
+                "belongs_to_ifcn": true,
                 "valid": true,
                 "uses_claimreview": false
             }
@@ -1191,7 +1200,7 @@
             "description": "",
             "nationality": "DE",
             "properties": {
-                "belongs_to_ifcn": false,
+                "belongs_to_ifcn": true,
                 "valid": true,
                 "uses_claimreview": false
             }
@@ -1202,7 +1211,7 @@
             "description": "",
             "nationality": "TR",
             "properties": {
-                "belongs_to_ifcn": false,
+                "belongs_to_ifcn": true,
                 "valid": true,
                 "uses_claimreview": true
             }

@@ -124,8 +124,8 @@ url: https://github.com/jgolbeck/fakenews
 size: 493 items
 
 used for:
-- fact_checking_urls: because the rebuttals linked belong to fact checking websites
-- url_labels: because the urls have labels (`fake`/`satire`)
+- fact_checking_urls: because the rebuttals linked belong to fact checking websites (for the label `fake`)
+- url_labels: because the urls have labels (`fake`/`satire`). For the label `satire` this is necessary since there are no review URLs TODO
 - Rebuttals
 
 ## `liar`
