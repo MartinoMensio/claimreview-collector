@@ -98,9 +98,15 @@ def merge_fact_checking_urls(old, new):
                     print(old)
                     print(new)
                     raise ValueError('abort')
-        result = {**old, **{k:v for k,v in new.items() if v!=None}}
+        #result = {**old, **{k:v for k,v in new.items() if v!=None}}
+        result = old
         print(old['source'], new['source'])
-        result['source'] = list(set(old['source'] + [new['source']]))
+        for k,v in new.items():
+            if k == 'source':
+                result['source'] = list(set(old['source'] + [new['source']]))
+            else:
+                if v!=None and v != "":
+                    result[k] = v
     return result
 
 # decide here what to aggregate
@@ -112,67 +118,137 @@ choice = {k if 'domain_list_' not in k else 'domain_list': {
     'fact_checking_urls': el['contains'].get('fact_checking_urls', False)
 } for k, el in utils.read_json('sources.json')['datasets'].items()}
 
-all_urls = []
-all_domains = []
-all_rebuttals = defaultdict(list)
-all_claimreviews = []
-all_fact_checking_urls = {}
-for subfolder, config in choice.items():
-    if config['urls']:
-        urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
-        all_urls.extend(urls)
-    if config['domains']:
-        domains = utils.read_json(utils.data_location / subfolder / 'domains.json')
-        all_domains.extend(domains)
-    if config['rebuttals']:
-        rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
-        for source_url, rebuttal_l in rebuttals.items():
-            for rebuttal_url, source in rebuttal_l.items():
-                all_rebuttals[source_url].append({
-                    'url': rebuttal_url,
-                    'source': source
-                })
-    if config['claimReviews']:
-        claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
-        all_claimreviews.extend(claimReview)
-    if config['fact_checking_urls']:
-        fact_checking_urls = utils.read_json(utils.data_location / subfolder / 'fact_checking_urls.json')
-        for fcu in fact_checking_urls:
-            # mongo limits on indexed values
-            fcu['url'] = fcu['url'][:1000]
-            if fcu.get('claim_url', None): fcu['claim_url'][:1000]
+def aggregate_initial():
+    all_urls = []
+    all_domains = []
+    all_rebuttals = defaultdict(list)
+    all_claimreviews = []
+    aggregated_fact_checking_urls = []
+    all_fact_checking_urls_by_url = defaultdict(list)
+    # step 1: load types of data natively
+    for subfolder, config in choice.items():
+        if config['urls']:
+            urls = utils.read_json(utils.data_location / subfolder / 'urls.json')
+            all_urls.extend(urls)
+        if config['domains']:
+            domains = utils.read_json(utils.data_location / subfolder / 'domains.json')
+            all_domains.extend(domains)
+        if config['rebuttals']:
+            rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
+            for source_url, rebuttal_l in rebuttals.items():
+                for rebuttal_url, source in rebuttal_l.items():
+                    all_rebuttals[source_url].append({
+                        'url': rebuttal_url,
+                        'source': source
+                    })
+        if config['claimReviews']:
+            claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
+            all_claimreviews.extend(claimReview)
+        if config['fact_checking_urls']:
+            fact_checking_urls = utils.read_json(utils.data_location / subfolder / 'fact_checking_urls.json')
+            for fcu in fact_checking_urls:
+                # mongo limits on indexed values
+                fcu['url'] = fcu['url'][:1000]
+                if fcu.get('claim_url', None): fcu['claim_url'][:1000]
 
 
-            matches = database_builder.get_fact_checking_urls(fcu['url'])
-            candidate = select_best_candidate(fcu, matches)
-            merged = merge_fact_checking_urls(candidate, fcu)
-            database_builder.load_fact_checking_url(merged)
+                #matches = database_builder.get_fact_checking_urls(fcu['url'])
+                matches = all_fact_checking_urls_by_url[fcu['url']]
+                candidate = select_best_candidate(fcu, matches)
+                merged = merge_fact_checking_urls(candidate, fcu)
+                #database_builder.load_fact_checking_url(merged)
+                all_fact_checking_urls_by_url[fcu['url']].append(merged)
+                aggregated_fact_checking_urls.append(merged)
 
-# TODO
+    # TODO
 
-urls_cnt = len(all_urls)
-domains_cnt = len(all_domains)
-fake_urls_cnt = len([el for el in all_urls if el['label'] == 'fake'])
-fake_domains_cnt = len([el for el in all_domains if el['label'] == 'fake'])
-print('#urls', urls_cnt, ': fake', fake_urls_cnt, 'true', urls_cnt - fake_urls_cnt)
-print('#domains', domains_cnt, ': fake', fake_domains_cnt, 'true', domains_cnt - fake_domains_cnt)
+    urls_cnt = len(all_urls)
+    domains_cnt = len(all_domains)
+    fake_urls_cnt = len([el for el in all_urls if el['label'] == 'fake'])
+    fake_domains_cnt = len([el for el in all_domains if el['label'] == 'fake'])
+    print('before aggregation #urls', urls_cnt, ': fake', fake_urls_cnt, 'true', urls_cnt - fake_urls_cnt)
+    print('before aggregation #domains', domains_cnt, ': fake', fake_domains_cnt, 'true', domains_cnt - fake_domains_cnt)
 
-aggregated_urls = utils.aggregate(all_urls)
-aggregated_domains = utils.aggregate(all_domains, 'domain')
+    aggregated_urls = utils.aggregate(all_urls)
+    aggregated_domains = utils.aggregate(all_domains, 'domain')
 
-utils.write_json_with_path(aggregated_urls, utils.data_location, 'aggregated_urls.json')
-utils.write_json_with_path(aggregated_domains, utils.data_location, 'aggregated_domains.json')
-utils.write_json_with_path(all_rebuttals, utils.data_location, 'aggregated_rebuttals.json')
-utils.write_json_with_path(all_claimreviews, utils.data_location, 'aggregated_claimReviews.json')
+    utils.write_json_with_path(aggregated_urls, utils.data_location, 'aggregated_urls.json')
+    utils.write_json_with_path(aggregated_domains, utils.data_location, 'aggregated_domains.json')
+    utils.write_json_with_path(all_rebuttals, utils.data_location, 'aggregated_rebuttals.json')
+    utils.write_json_with_path(all_claimreviews, utils.data_location, 'aggregated_claimReviews.json')
+    utils.write_json_with_path(aggregated_fact_checking_urls , utils.data_location, 'aggregated_fact_checking_urls.json')
 
-# copy to backend
-utils.write_json_with_path(aggregated_urls, Path('../backend'), 'aggregated_urls.json')
-utils.write_json_with_path(aggregated_domains, Path('../backend'), 'aggregated_domains.json')
-utils.write_json_with_path(all_rebuttals, Path('../backend'), 'aggregated_rebuttals.json')
-utils.write_json_with_path(all_claimreviews, Path('../backend'), 'aggregated_claimReviews.json')
+    utils.print_stats(aggregated_urls)
+    utils.print_stats(aggregated_domains)
+    print('len aggregated fact_checking_urls', len(aggregated_fact_checking_urls))
 
-utils.print_stats(aggregated_urls)
-utils.print_stats(aggregated_domains)
 
-to_be_mapped = [url for url in aggregated_urls.keys()]
-#unshortener.unshorten_multiprocess(to_be_mapped)
+    # database_builder.load_urls_zero()
+    # database_builder.load_domains_zero()
+    # database_builder.load_rebuttals_zero()
+
+    to_be_mapped = [url for url in aggregated_urls.keys()]
+    #unshortener.unshorten_multiprocess(to_be_mapped)
+
+def load_into_db():
+    # build the database
+    database_builder.clean_db()
+    database_builder.create_indexes()
+    database_builder.load_sources()
+    # load into database the beginning
+    database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
+    database_builder.load_domains_zero()
+    database_builder.load_rebuttals_zero()
+    #database_builder.load_fact_checking_urls_zero()
+
+def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
+    match = aggregated_urls.get('url', None)
+    if match:
+        print(match, new_url)
+        exit(0)
+        sources = match['sources']
+        label = match['label']
+        if label != new_label:
+            raise ValueError('labels differ: old {} new {}'.format(label, new_label))
+        sources += new_sources
+    else:
+        label = new_label
+        sources = new_sources
+    aggregated_urls[new_url] = {
+        'label': label,
+        'sources': sources
+    }
+
+
+def extract_more():
+    """
+    Extracts the additional informations:
+    From fact_checking_urls:
+    - if el['claim_url'] and el['label']: add url with label
+    - if el['url']: add url with 'true' label (the fact checker is trustworthy??)
+    """
+    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+    classified_urls = utils.read_json(utils.data_location / 'aggregated_urls.json')
+
+    print('BEFORE')
+    utils.print_stats(classified_urls)
+
+    for fcu in fact_checking_urls:
+        url = fcu.get('url', None)
+        claim_url = fcu.get('claim_url', None)
+        label = fcu.get('label', None)
+        sources = fcu['source']
+        if url and url != "":
+            check_and_add_url(url, 'true', sources, classified_urls)
+        if claim_url and label:
+            check_and_add_url(claim_url, label, sources, classified_urls)
+
+    print('AFTER')
+    utils.print_stats(classified_urls)
+    utils.write_json_with_path(classified_urls, utils.data_location, 'aggregated_urls_with_fcu.json')
+
+
+if __name__ == "__main__":
+    aggregate_initial()
+    extract_more()
+    load_into_db()

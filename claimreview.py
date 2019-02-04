@@ -177,7 +177,7 @@ def simplify_label(label):
         'bias': 'fake',
         'conspiracy': 'fake',
         'junksci': 'fake',
-        'hate': 'fake',
+        #'hate': 'fake', # hate speech is not necessarily fake
         'clickbait': 'fake',
         #'unreliable': 'fake',
         'reliable': 'true',

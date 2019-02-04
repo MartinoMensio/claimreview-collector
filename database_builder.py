@@ -12,8 +12,8 @@ import utils
 
 client = MongoClient()
 
-db = client['test_coinform']
-db_new = client['new_entities']
+# db = client['test_coinform']
+db = client['datasets_resources']
 
 domains_collection = db['domains']
 urls_collection = db['urls']
@@ -23,7 +23,7 @@ fact_checkers_collection = db['fact_checkers']
 claimReviews_collection = db['claim_reviews']
 url_redirects_collection = db['url_redirects']
 
-fact_checking_urls_collection = db_new['fact_checking_urls']
+fact_checking_urls_collection = db['fact_checking_urls']
 
 def clean_db():
     domains_collection.drop()
@@ -48,7 +48,7 @@ def load_sources():
         v['_id'] = k
         fact_checkers_collection.insert_one(v)
 
-def load_domains():
+def load_domains_zero():
     domains_collection.drop()
 
     domains = utils.read_json(utils.data_location / 'aggregated_domains.json')
@@ -61,22 +61,27 @@ def load_domains():
         }
         domains_collection.replace_one({'_id': doc['_id']}, doc, upsert=True)
 
-def load_urls():
+def load_url(url):
+    raise NotImplementedError()
+
+def load_urls_zero(file_name='aggregated_urls.json'):
     urls_collection.drop()
 
-    urls = utils.read_json(utils.data_location / 'aggregated_urls.json')
+    urls = utils.read_json(utils.data_location / file_name)
     for u, data in urls.items():
+        u = u[:1000]
         urls_collection.insert_one({
             '_id': u,
             'url': u,
             'score': data
         })
 
-def load_rebuttals():
+def load_rebuttals_zero():
     rebuttals_collection.drop()
 
     rebuttals = utils.read_json(utils.data_location / 'aggregated_rebuttals.json')
     for u, data in rebuttals.items():
+        u = u[:1000]
         rebuttals_collection.insert_one({
             '_id': u,
             'url': u,
@@ -102,8 +107,10 @@ def add_redirections(input_file_path):
         url_redirects_collection.update(doc, doc, upsert=True)
 
 def create_indexes():
-    db['twitter_tweets'].create_index('user.id', name='user.id')
-    db_new['fact_checking_urls'].create_index('url', name='url')
+    # Not my business, I only deal with datasets
+    #db['twitter_tweets'].create_index('user.id', name='user.id')
+
+    db['fact_checking_urls'].create_index('url', name='url')
     #db_new['fact_checking_urls'].create_index('claim_url', name='claim_url')
 
 
@@ -135,9 +142,10 @@ def load_fact_checking_url(fact_checking_url):
         return fact_checking_urls_collection.insert_one(fact_checking_url)
 
 if __name__ == "__main__":
+    print('don\'t use me directly! Run aggregate.py instead!!!')
     #clean_db()
     #load_sources()
-    load_domains()
-    #load_urls()
-    #sload_rebuttals()
+    #load_domains_zero()
+    #load_urls_zero()
+    #load_rebuttals_zero()
     #load_claimReviews()
