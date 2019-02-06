@@ -52,7 +52,11 @@ def get_claimreviews_from_factcheckers(original_claimReviews):
         fixed_url = claimreview.get_corrected_url(c['url'])
 
         # this part with id and file saving is just to be able to restore the operation after a failure so that the single claims are saved onto disk on by one
-        id = utils.string_to_md5(fixed_url)
+        try:
+            id = utils.string_to_md5(fixed_url)
+        except Exception as e:
+            print(fixed_url)
+            raise e
         partial_file_name = '{}.json'.format(id)
         partial_file_path = subfolder_path / 'intermediate' / 'single_claims' / partial_file_name
         if os.path.isfile(partial_file_path):
@@ -66,10 +70,14 @@ def get_claimreviews_from_factcheckers(original_claimReviews):
         if not partial:
             # in this case there is no claimReview metadata on the fact checker website
             #print(c['url'])
-            pass
+            # return the original claimreview
+            result.append(c)
         if len(partial):
             # there can be multiple claimReviews in a single fact checking page
             for j, claimReview in enumerate(partial):
+                if 'url' not in claimReview:
+                    # some broken claimReview
+                    claimReview['url'] = c['url']
                 # save this in the result
                 #result['{}::{}'.format(fixed_url, j)] = claimReview
                 result.append(claimReview)
@@ -83,11 +91,7 @@ if __name__ == '__main__':
     # if you share a fact checking site, the fact checking site is true
     urls = [{'url': c['url'], 'label': 'true', 'source': 'datacommons_factcheck'} for c in claimReviews]
 
-    fact_checking_urls = []
-    for cr in claimReviews:
-        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_factcheck'))
 
-    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
 
     # retrieve the claimReviews with more properties
     claimReviews_full = get_claimreviews_from_factcheckers(claimReviews)
@@ -96,7 +100,10 @@ if __name__ == '__main__':
 
     # rebuttals is a dict that associates each URL with other URLs that are related. In this case it is for suggesting to read the fact checking article
     rebuttals = defaultdict(lambda: defaultdict(list))
+    fact_checking_urls = []
     for claimReview in claimReviews_full:
+        fcu = claimreview.to_fact_checking_url(claimReview, 'datacommons_factcheck')
+        fact_checking_urls.append(fcu)
         # retrieve the URL of the source of the claim (not always there)
         claim_urls = claimreview.get_claim_urls(claimReview)
         if claim_urls:
@@ -107,20 +114,18 @@ if __name__ == '__main__':
                 fixed_url = claimreview.get_corrected_url(claimReview['url'])
 
             # save the found mapping between the claim URL and the factchecking URL
-            rebuttals[claim_urls][fixed_url] = ['datacommons_factcheck']
-            score = claimreview.get_claim_rating(claimReview)
-            print(score)
-            label = None
-            if score != None:
-                # convert to fake/true
-                if score <= 0.30:
-                    label = 'fake'
-                if score >= 0.8:
-                    label = 'true'
+            try:
+                rebuttals[claim_urls][fixed_url] = ['datacommons_factcheck']
+            except Exception as e:
+                print(claim_urls)
+                print(fixed_url)
+                raise e
+            label = claimreview.get_label(claimReview)
             if label:
                 # save the label for the URL of the claim
                 urls.append({'url': claim_urls, 'label': label, 'source': 'datacommons_factcheck'})
 
+    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
     print(len(rebuttals))
 
     utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')

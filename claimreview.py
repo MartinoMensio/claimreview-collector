@@ -10,6 +10,72 @@ import unshortener
 import cache_manager
 import flatten_json
 
+# the values of truthiness for the simplified labels
+simplified_labels_scores = {
+    'true': 1.0,
+    'mixed': 0.5,
+    'fake': 0.0
+}
+
+# simplified to the three cases true/mixed/fake
+label_maps = {
+    # from buzzface
+    'mostly true': 'true',
+    'mixture of true and false': 'mixed',
+    'mostly false': 'fake',
+    'no factual content': None,
+    # from factcheckni
+    'Accurate': 'true',
+    #'Unsubstantiated': not true nor folse, no proofs --> discard
+    'Inaccurate': 'fake',
+    # from mrisdal, opensources, pontes_fakenewssample
+    'fake': 'fake',
+    'bs': 'fake',
+    'bias': 'fake',
+    'conspiracy': 'fake',
+    'junksci': 'fake',
+    #'hate': 'fake', # hate speech is not necessarily fake
+    'clickbait': 'fake',
+    #'unreliable': 'fake',
+    'reliable': 'true',
+    'conspirancy': 'fake',
+    # from leadstories
+    'Old Fake News': 'fake',
+    'Fake News': 'fake',
+    'Hoax Alert': 'fake',
+    # from politifact
+    'False': 'fake',
+    'True': 'true',
+    'Mostly True': 'true',
+    'Half True': 'mixed',
+    'Half-True': 'mixed',
+    'Mostly False': 'fake',
+    'Pants on Fire!': 'fake',
+    # from golbeck_fakenews
+    'Fake': 'fake',
+    # from liar (politifact-dashed)
+    'false': 'fake',
+    'true': 'true',
+    'mostly-true': 'true',
+    'mostly-false': 'fake',
+    'barely-true': 'fake',
+    'pants-fire': 'fake',
+    'half-true': 'mixed',
+    # from vlachos_factchecking
+    'TRUE': 'true',
+    'FALSE': 'fake',
+    'MOSTLY TRUE': 'true',
+    'MOSTLY FALSE': 'fake',
+    'HALF TRUE': 'mixed',
+    # others from ClaimReviews
+    'Accurate': 'true',
+    'Inaccurate': 'fake',
+    'Wrong': 'fake',
+    'Not accurate': 'fake',
+    'Lie of the Year': 'fake',
+    'Mostly false': 'fake'
+}
+
 
 def get_corrected_url(url):
     corrections = {
@@ -123,6 +189,7 @@ def get_claim_urls(claimReview):
 def get_claim_rating(claimReview):
     # what to do with these labels? for now returns None so the claims are discarded
     # {'Known since 2008', 'Lacks context', 'Unproven claim', 'Tactics look typical', 'Cannot Be Verified', 'Shift from past position', 'Easily beats the market', 'Includes Hispanic Other Black', 'More words than action', 'By Some Counts Yes', 'Roe grants federal right', 'Not a Muslim migrant', 'Polls depend on wording', 'Had seat at table', "Record doesn't say that", 'Coverage has limits', 'Wrong', 'Not accurate', 'Photo is real', 'Misleads', 'Met half of them', 'Mostly entered before Obama', 'No evidence', 'Wrong use of word', 'Mis- leading', 'Lie of the Year', 'Other spending nears $200M', 'Too soon to say', 'Possible but risky', 'White House not studio', 'Obama Called in 2012', 'Trump ordered new probe', 'Disputed Claim', 'Clinton role still unclear', 'Flip- flop', 'False', 'They are not eligible', 'No such plan', 'Not what GM says', 'In dispute', 'Trump deserves some credit', 'Can still be deported', 'Spinning the facts', 'Revised after backlash', 'Personal tweet taken down', "It's Calif. law", "Japan's leader acted first", 'Mostly false', 'Study in Dispute', 'Salary not only factor', 'No contact', 'Needs Context', 'Old stat', "He's very close", 'Flip- Flop', 'Rates are even higher', 'Staff error', 'In effect since 1965', 'Far from clear', 'Number not that high', 'Claim omits key facts', "Didn't use that word", 'Ignores US GDP size', 'Needs context', 'U.S. has trade surplus', 'Depends on the metric', 'Not the Whole Story', 'Way early to say', 'Numbers are close', 'Trump role emerged later', 'Depends on source', 'No way to verify', 'Effect not clear', 'No way to know', 'Result of Trump policy', 'Twitter fixed a glitch', 'Ignores all tax hikes', 'Vetted by State Dept.', 'His numbers are outdated', 'Fuzzy math', 'Latino numbers much higher', 'Not the same thing', 'Not what Pelosi said', 'Not the whole story', 'Experts question wall impact', 'Flynn talked Russia sanction', 'Lacks Context', 'Under Dispute', 'Supports border tech security', 'Unlikely but possible', 'Could be much worse', 'Lacks Evidence', 'No MS-13 removal data', 'Legal rules unclear', 'She told law schools', 'Not Missouri students', "Don't count your chickens", 'Depends on intent', 'Not that clear cut', 'History poses big hurdle', 'But little impact yet'}
+
     reviewRating = claimReview.get('reviewRating', None)
     if not reviewRating:
         reviewRating = claimReview.get('properties', {}).get('reviewRating', None)
@@ -143,80 +210,43 @@ def get_claim_rating(claimReview):
     if not score:
         # TODO map textual label to score
         score = None
-        scoreTxt = reviewRating.get('alternateName', None) or reviewRating['properties']['alternateName']
-        if scoreTxt in ['True', 'Accurate']:
-            score = 1.
-        elif scoreTxt in ['False', 'Inaccurate', 'Wrong', 'Not accurate', 'Lie of the Year', 'Mostly false']:
-            score = 0.
+        try:
+            scoreTxt = reviewRating.get('alternateName', None) or reviewRating.get('properties', {}).get('alternateName', None)
+        except Exception as e:
+            print(reviewRating)
+            raise e
+        simplified_label = simplify_label(scoreTxt)
+        if simplified_label:
+            score = simplified_labels_scores[simplified_label]
     return score
 
 def get_label(claimReview):
-    """get a binary label true/fake, very simplified"""
+    """get a label true/mixed/fake, very simplified"""
     score = get_claim_rating(claimReview)
     result = None
     if score != None:
         # convert to fake/true
         if score <= 0.30:
             result = 'fake'
-        if score >= 0.8:
+        elif score >= 0.8:
             result = 'true'
+        else:
+            result = 'mixed'
     return result
 
 def simplify_label(label):
-    label_maps = {
-        # from buzzface
-        'mostly true': 'true',
-        'mostly false': 'fake',
-        # from factcheckni
-        'Accurate': 'true',
-        #'Unsubstantiated': not true nor folse, no proofs --> discard
-        'Inaccurate': 'fake',
-        # from mrisdal, opensources, pontes_fakenewssample
-        'fake': 'fake',
-        'bs': 'fake',
-        'bias': 'fake',
-        'conspiracy': 'fake',
-        'junksci': 'fake',
-        #'hate': 'fake', # hate speech is not necessarily fake
-        'clickbait': 'fake',
-        #'unreliable': 'fake',
-        'reliable': 'true',
-        'conspirancy': 'fake',
-        # from leadstories
-        'Old Fake News': 'fake',
-        'Fake News': 'fake',
-        "Hoax Alert": 'fake',
-        # from politifact
-        "False": 'fake',
-        "True": 'true',
-        "Mostly True": 'true',
-        #"Half True": "?",
-        "Mostly False": 'fake',
-        "Pants on Fire!": 'fake',
-        # from golbeck_fakenews
-        "Fake": 'fake',
-        # from liar (politifact-dashed)
-        "false": 'fake',
-        "true": 'true',
-        "mostly-true": 'true',
-        "mostly-false": 'fake',
-        "barely-true": 'fake',
-        "pants-fire": 'fake',
-        # from vlachos_factchecking
-        "TRUE": 'true',
-        "FALSE": 'fake',
-        "MOSTLY TRUE": 'true',
-        "MOSTLY FALSE": 'fake'
-    }
     return label_maps.get(label, None)
 
 def to_fact_checking_url(claimReview, source='claimReview'):
+    if 'url' not in claimReview:
+        print(claimReview)
+        raise ValueError('missing URL')
     return {
         'url': claimReview['url'],
         'source': source,
         'claim': claimReview.get('claimReviewed', None),
         'claim_url': get_claim_urls(claimReview),
-        'label': simplify_label(get_label(claimReview)),
+        'label': get_label(claimReview),
         'date': claimReview.get('datePublished', None),
         'author': claimReview.get('author', {}).get('name', None)
     }

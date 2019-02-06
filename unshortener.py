@@ -25,7 +25,9 @@ class Unshortener(object):
 
     def unshorten(self, url, handle_error=True):
         source_url = database_builder.get_url_redirect(url)
-        if not source_url:
+        if source_url:
+            source_url = source_url['to']
+        else:
             res_text = self.session.post(resolver_url, headers={'Referer': resolver_url}, data={'csrfmiddlewaretoken': self.csrf, 'url': url}).text
             soup = BeautifulSoup(res_text, 'html.parser')
             try:

@@ -371,6 +371,14 @@
                 "fact_checking_urls": true
             }
         },
+        "hearvox_unreliable_news": {
+            "name": "Unreliable News Sites (UNS)",
+            "url": "https://github.com/hearvox/unreliable-news",
+            "description": "An index of fake-news, clickbait, and hate websites, for Columbia Journalism Review (to be published Jan. 2019).",
+            "author": "https://www.rjionline.org/account/profile/618",
+            "contains": {
+            }
+        },
         "ifcn": {
             "name": "International Fact-Checking Network",
             "url": "https://ifcncodeofprinciples.poynter.org/signatories",

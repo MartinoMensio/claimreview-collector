@@ -21,7 +21,7 @@ types_by_domain = {k: set([el['type'] for el in v]) for k,v in itertools.groupby
 result = []
 for k, v in types_by_domain.items():
     assert len(v) == 1
-    label =  v.pop()
+    label = v.pop()
     label = claimreview.simplify_label(label)
     if label:
         result.append({
