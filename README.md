@@ -117,7 +117,7 @@ used for: TextualClaims, DomainLabels
 
 ## `golbeck_fakenews`
 
-type: url labels + rebuttals
+type: url labels + rebuttals + full text
 
 url: https://github.com/jgolbeck/fakenews
 
@@ -125,8 +125,8 @@ size: 493 items
 
 used for:
 - fact_checking_urls: because the rebuttals linked belong to fact checking websites (for the label `fake`)
-- url_labels: because the urls have labels (`fake`/`satire`). For the label `satire` this is necessary since there are no review URLs TODO
-- Rebuttals
+- url_labels: because the urls have labels (`fake`/`satire`). For the label `satire` this is necessary since there are no review (*"Each fake news article is paired with a rebutting article from a reliable source that rebuts the fake source"*) URLs TODO
+- Text (TODO)
 
 ## `liar`
 
@@ -283,7 +283,7 @@ type: DomainLabels
 
 url:
 
-- `fakenewswatch` https://web.archive.org/web/20180213181029/http://fakenewswatch.com/
+- `fakenewswatch` https://web.archive.org/web/20180213181029/http://fakenewswatch.com/ --> dead website, don't trust it
 - `dailydot` https://www.dailydot.com/layer8/fake-news-sites-list-facebook/
 - `usnwes` http://www.usnews.com/news/national-news/articles/2016-11-14/avoid-these-fake-news-sites-at-all-costs
 - `newsrepublic` https://newrepublic.com/article/118013/satire-news-websites-are-cashing-gullible-outraged-readers
@@ -420,3 +420,7 @@ url: https://github.com/BuzzFeedNews/2018-12-fake-news-top-50
 size: 257 items
 
 used for: DomainLabels
+
+# hearvox_unreliable_news
+
+TODO, is an aggregator of domain-level classifications

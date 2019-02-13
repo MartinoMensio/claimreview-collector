@@ -8,8 +8,8 @@
             "contains": {
                 "domain_classification": false,
                 "url_classification": false,
-                "rebuttal_suggestion": true,
-                "textual_claims": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
                 "claimReviews": true,
                 "fact_checking_urls": true
             }
@@ -23,8 +23,8 @@
                 "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false,
+                "textual_claims": false,
+                "claimReviews": true,
                 "fact_checking_urls": true
             }
         },
@@ -48,10 +48,10 @@
             "author": "https://ischool.umd.edu/faculty-staff/jennifer-golbeck",
             "contains": {
                 "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": true,
-                "textual_claims": true,
-                "claimReviews": true,
+                "url_classification": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
+                "claimReviews": false,
                 "fact_checking_urls": true
             }
         },
@@ -64,7 +64,7 @@
                 "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
-                "textual_claims": true,
+                "textual_claims": false,
                 "claimReviews": false,
                 "fact_checking_urls": true
             }
@@ -97,7 +97,7 @@
         },
         "opensources": {
             "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
-            "url": "https://github.com/OpenSourcesGroup/opensources",
+            "url": "http://www.opensources.co/",
             "description": "OpenSources is a curated resource for assessing online information sources, available for public use. Websites in this resource range from credible news sources to misleading and outright fake websites. Headed by Melissa Zimdars of Merrimack College, our research team is dedicated to preserving the integrity and enhancing the transparency of information on the internet.",
             "author": "http://www.opensources.co/",
             "contains": {
@@ -192,7 +192,7 @@
             "description": "List of fake news sites by Fake News Watch",
             "author": "http://fakenewswatch.com/",
             "contains": {
-                "domain_classification": true,
+                "domain_classification": false,
                 "url_classification": false,
                 "rebuttal_suggestion": false,
                 "textual_claims": false,
@@ -311,8 +311,8 @@
             "contains": {
                 "domain_classification": false,
                 "url_classification": false,
-                "rebuttal_suggestion": true,
-                "textual_claims": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
                 "claimReviews": false,
                 "fact_checking_urls": true
             }
@@ -325,8 +325,8 @@
             "contains": {
                 "domain_classification": false,
                 "url_classification": false,
-                "rebuttal_suggestion": true,
-                "textual_claims": true,
+                "rebuttal_suggestion": false,
+                "textual_claims": false,
                 "claimReviews": true,
                 "fact_checking_urls": true
             }
@@ -377,6 +377,7 @@
             "description": "An index of fake-news, clickbait, and hate websites, for Columbia Journalism Review (to be published Jan. 2019).",
             "author": "https://www.rjionline.org/account/profile/618",
             "contains": {
+                "domain_classification": true
             }
         },
         "ifcn": {
