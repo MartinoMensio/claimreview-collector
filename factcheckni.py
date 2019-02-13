@@ -3,6 +3,7 @@
 import utils
 import requests
 import re
+import os
 from bs4 import BeautifulSoup
 
 LIST_URL = 'https://factcheckni.org/page/{}/'
@@ -10,8 +11,12 @@ LIST_URL = 'https://factcheckni.org/page/{}/'
 my_path = utils.data_location / 'factcheckni'
 
 page = 1
-all_statements = []
-while True:
+if os.path.exists(my_path / 'fact_checking_urls.json'):
+    all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+else:
+    all_statements = []
+go_on = True
+while go_on:
     facts_url = LIST_URL.format(page)
     print(facts_url)
     response = requests.get(facts_url)
@@ -33,6 +38,11 @@ while True:
         else:
             claim = None
 
+        found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
+        if found:
+            print('found')
+            go_on = False
+            break
 
         all_statements.append({
             'url': url,

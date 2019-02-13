@@ -2,6 +2,7 @@
 
 import utils
 import requests
+import os
 from bs4 import BeautifulSoup
 
 LIST_URL = 'https://www.weeklystandard.com/tag/tws-fact-check'
@@ -13,9 +14,13 @@ headers = {
 }
 
 page = 1
-all_statements = []
 next_page_url = LIST_URL
-while True:
+if os.path.exists(my_path / 'fact_checking_urls.json'):
+    all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+else:
+    all_statements = []
+go_on = True
+while go_on:
     facts_url = next_page_url
     print(facts_url)
     response = requests.get(facts_url, headers=headers)
@@ -38,6 +43,11 @@ while True:
         url = s.select('a.Link')[0]['href']
         title = s.select('a.Link')[0].text.strip()
 
+        found = next((item for item in all_statements if (item['url'] == url and item['title'] == title)), None)
+        if found:
+            print('found')
+            go_on = False
+            break
 
         all_statements.append({
             'url': url,

@@ -2,6 +2,7 @@
 
 import utils
 import requests
+import os
 from bs4 import BeautifulSoup
 
 import dateparser
@@ -10,7 +11,10 @@ facts_url = 'https://fullfact.org/'
 
 my_path = utils.data_location / 'fullfact'
 
-all_statements = []
+if os.path.exists(my_path / 'fact_checking_urls.json'):
+    all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+else:
+    all_statements = []
 
 print(facts_url)
 response = requests.get(facts_url)
@@ -21,14 +25,18 @@ if response.status_code != 200:
 soup = BeautifulSoup(response.text, 'lxml')
 
 for s in soup.select('div.news-feed #mostRecent li'):
-    url = s.select('a')[0]['href']
+    url = 'https://fullfact.org' +  s.select('a')[0]['href']
     title = s.select('a')[0].text.strip()
     date = s.select('small.date')[0].text.strip()
     date = dateparser.parse(date).isoformat()
 
+    found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
+    if found:
+        print('found')
+        break
 
     all_statements.append({
-        'url': 'https://fullfact.org' + url,
+        'url': url,
         'title': title,
         'date': date,
         'source': 'fullfact'

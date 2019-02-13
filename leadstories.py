@@ -3,6 +3,7 @@
 import utils
 import requests
 import re
+import os
 from bs4 import BeautifulSoup
 
 import claimreview
@@ -18,8 +19,12 @@ labels_in_title = [
 ]
 
 page = 1
-all_statements = []
-while True:
+if os.path.exists(my_path / 'fact_checking_urls.json'):
+    all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+else:
+    all_statements = []
+go_on = True
+while go_on:
     facts_url = LIST_URL.format(page)
     print(facts_url)
     response = requests.get(facts_url)
@@ -46,7 +51,11 @@ while True:
                 label = claimreview.simplify_label(label)
                 break
 
-
+        found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
+        if found:
+            print('found')
+            go_on = False
+            break
 
         all_statements.append({
             'url': url,
