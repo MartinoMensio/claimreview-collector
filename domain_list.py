@@ -45,11 +45,15 @@ all_domains = []
 for source, mappings in filecolumns.items():
     data = utils.read_tsv(location / 'intermediate' / '{}.tsv'.format(source))
     print(source)
+    source_name = 'domain_list_{}'.format(source)
     domains = [{
         'domain': el[mappings['domain_col']].lower(),
         'label': 'true' if el[mappings['label_col']] in mappings['true_vals'] else 'fake',
-        'source': 'domain_list_{}'.format(source)
+        'source': source_name
     } for el in data if el[mappings['label_col']] in mappings['true_vals']+mappings['fake_vals']]
+
+    # save separately the domains for each list
+    utils.write_json_with_path(domains, utils.data_location / source_name, 'domains.json')
 
     all_domains.extend(domains)
 

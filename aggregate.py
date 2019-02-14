@@ -110,7 +110,7 @@ def merge_fact_checking_urls(old, new):
     return result
 
 # decide here what to aggregate
-choice = {k if 'domain_list_' not in k else 'domain_list': {
+choice = {k: {
     'urls': el['contains'].get('url_classification', False), # TODO rename to url_labels
     'domains': el['contains'].get('domain_classification', False), # TODO rename to domain_labels
     'rebuttals': el['contains'].get('rebuttal_suggestion', False), # TODO rename to rebuttals
