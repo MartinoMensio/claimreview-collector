@@ -20,18 +20,20 @@ urls_collection = db['urls']
 rebuttals_collection = db['rebuttals']
 datasets_collection = db['datasets']
 fact_checkers_collection = db['fact_checkers']
-claimReviews_collection = db['claim_reviews']
+#claimReviews_collection = db['claim_reviews']
 url_redirects_collection = db['url_redirects']
 
 fact_checking_urls_collection = db['fact_checking_urls']
 
 def clean_db():
+    # they are already dropped in _zero methods
     domains_collection.drop()
     urls_collection.drop()
     rebuttals_collection.drop()
     datasets_collection.drop()
     fact_checkers_collection.drop()
-    claimReviews_collection.drop()
+    fact_checking_urls_collection.drop()
+    #claimReviews_collection.drop()
 
 def load_sources():
     datasets_collection.drop()
@@ -76,6 +78,18 @@ def load_urls_zero(file_name='aggregated_urls.json'):
             'score': data
         })
 
+def load_fact_checking_urls_zero():
+    fact_checking_urls_collection.drop()
+
+    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+    for fcu in fact_checking_urls:
+        print(fcu)
+        url = fcu.get('url', None)
+        if url: url[:1000]
+        claim_url = fcu.get('claim_url', '')
+        if claim_url: claim_url[:1000]
+    return fact_checking_urls_collection.insert_many(fact_checking_urls)
+
 def load_rebuttals_zero():
     rebuttals_collection.drop()
 
@@ -88,13 +102,14 @@ def load_rebuttals_zero():
             'rebuttals': data
         })
 
+"""
 def load_claimReviews():
     claimReviews_collection.drop()
 
     claimReviews = utils.read_json(utils.data_location / 'aggregated_claimReviews.json')
     for claimReview in claimReviews:
         claimReviews_collection.insert_one(claimReview)
-
+"""
 
 def add_redirections(input_file_path):
     """The input file contains a JSON with k:v for redirections"""
@@ -111,7 +126,7 @@ def create_indexes():
     #db['twitter_tweets'].create_index('user.id', name='user.id')
 
     db['fact_checking_urls'].create_index('url', name='url')
-    #db_new['fact_checking_urls'].create_index('claim_url', name='claim_url')
+    db['fact_checking_urls'].create_index('claim_url', name='claim_url')
 
 
 def get_url_redirect(url):

@@ -199,7 +199,7 @@ def load_into_db():
     database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
     database_builder.load_domains_zero()
     database_builder.load_rebuttals_zero()
-    #database_builder.load_fact_checking_urls_zero()
+    database_builder.load_fact_checking_urls_zero()
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
     match = aggregated_urls.get('url', None)

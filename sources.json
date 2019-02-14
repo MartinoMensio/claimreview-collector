@@ -377,7 +377,7 @@
             "description": "An index of fake-news, clickbait, and hate websites, for Columbia Journalism Review (to be published Jan. 2019).",
             "author": "https://www.rjionline.org/account/profile/618",
             "contains": {
-                "domain_classification": true
+                "domain_classification": false
             }
         },
         "ifcn": {

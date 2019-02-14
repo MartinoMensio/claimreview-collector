@@ -107,6 +107,9 @@ def scrape():
 def extract_urls_rebuttals_domains_factcheckers(claimReviews):
     urls = []
     rebuttals = defaultdict(lambda: defaultdict(list))
+    # if os.path.exists(subfolder_path / 'fact_checking_urls.json'):
+    #     fact_checking_urls = utils.read_json(subfolder_path / 'fact_checking_urls.json')
+    # else:
     fact_checking_urls = []
 
     for j, claimReview in enumerate(claimReviews):
@@ -117,6 +120,12 @@ def extract_urls_rebuttals_domains_factcheckers(claimReviews):
             label = claimreview.get_label(claimReview)
             if label:
                 urls.append({'url': claim_urls, 'label': label, 'source': 'google_factcheck_explorer'})
+
+        # found = next((item for item in fact_checking_urls if (item['url'] == claimReview['url'] and item['claim'] == claimReview.get('claimReviewed', None))), None)
+        # if found:
+        #     print('found')
+        #     break
+
         fact_checking_urls.append(claimreview.to_fact_checking_url(claimReview, 'google_factcheck_explorer'))
 
     utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')

@@ -13,11 +13,15 @@ claimReviews = data['dataFeedElement']
 results = [{'url': el['url'], 'label': 'true', 'source': 'datacommons_feeds'} for el in claimReviews]
 
 fact_checking_urls = []
+claim_reviews = []
 for item in claimReviews:
     cr = item['item'][0]
+    claim_reviews.append(cr)
     fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_factcheck'))
 
 utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
+
+utils.write_json_with_path(claimReviews, subfolder_path, 'claimReviews.json')
 
 utils.write_json_with_path(results, subfolder_path, 'urls.json')
 
