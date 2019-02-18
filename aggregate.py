@@ -109,6 +109,20 @@ def merge_fact_checking_urls(old, new):
                     result[k] = v
     return result
 
+def merge_rebuttals(rebuttals_for_url, new_rebuttal):
+    print(rebuttals_for_url, new_rebuttal)
+    match = next((el for el in rebuttals_for_url if el['url'] == new_rebuttal['url']), None)
+    if not match:
+        match = {'url': new_rebuttal['url'], 'source': []}
+        rebuttals_for_url.append(match)
+
+    #print(match['source'])
+    #print(match['source'])
+    match['source'] = list(set(match['source'] + new_rebuttal['source']))
+
+    return rebuttals_for_url
+
+
 # decide here what to aggregate
 choice = {k: {
     'urls': el['contains'].get('url_classification', False), # TODO rename to url_labels
@@ -137,10 +151,7 @@ def aggregate_initial():
             rebuttals = utils.read_json(utils.data_location / subfolder / 'rebuttals.json')
             for source_url, rebuttal_l in rebuttals.items():
                 for rebuttal_url, source in rebuttal_l.items():
-                    all_rebuttals[source_url].append({
-                        'url': rebuttal_url,
-                        'source': source
-                    })
+                    all_rebuttals[source_url] = merge_rebuttals(all_rebuttals.get(source_url, []), {'url': rebuttal_url, 'source': source})
         if config['claimReviews']:
             claimReview = utils.read_json(utils.data_location / subfolder / 'claimReviews.json')
             all_claimreviews.extend(claimReview)
@@ -192,14 +203,14 @@ def aggregate_initial():
 
 def load_into_db():
     # build the database
-    database_builder.clean_db()
-    database_builder.create_indexes()
-    database_builder.load_sources()
-    # load into database the beginning
-    database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
-    database_builder.load_domains_zero()
+    # database_builder.clean_db()
+    # database_builder.create_indexes()
+    # database_builder.load_sources()
+    # # load into database the beginning
+    # database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
+    # database_builder.load_domains_zero()
     database_builder.load_rebuttals_zero(file_name='aggregated_rebuttals_with_fcu.json')
-    database_builder.load_fact_checking_urls_zero()
+    # database_builder.load_fact_checking_urls_zero()
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
     match = aggregated_urls.get('url', None)
@@ -245,7 +256,7 @@ def extract_more():
             check_and_add_url(claim_url, label, sources, classified_urls)
             if claim_url not in rebuttals:
                 rebuttals[claim_url] = []
-            rebuttals[claim_url].append({
+            rebuttals[claim_url] = merge_rebuttals(rebuttals.get(claim_url, []), {
                         'url': url,
                         'source': sources
                     })
@@ -258,6 +269,6 @@ def extract_more():
 
 
 if __name__ == "__main__":
-    #aggregate_initial()
-    #extract_more()
+    aggregate_initial()
+    extract_more()
     load_into_db()
