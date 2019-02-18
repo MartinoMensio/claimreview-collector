@@ -198,7 +198,7 @@ def load_into_db():
     # load into database the beginning
     database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
     database_builder.load_domains_zero()
-    database_builder.load_rebuttals_zero()
+    database_builder.load_rebuttals_zero(file_name='aggregated_rebuttals_with_fcu.json')
     database_builder.load_fact_checking_urls_zero()
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
@@ -229,8 +229,9 @@ def extract_more():
     """
     fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
     classified_urls = utils.read_json(utils.data_location / 'aggregated_urls.json')
+    rebuttals = utils.read_json(utils.data_location / 'aggregated_rebuttals.json')
 
-    print('BEFORE')
+    print('BEFORE extract_more')
     utils.print_stats(classified_urls)
 
     for fcu in fact_checking_urls:
@@ -242,13 +243,21 @@ def extract_more():
             check_and_add_url(url, 'true', sources, classified_urls)
         if claim_url and label:
             check_and_add_url(claim_url, label, sources, classified_urls)
+            if claim_url not in rebuttals:
+                rebuttals[claim_url] = []
+            rebuttals[claim_url].append({
+                        'url': url,
+                        'source': sources
+                    })
 
-    print('AFTER')
+    print('AFTER extract_more')
     utils.print_stats(classified_urls)
+
     utils.write_json_with_path(classified_urls, utils.data_location, 'aggregated_urls_with_fcu.json')
+    utils.write_json_with_path(rebuttals, utils.data_location, 'aggregated_rebuttals_with_fcu.json')
 
 
 if __name__ == "__main__":
-    aggregate_initial()
-    extract_more()
+    #aggregate_initial()
+    #extract_more()
     load_into_db()

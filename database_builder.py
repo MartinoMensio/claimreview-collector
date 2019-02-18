@@ -78,10 +78,10 @@ def load_urls_zero(file_name='aggregated_urls.json'):
             'score': data
         })
 
-def load_fact_checking_urls_zero():
+def load_fact_checking_urls_zero(file_name='aggregated_fact_checking_urls.json'):
     fact_checking_urls_collection.drop()
 
-    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+    fact_checking_urls = utils.read_json(utils.data_location / file_name)
     for fcu in fact_checking_urls:
         print(fcu)
         url = fcu.get('url', None)
@@ -90,10 +90,10 @@ def load_fact_checking_urls_zero():
         if claim_url: claim_url[:1000]
     return fact_checking_urls_collection.insert_many(fact_checking_urls)
 
-def load_rebuttals_zero():
+def load_rebuttals_zero(file_name='aggregated_rebuttals.json'):
     rebuttals_collection.drop()
 
-    rebuttals = utils.read_json(utils.data_location / 'aggregated_rebuttals.json')
+    rebuttals = utils.read_json(utils.data_location / file_name)
     for u, data in rebuttals.items():
         u = u[:1000]
         rebuttals_collection.insert_one({
