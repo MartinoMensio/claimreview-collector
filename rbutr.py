@@ -37,10 +37,9 @@ rbutr_urls = set()
 for row in data:
     rbutr_urls.add(row['sourcepage'])
     rbutr_urls.add(row['rebuttalpage'])
-uns = unshortener.Unshortener(mappings)
 for idx, u in enumerate(tqdm(rbutr_urls)):
     #print(u)
-    uns.unshorten(u, handle_error=False)
+    unshortener.unshorten(u)
     if idx % 10 == 0:
         utils.write_json_with_path(mappings, rbutr_mapping_location, 'mappings.json')
 

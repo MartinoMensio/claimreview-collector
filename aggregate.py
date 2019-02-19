@@ -239,7 +239,7 @@ def aggregate_initial():
 
     # TODO URL unshortening of datasets
     to_be_mapped = [url for url in aggregated_urls.keys()]
-    # unshortener.unshorten_multiprocess(to_be_mapped)
+    # unshortener.unshorten(to_be_mapped)
 
 
 def load_into_db():
