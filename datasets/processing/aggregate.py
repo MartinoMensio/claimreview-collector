@@ -340,4 +340,4 @@ def extract_more():
 def main():
     aggregate_initial()
     extract_more()
-    #load_into_db()
+    load_into_db()

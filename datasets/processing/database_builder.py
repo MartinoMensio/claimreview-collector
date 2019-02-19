@@ -38,7 +38,7 @@ def clean_db():
 def load_datasets():
     datasets_collection.drop()
 
-    sources = utils.read_json('sources.json')
+    sources = utils.read_sources()
     datasets = sources['datasets']
     for k, v in datasets.items():
         v['_id'] = k
