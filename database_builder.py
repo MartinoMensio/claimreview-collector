@@ -35,25 +35,32 @@ def clean_db():
     fact_checking_urls_collection.drop()
     #claimReviews_collection.drop()
 
-def load_sources():
+def load_datasets():
     datasets_collection.drop()
-    fact_checkers_collection.drop()
 
     sources = utils.read_json('sources.json')
     datasets = sources['datasets']
-    fact_checkers = sources['fact_checkers']
     for k, v in datasets.items():
         v['_id'] = k
         datasets_collection.insert_one(v)
 
-    for k, v in fact_checkers.items():
-        v['_id'] = k
-        fact_checkers_collection.insert_one(v)
 
-def load_domains_zero():
+def load_fact_checkers(file_name='aggregated_fact_checkers.json'):
+    fact_checkers_collection.drop()
+
+    fact_checkers = utils.read_json(utils.data_location / file_name)
+    for fc in fact_checkers:
+        k = fc.get('id', None)
+        if not k:
+            k = fc['domain']
+        k = k.replace('.', '_')
+        fc['_id'] = k
+        fact_checkers_collection.insert_one(fc)
+
+def load_domains_zero(file_name='aggregated_domains.json'):
     domains_collection.drop()
 
-    domains = utils.read_json(utils.data_location / 'aggregated_domains.json')
+    domains = utils.read_json(utils.data_location / file_name)
     for d, data in domains.items():
         d = get_url_domain(d)
         doc = {

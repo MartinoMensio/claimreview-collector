@@ -421,6 +421,22 @@ size: 257 items
 
 used for: DomainLabels
 
-# hearvox_unreliable_news
+## hearvox_unreliable_news
 
 TODO, is an aggregator of domain-level classifications
+
+## `ifcn`
+
+The International Fact Checking Network
+
+url: https://ifcncodeofprinciples.poynter.org/signatories
+
+## `reporterslab`
+
+url: https://reporterslab.org/fact-checking/#
+
+Google Sheet ID (taken from source of the page)
+10nFzJbHbPho7_kMFCRoX7VsQLSNIB3EaUh4ITDlsV0M
+
+https://spreadsheets.google.com/feeds/list/10nFzJbHbPho7_kMFCRoX7VsQLSNIB3EaUh4ITDlsV0M/1/public/values?alt=json
+https://docs.google.com/spreadsheets/d/10nFzJbHbPho7_kMFCRoX7VsQLSNIB3EaUh4ITDlsV0M/edit#gid=0

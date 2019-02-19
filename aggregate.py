@@ -94,7 +94,7 @@ def merge_fact_checking_urls(old, new):
                     raise ValueError('abort')
         #result = {**old, **{k:v for k,v in new.items() if v!=None}}
         result = old
-        print(old['source'], new['source'])
+        #print(old['source'], new['source'])
         for k, v in new.items():
             if k == 'source':
                 result['source'] = list(set(old['source'] + [new['source']]))
@@ -116,6 +116,30 @@ def merge_rebuttals(rebuttals_for_url, new_rebuttal):
 
     return rebuttals_for_url
 
+def merge_fact_checkers(all_fact_checkers, new_fact_checker):
+    print(new_fact_checker)
+    match = next((el for el in all_fact_checkers if el['domain'] == new_fact_checker['domain']), None)
+    if not match:
+        match = {}
+        all_fact_checkers.append(match)
+
+    for k, v in new_fact_checker.items():
+        if k == 'source':
+            match['sources'] = list(set(match.get('sources', []) + [v]))
+        else:
+            if k in match and match[k] and v:
+                if k == 'properties':
+                    match[k] = {**match[k], **new_fact_checker[k]}
+                else:
+                    if v != match[k]:
+                        print('different', k, match[k], new_fact_checker[k], ':for:', new_fact_checker['name'])
+                        if new_fact_checker['source'] != 'ifcn':
+                            v = match[k]
+                        #raise ValueError('ohoho')
+            if v != None and v != '':
+                match[k] = v
+
+
 
 # decide here what to aggregate
 choice = {k: {
@@ -127,7 +151,8 @@ choice = {k: {
     'rebuttals': el['contains'].get('rebuttal_suggestion', False),
     # TODO rename to claim_reviews
     'claimReviews': el['contains'].get('claimReviews', False),
-    'fact_checking_urls': el['contains'].get('fact_checking_urls', False)
+    'fact_checking_urls': el['contains'].get('fact_checking_urls', False),
+    'fact_checkers': el['contains'].get('fact_checkers', False)
 } for k, el in utils.read_json('sources.json')['datasets'].items()}
 
 
@@ -138,6 +163,7 @@ def aggregate_initial():
     all_claimreviews = []
     aggregated_fact_checking_urls = []
     all_fact_checking_urls_by_url = defaultdict(list)
+    all_fact_checkers = []
     # step 1: load types of data natively
     for subfolder, config in choice.items():
         if config['urls']:
@@ -176,6 +202,11 @@ def aggregate_initial():
                 all_fact_checking_urls_by_url[fcu['url']].append(merged)
                 aggregated_fact_checking_urls.append(merged)
 
+        if config['fact_checkers']:
+            fact_checkers = utils.read_json(utils.data_location / subfolder / 'fact_checkers.json')
+            for fc in fact_checkers:
+                merge_fact_checkers(all_fact_checkers, fc)
+
     urls_cnt = len(all_urls)
     domains_cnt = len(all_domains)
     fake_urls_cnt = len([el for el in all_urls if el['label'] == 'fake'])
@@ -198,6 +229,7 @@ def aggregate_initial():
         all_claimreviews, utils.data_location, 'aggregated_claimReviews.json')
     utils.write_json_with_path(aggregated_fact_checking_urls,
                                utils.data_location, 'aggregated_fact_checking_urls.json')
+    utils.write_json_with_path(all_fact_checkers, utils.data_location, 'aggregated_fact_checkers.json')
 
     utils.print_stats(aggregated_urls)
     utils.print_stats(aggregated_domains)
@@ -212,15 +244,16 @@ def aggregate_initial():
 
 def load_into_db():
     # build the database
-    # database_builder.clean_db()
-    # database_builder.create_indexes()
-    # database_builder.load_sources()
+    database_builder.clean_db()
+    database_builder.create_indexes()
+    database_builder.load_datasets()
+    database_builder.load_fact_checkers()
     # # load into database the beginning
-    # database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
-    # database_builder.load_domains_zero()
+    database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
+    database_builder.load_domains_zero(file_name='aggregated_domains_with_fact_checkers.json')
     database_builder.load_rebuttals_zero(
         file_name='aggregated_rebuttals_with_fcu.json')
-    # database_builder.load_fact_checking_urls_zero()
+    database_builder.load_fact_checking_urls_zero()
 
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
@@ -254,8 +287,10 @@ def extract_more():
         utils.data_location / 'aggregated_fact_checking_urls.json')
     classified_urls = utils.read_json(
         utils.data_location / 'aggregated_urls.json')
+    classified_domains = utils.read_json(utils.data_location / 'aggregated_domains.json')
     rebuttals = utils.read_json(
         utils.data_location / 'aggregated_rebuttals.json')
+    fact_checkers = utils.read_json(utils.data_location / 'aggregated_fact_checkers.json')
 
     print('BEFORE extract_more')
     utils.print_stats(classified_urls)
@@ -276,6 +311,19 @@ def extract_more():
                 'source': sources
             })
 
+    for fc in fact_checkers:
+        domain = fc['domain']
+        match = classified_domains.get(domain, None)
+        if not match:
+            match = {'sources': []}
+            classified_domains[domain] = match
+        else:
+            if match['label'] != 'true':
+                raise ValueError('{} is a fact checker that is not behaving well: "{}"'.format(domain, match['label']))
+        match['label'] = 'true'
+        match['sources'].extend(fc['sources'])
+        match['is_fact_checker'] = True
+
     print('AFTER extract_more')
     utils.print_stats(classified_urls)
 
@@ -283,6 +331,7 @@ def extract_more():
         classified_urls, utils.data_location, 'aggregated_urls_with_fcu.json')
     utils.write_json_with_path(
         rebuttals, utils.data_location, 'aggregated_rebuttals_with_fcu.json')
+    utils.write_json_with_path(classified_domains, utils.data_location, 'aggregated_domains_with_fact_checkers.json')
 
 
 if __name__ == "__main__":

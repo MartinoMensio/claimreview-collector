@@ -4,6 +4,7 @@ import json
 import sys
 import itertools
 import hashlib
+import re
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -39,6 +40,10 @@ def write_file_with_path(content, path, filename):
         f.write(content)
 
 def get_url_domain(url):
+    url = url.lower()
+    if not re.match(r'[a-z]+://.*', url):
+        # default protocol
+        url = 'https://' + url
     parsed_uri = urlparse(url)
     return parsed_uri.netloc
 
