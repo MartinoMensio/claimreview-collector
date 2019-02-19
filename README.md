@@ -11,6 +11,11 @@ We select from the datasets only items that are (almost) completely true or fake
 
 Goal: have a list of URL labelled with `fake` / `true`
 
+## Installation
+
+Maybe better in a virtual environment!
+`pip install -r requirements.txt`
+
 ## Types of data
 
 ### fact_checking_url

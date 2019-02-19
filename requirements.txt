@@ -1,14 +1,1 @@
-extruct
-pylint
-requests
-tqdm
-plac
-flatten_json
-python-dotenv
-pymongo
-validators
-tldextract
-beautifulsoup4
-dateparser
-unidecode
-pycountry
+-e .
