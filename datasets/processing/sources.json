@@ -350,8 +350,8 @@
             "description": "Fake News Sample",
             "author": "https://www.kaggle.com/pontes",
             "contains": {
-                "domain_classification": false,
-                "url_classification": true,
+                "domain_classification": true,
+                "url_classification": false,
                 "rebuttal_suggestion": false,
                 "textual_claims": true,
                 "claimReviews": false
