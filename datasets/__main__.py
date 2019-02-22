@@ -11,7 +11,7 @@ if __name__ == '__main__':
         'process_all': commands.process_all,
         'aggregate_all': commands.aggregate_all,
         'scrape_factchecking': commands.scrape_factchecking,
-        'scrape_single_factching': commands.scrape_single_factching,
+        'scrape_single_factchecking': commands.scrape_single_factchecking,
         'process_factchecker_lists': commands.process_factchecker_lists,
         'process_single_factchecker_list': commands.process_single_factchecker_list,
         'process_datasets': commands.process_datasets,

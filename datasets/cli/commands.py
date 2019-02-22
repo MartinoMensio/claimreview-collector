@@ -36,7 +36,7 @@ processing_functions_datasets = {
 }
 
 scrape_factchecking_functions = {
-    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(True),
+    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(False),
     'factcheckni': factcheckni.main,
     'fullfact': fullfact.main,
     'leadstories': leadstories.main,
@@ -64,10 +64,10 @@ def aggregate_all():
 def scrape_factchecking():
     print('scraping factchecking...')
     for key in scrape_factchecking_functions.keys():
-        scrape_single_factching(key)
+        scrape_single_factchecking(key)
     print('scraping factchecking done')
 
-def scrape_single_factching(key):
+def scrape_single_factchecking(key):
     print('processing {}...'.format(key))
     scrape_factchecking_functions[key]()
     print('done {}'.format(key))

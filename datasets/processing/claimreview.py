@@ -186,6 +186,13 @@ def get_claim_urls(claimReview):
     # remove the "mm:ss mark of URL" that is used for some videos
     if result:
         result = re.sub(r'.*\s+mark(\sof)?\s+(.+)', r'\2', result)
+        domain = utils.get_url_domain(result)
+        # some sameAs point to wikipedia page of person/organisation
+        if re.match(r'.*wikipedia\.org', domain):
+            result = None
+        # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
+        elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?', result):
+            result = None
     return result
 
 def get_claim_rating(claimReview):
@@ -243,11 +250,16 @@ def to_fact_checking_url(claimReview, source='claimReview'):
     if 'url' not in claimReview:
         print(claimReview)
         raise ValueError('missing URL')
+    url = claimReview['url']
+    claim_url = get_claim_urls(claimReview)
+    if url == claim_url:
+        print('same url and claim_url: {}'.format(url))
+        claim_url = None
     return {
-        'url': claimReview['url'],
+        'url': url,
         'source': source,
         'claim': claimReview.get('claimReviewed', None),
-        'claim_url': get_claim_urls(claimReview),
+        'claim_url': claim_url,
         'label': get_label(claimReview),
         'date': claimReview.get('datePublished', None),
         'author': claimReview.get('author', {}).get('name', None)
