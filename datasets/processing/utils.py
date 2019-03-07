@@ -54,9 +54,17 @@ def print_stats(data):
     by_label = itertools.groupby(sorted(data.items(), key=by_label_fn), key=by_label_fn)
     print({k: len(list(v)) for k,v in by_label}, 'total', len(data))
 
+def identifier_from_url_or_domain(element, key):
+    selected_property = element[key]
+    if key == 'domain':
+        if selected_property.endswith('/'):
+            # only example is anews24.org/
+            selected_property = selected_property[:-1]
+    return selected_property
+
 def aggregate(data_list, key='url'):
     """returns a dict, grouping the data by the key (url/domain)"""
-    by_key_fn = lambda el: el[key]
+    by_key_fn = lambda el: identifier_from_url_or_domain(el, key)
     by_key = {k: list(v) for k,v in itertools.groupby(sorted(data_list, key=by_key_fn), key=by_key_fn)}
     agree = {}
     not_agree = {}

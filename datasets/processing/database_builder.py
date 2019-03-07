@@ -90,7 +90,6 @@ def load_fact_checking_urls_zero(file_name='aggregated_fact_checking_urls.json')
 
     fact_checking_urls = utils.read_json(utils.data_location / file_name)
     for fcu in fact_checking_urls:
-        print(fcu)
         url = fcu.get('url', None)
         if url: url[:1000]
         claim_url = fcu.get('claim_url', '')

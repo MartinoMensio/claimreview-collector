@@ -40,7 +40,7 @@ def main():
         rbutr_urls.add(row['rebuttalpage'])
     for idx, u in enumerate(tqdm(rbutr_urls)):
         #print(u)
-        unshortener.unshorten(u)
+        #unshortener.unshorten(u)
         if idx % 10 == 0:
             utils.write_json_with_path(mappings, rbutr_mapping_location, 'mappings.json')
 

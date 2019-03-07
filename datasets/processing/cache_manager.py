@@ -12,10 +12,10 @@ import hashlib
 from pathlib import Path
 
 from . import unshortener
+from . import utils
 
 
-my_path = os.path.dirname(os.path.abspath(__file__))
-cache_path = Path(my_path) / 'cache'
+cache_path = utils.data_location / '..' / 'cache'
 web_pages_path = cache_path / 'pages'
 index_file = cache_path / 'index.json'
 

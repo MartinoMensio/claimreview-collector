@@ -60,7 +60,7 @@ def main():
         unique = {u for sublist in real_urls for u in sublist}
         #print(unique)
         if len(unique) != 1:
-            print(file_location, unique)
+            #print(file_location, unique)
             continue
         id = file_location.split('/')[-1].split('.')[0]
         url = unique.pop()

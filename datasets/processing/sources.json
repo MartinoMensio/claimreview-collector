@@ -397,7 +397,7 @@
             "author": "https://reporterslab.org/",
             "contains": {
                 "domain_classification": false,
-                "fact_checkers": true
+                "fact_checkers": false
             }
         },
         "factcheckni": {

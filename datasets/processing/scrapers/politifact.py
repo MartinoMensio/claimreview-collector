@@ -37,7 +37,7 @@ def main():
         statements = soup.select(STATEMENT_SELECTOR)
         #print(statements)
         for s in statements:
-            url = 'https://www.politifact.com/' + s.select('p.statement__text a.link')[0]['href']
+            url = 'https://www.politifact.com' + s.select('p.statement__text a.link')[0]['href']
             claim = s.select('p.statement__text a.link')[0].text
             author = s.select('div.statement__source a')[0].text
             label = s.select('div.meter img')[0]['alt']

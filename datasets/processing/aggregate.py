@@ -12,10 +12,11 @@ from dateutil import parser
 from unidecode import unidecode
 from collections import defaultdict
 from pathlib import Path
+from tqdm import tqdm
 
 from . import utils
 from . import unshortener
-
+from . import claimreview
 from . import database_builder
 
 
@@ -75,8 +76,17 @@ def select_best_candidate(fcu, matches):
 
     return best
 
+def merge_fact_checking_urls(aggregated_fact_checking_urls, by_url, fcu):
+    matches = by_url[fcu['url']]
+    candidate = select_best_candidate(fcu, matches)
+    merged = merge_fact_checking_urls_with_candidates(candidate, fcu)
+    # database_builder.load_fact_checking_url(merged)
+    if not candidate:
+        by_url[fcu['url']].append(merged)
+        aggregated_fact_checking_urls.append(merged)
+    return aggregated_fact_checking_urls
 
-def merge_fact_checking_urls(old, new):
+def merge_fact_checking_urls_with_candidates(old, new):
     if not old:
         result = {**new}
         result['source'] = [new['source']]
@@ -198,12 +208,7 @@ def aggregate_initial():
                     fcu['claim_url'][:1000]
 
                 #matches = database_builder.get_fact_checking_urls(fcu['url'])
-                matches = all_fact_checking_urls_by_url[fcu['url']]
-                candidate = select_best_candidate(fcu, matches)
-                merged = merge_fact_checking_urls(candidate, fcu)
-                # database_builder.load_fact_checking_url(merged)
-                all_fact_checking_urls_by_url[fcu['url']].append(merged)
-                aggregated_fact_checking_urls.append(merged)
+                merge_fact_checking_urls(aggregated_fact_checking_urls, all_fact_checking_urls_by_url, fcu)
 
         if config['fact_checkers']:
             fact_checkers = utils.read_json(utils.data_location / subfolder / 'fact_checkers.json')
@@ -337,7 +342,43 @@ def extract_more():
     utils.write_json_with_path(classified_domains, utils.data_location, 'aggregated_domains_with_fact_checkers.json')
 
 
+def retrieve_all_fact_checking_from_source():
+    print('now retrieveing original claimReviews from the source')
+
+    starting_fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+
+    all_retrieved_claimreviews = []
+    result = []
+
+    source_found = 0
+    source_not_found = 0
+    exceptions = 0
+
+    for i, fcu in enumerate(tqdm(starting_fact_checking_urls)):
+        all_fact_checking_urls_by_url = defaultdict(list)
+        retrieved_claimreviews = claimreview.get_claimreview_from_factcheckers(fcu['url'])
+        all_retrieved_claimreviews.extend(retrieved_claimreviews)
+        if retrieved_claimreviews:
+            source_found += 1
+            for cr in retrieved_claimreviews:
+                try:
+                    new_fact_checking_url = claimreview.to_fact_checking_url(cr, source='from_source')
+                except Exception as e:
+                    print(cr)
+                    raise e
+                merge_fact_checking_urls(result, all_fact_checking_urls_by_url, new_fact_checking_url)
+        else:
+            source_not_found += 1
+            merge_fact_checking_urls(result, all_fact_checking_urls_by_url, fcu)
+        # if not (i % 100):
+        #     print('source_found', source_found, 'source_not_found', source_not_found)
+
+    utils.write_json_with_path(result, utils.data_location, 'aggregated_fact_checking_urls_source.json')
+    # TODO next step should use that
+
+
 def main():
     aggregate_initial()
+    #retrieve_all_fact_checking_from_source()
     extract_more()
     load_into_db()

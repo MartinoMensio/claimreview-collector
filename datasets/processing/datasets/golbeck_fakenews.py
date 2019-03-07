@@ -18,13 +18,14 @@ def main():
         label = claimreview.simplify_label(original_label)
         claim_url = row['URL of article']
         for url in row['URL of rebutting article'].split('; '):
-            fact_checking_urls.append({
-                'url': url,
-                'source': 'golbeck_fakenews',
-                'claim_url': claim_url,
-                'label': label,
-                'original_label': original_label
-            })
+            if url:
+                fact_checking_urls.append({
+                    'url': url,
+                    'source': 'golbeck_fakenews',
+                    'claim_url': claim_url,
+                    'label': label,
+                    'original_label': original_label
+                })
 
     utils.write_json_with_path(fact_checking_urls, directory, 'fact_checking_urls.json')
 
@@ -42,7 +43,7 @@ def main():
             "@context": "http://schema.org",
             "@type": "ClaimReview",
             "datePublished": "2015-06-15",
-            "url": source_url,
+            "url": el,
             "author": {
                 "@type": "Person",
                 "url": verifier_url

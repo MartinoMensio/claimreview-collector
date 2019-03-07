@@ -36,7 +36,7 @@ processing_functions_datasets = {
 }
 
 scrape_factchecking_functions = {
-    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(False),
+    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(True),
     'factcheckni': factcheckni.main,
     'fullfact': fullfact.main,
     'leadstories': leadstories.main,

@@ -24,5 +24,6 @@ setup(name='datasets',
           'beautifulsoup4',
           'dateparser',
           'unidecode',
-          'pycountry'
+          'pycountry',
+          'dirtyjson'
       ])

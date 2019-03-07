@@ -82,6 +82,7 @@ label_maps = {
 
 
 def get_corrected_url(url, resolve=True):
+    #url = re.sub(r'http://(punditfact.com)/(.*)', r'https://politifact.com/\2', url)
     corrections = {
         'http://www.puppetstringnews.com/blog/obama-released-10-russian-agents-from-us-custody-in-2010-during-hillarys-uranium-deal': 'https://www.politifact.com/punditfact/statements/2017/dec/06/puppetstringnewscom/story-misleads-tying-obama-russian-spy-swap-hillar/',
         'http://static.politifact.com.s3.amazonaws.com/politifact/mugs/Noah_Smith_mug.jpg': 'https://www.politifact.com/punditfact/statements/2018/mar/08/noah-smith/has-automation-driven-job-losses-steel-industry/',
@@ -90,12 +91,14 @@ def get_corrected_url(url, resolve=True):
     }
     resolved = corrections.get(url, url)
     if resolve:
-        resolved = unshortener.unshorten(url)
+        resolved = unshortener.unshorten(resolved)
     return resolved
 
 def fix_page(page):
-    page = re.sub('"claimReviewed": ""([^"]*)""', r'"claimReviewed": "\1"', page)
+    page = re.sub('"claimReviewed": ""([^"]*)"', r'"claimReviewed": "\1', page)
     page = re.sub('}"itemReviewed"', '}, "itemReviewed"', page)
+    # Politifact broken http://www.politifact.com/north-carolina/statements/2016/mar/30/pat-mccrory/pat-mccrory-wrong-when-he-says-north-carolinas-new
+    page = re.sub('" "twitter": "', '", "twitter": "', page)
     # CDATA error
     page = re.sub('<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>', 'false', page)
     return page
@@ -103,7 +106,11 @@ def fix_page(page):
 def retrieve_claimreview(url):
     url_fixed = get_corrected_url(url)
     domain = utils.get_url_domain(url_fixed)
-    parser = _domain_parser_map[domain]
+    try:
+        parser = _domain_parser_map[domain]
+    except Exception as e:
+        print(domain, url, url_fixed)
+        raise e
     # download the page
     page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
     page_text = fix_page(page_text)
@@ -111,7 +118,6 @@ def retrieve_claimreview(url):
         result = parser(page_text)
     except Exception as e:
         print(url)
-        #print(page_text)
         raise e
     return url_fixed, result
 
@@ -129,11 +135,15 @@ def _microdata_parser(page):
     #for m in matches:
     #
     data = extruct.extract(page)
-    microdata = data['microdata']
+    # filter before flattening otherwise merge errors
+    microdata = [el for el in data['microdata'] if el['type'] == 'http://schema.org/ClaimReview']
     jsonld = _to_jsonld(microdata)
     # get only the ClaimReview, not other microdata
     claimReviews = [el for el in jsonld if ('@type' in el and 'ClaimReview' in el['@type'])]
     return claimReviews
+
+def _fake_parser(page):
+    return []
 
 def _snopes_parser(page):
     return _jsonld_parser(page)
@@ -157,8 +167,34 @@ _domain_parser_map = {
     'www.factcheck.org': _factcheck_parser,
     "www.politifact.com": _politifact_parser,
     'www.washingtonpost.com': _washingtonpost_parser,
-    'www.weeklystandard.com': _weeklystandard_parser
+    'www.weeklystandard.com': _weeklystandard_parser,
+    'hoax-alert.leadstories.com': _jsonld_parser,
+    'fullfact.org': _jsonld_parser,
+    'chequeado.com': _jsonld_parser,
+    'nytimes.com': _jsonld_parser,
+    'www.nytimes.com': _jsonld_parser,
+    'factcheck.afp.com': _jsonld_parser,
+    'www.animalpolitico.com': _microdata_parser,
+    # without claimReview
+    'newtral.es': _fake_parser,
+    'factcheckni.org': _fake_parser,
+    'www.lemonde.fr': _fake_parser,
+    'verafiles.org': _fake_parser
 }
+
+def clean_claim_url(url):
+    result = url
+    # remove the "mm:ss mark of URL" that is used for some videos
+    if result:
+        result = re.sub(r'.*\s+mark(\sof)?\s+(.+)', r'\2', result)
+        domain = utils.get_url_domain(result)
+        # some sameAs point to wikipedia page of person/organisation
+        if re.match(r'.*wikipedia\.org', domain):
+            result = None
+        # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
+        elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?', result):
+            result = None
+    return result
 
 def get_claim_urls(claimReview):
     result = None
@@ -182,17 +218,11 @@ def get_claim_urls(claimReview):
                 #    print(sameAs)
             result = sameAs
     # TODO also return sameAs if present on the claim directly, other links there!!
-
-    # remove the "mm:ss mark of URL" that is used for some videos
-    if result:
-        result = re.sub(r'.*\s+mark(\sof)?\s+(.+)', r'\2', result)
-        domain = utils.get_url_domain(result)
-        # some sameAs point to wikipedia page of person/organisation
-        if re.match(r'.*wikipedia\.org', domain):
-            result = None
-        # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
-        elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?', result):
-            result = None
+    if type(result) == list:
+        # TODO consider multiple values
+        result = clean_claim_url(result[0])
+    else:
+        result = clean_claim_url(result)
     return result
 
 def get_claim_rating(claimReview):
@@ -290,6 +320,7 @@ def _to_jsonld(microdata):
     jsonld_data = flatten_json.unflatten(jsonld_data)
     return [jsonld_data]
 
+"""
 def get_claimreviews_from_factcheckers(original_claimreviews):
     result = []
     for idx, c in enumerate(tqdm(original_claimreviews)):
@@ -297,42 +328,47 @@ def get_claimreviews_from_factcheckers(original_claimreviews):
         result.append(c_full)
 
     return result
+"""
 
-def get_claimreview_from_factcheckers(original_claimreview):
+def get_claimreview_from_factcheckers(original_claimreview_url):
     """This method enriches a claimReview item with more data by going to the url of the publisher"""
 
-    result = None
+    result = []
 
     # get the correct URL (some of them are wrong in the original dataset)
-    fixed_url = get_corrected_url(original_claimreview['url'])
+    fixed_url = get_corrected_url(original_claimreview_url)
 
     # this part with id and file saving is just to be able to restore the operation after a failure so that the single claims are saved onto disk on by one
     try:
         id = utils.string_to_md5(fixed_url)
+        #print(id)
     except Exception as e:
         print(fixed_url)
         raise e
     partial_file_name = '{}.json'.format(id)
     partial_file_path = subfolder_path / partial_file_name
+    #print(partial_file_name)
     if os.path.isfile(partial_file_path):
         # if it's been already saved, read it
         partial = utils.read_json(partial_file_path)
     else:
         # otherwise download the original claimReview from the fact checker
-        url, partial = retrieve_claimreview(original_claimreview['url'])
-        # and save it to disk
-        utils.write_json_with_path(partial, subfolder_path , partial_file_name)
+        try:
+            url, partial = retrieve_claimreview(fixed_url)
+            # and save it to disk
+            utils.write_json_with_path(partial, subfolder_path, partial_file_name)
+        except Exception as e:
+            print(e)
+            return result
     if not partial:
         # in this case there is no claimReview metadata on the fact checker website
         #print(c['url'])
         # return the original claimreview
-        result.append(original_claimreview)
+        return []
     if len(partial):
         # there can be multiple claimReviews in a single fact checking page
         for j, claimReview in enumerate(partial):
-            if 'url' not in claimReview:
-                # some broken claimReview
-                claimReview['url'] = original_claimreview['url']
+            claimReview['url'] = fixed_url
             # save this in the result
             #result['{}::{}'.format(fixed_url, j)] = claimReview
             result.append(claimReview)
@@ -340,5 +376,8 @@ def get_claimreview_from_factcheckers(original_claimreview):
     return result
 
 def main():
-    res = plac.call(retrieve_claimreview)
-    print(res)
+    res = plac.call(get_claimreview_from_factcheckers)
+    print(json.dumps(res))
+
+if __name__ == "__main__":
+    main()
