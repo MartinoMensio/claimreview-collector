@@ -77,7 +77,12 @@ label_maps = {
     'Wrong': 'fake',
     'Not accurate': 'fake',
     'Lie of the Year': 'fake',
-    'Mostly false': 'fake'
+    'Mostly false': 'fake',
+    # metafact.ai labels
+    'Affirmative': 'true',
+    'Negative': 'fake',
+    'Uncertain': 'mixed',
+    #'Not Enough Experts': ??
 }
 
 

@@ -112,7 +112,7 @@ def prepare_factcheckers():
             'name': d['name'],
             'url': d['website'],
             'description': '',
-            'nationality': 'FR',
+            'nationality': d['country'],
             'properties': d,
             'id': d['id'],
             'source': 'ifcn',

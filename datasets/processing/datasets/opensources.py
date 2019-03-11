@@ -15,7 +15,7 @@ def process(data, output_folder, source):
         #print(looking_at)
         classes = set([a for a in [claimreview.simplify_label(el) for el in looking_at] if a])
         if len(classes) != 1:
-            print(domain, classes)
+            #print(domain, classes)
             continue
         label = classes.pop()
         results.append({'domain': domain, 'label': label, 'source': source})
