@@ -19,6 +19,7 @@ def main():
         claim_url = row['URL of article']
         for url in row['URL of rebutting article'].split('; '):
             if url:
+                url = url.strip()
                 fact_checking_urls.append({
                     'url': url,
                     'source': 'golbeck_fakenews',
