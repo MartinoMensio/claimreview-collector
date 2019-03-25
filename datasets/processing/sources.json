@@ -15,9 +15,9 @@
             }
         },
         "datacommons_feeds": {
-            "name": "Fact Check Data from Datacommons feeds",
+            "name": "Fact Check Markup Tool Data Feed",
             "url": "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json",
-            "description": "As the Fact Check Data from datacommons.org (https://www.datacommons.org/factcheck/download), this dataset is a collection of ClaimReview items. The dataset is not documented and we don't know where these items come from. Probably is a small sample from datacommons.org",
+            "description": "This is a data feed of ClaimReview markups created via the Google Fact Check Markup Tool. The data in the feed also follows the schema.org ClaimReview standard, namely the same schema as the data in the historical research dataset. The feed itself is in DataFeed format. The compilation of the research dataset and the data feed from the Fact Check Markup Tool are licensed under CC BY. The license on the structured data of each ClaimReview markup is specified in the field sdLicense. Additionally, each publisher may have their own license terms for content on their website. Please refer to the website of the publisher.",
             "author": "https://www.datacommons.org/",
             "contains": {
                 "domain_classification": false,

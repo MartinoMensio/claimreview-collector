@@ -1,14 +1,18 @@
 #!/usr/bin/env python
+import requests
 
 from .. import utils
 from .. import claimreview
 
 dataset = 'datacommons_feeds'
 subfolder_path = utils.data_location / 'datacommons_feeds'
-input_file = subfolder_path / 'source' / 'data.json'
+feed_url = 'https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json'
 
 def main():
-    data = utils.read_json(input_file)
+    response = requests.get(feed_url)
+    if response.status_code != 200:
+        raise ValueError(response.status_code)
+    data = response.json()
     claimReviews = data['dataFeedElement']
 
     results = [{'url': el['url'], 'label': 'true', 'source': 'datacommons_feeds'} for el in claimReviews]
@@ -18,7 +22,7 @@ def main():
     for item in claimReviews:
         cr = item['item'][0]
         claim_reviews.append(cr)
-        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_factcheck'))
+        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_feeds'))
 
     utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
 

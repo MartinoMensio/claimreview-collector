@@ -207,21 +207,26 @@ def get_claim_urls(claimReview):
     if not itemReviewed:
         itemReviewed = claimReview.get('properties', {}).get('itemReviewed', None)
     if itemReviewed:
-        sameAs = itemReviewed.get('sameAs', None)
-        if sameAs:
-            result = itemReviewed['sameAs']
+        appearance = itemReviewed.get('appearance', None)
+        if appearance:
+            # new field appearance in https://pending.schema.org/Claim
+            result = appearance[0]['url']
         else:
-            author = itemReviewed.get('author', None)
-            if not author:
-                author = itemReviewed.get('properties', {}).get('author', None)
-            if author:
-                #exit(0)
-                sameAs = author.get('sameAs', None)
-                if not sameAs:
-                    sameAs = author.get('properties', {}).get('sameAs', None)
-                #if sameAs:
-                #    print(sameAs)
-            result = sameAs
+            sameAs = itemReviewed.get('sameAs', None)
+            if sameAs:
+                result = itemReviewed['sameAs']
+            else:
+                author = itemReviewed.get('author', None)
+                if not author:
+                    author = itemReviewed.get('properties', {}).get('author', None)
+                if author:
+                    #exit(0)
+                    sameAs = author.get('sameAs', None)
+                    if not sameAs:
+                        sameAs = author.get('properties', {}).get('sameAs', None)
+                    #if sameAs:
+                    #    print(sameAs)
+                result = sameAs
     # TODO also return sameAs if present on the claim directly, other links there!!
     if type(result) == list:
         # TODO consider multiple values

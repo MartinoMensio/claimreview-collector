@@ -1,11 +1,10 @@
 from ..processing import aggregate
-from ..processing.datasets import datacommons_factcheck, datacommons_feeds, mrisdal_fakenews, golbeck_fakenews, liar, buzzface, opensources, fakenewsnet, rbutr, hyperpartisan, wikipedia, domain_list, jruvika_fakenews, factcheckni_list, buzzfeednews, pontes_fakenewssample, vlachos_factchecking  # datasets, factchecking_scrapers, fact_checker_lists
-from ..processing.scrapers import google_factcheck_explorer, factcheckni, fullfact, leadstories, politifact, snopes, weeklystandard, metafact, truthsetter, fiskkit
+from ..processing.datasets import datacommons_factcheck, mrisdal_fakenews, golbeck_fakenews, liar, buzzface, opensources, fakenewsnet, rbutr, hyperpartisan, wikipedia, domain_list, jruvika_fakenews, factcheckni_list, buzzfeednews, pontes_fakenewssample, vlachos_factchecking  # datasets, factchecking_scrapers, fact_checker_lists
+from ..processing.scrapers import google_factcheck_explorer, datacommons_feeds, factcheckni, fullfact, leadstories, politifact, snopes, weeklystandard, metafact, truthsetter, fiskkit
 from ..processing.fact_checker_lists import ifcn, reporterslab
 
 processing_functions_datasets = {
     'datacommons_factcheck': datacommons_factcheck.main,
-    'datacommons_feeds': datacommons_feeds.main,
     'mrisdal_fakenews': mrisdal_fakenews.main,
     'golbeck_fakenews': golbeck_fakenews.main,
     'golbeck_fakenews': golbeck_fakenews.main,
@@ -37,6 +36,7 @@ processing_functions_datasets = {
 
 scrape_factchecking_functions = {
     'google_factcheck_explorer': lambda: google_factcheck_explorer.main(True),
+    'datacommons_feeds': datacommons_feeds.main,
     'factcheckni': factcheckni.main,
     'fullfact': fullfact.main,
     'leadstories': leadstories.main,
@@ -45,7 +45,7 @@ scrape_factchecking_functions = {
     'weeklystandard': weeklystandard.main,
     'metafact': metafact.main,
     'truthsetter': truthsetter.main,
-    'fiskkit': fiskkit.main
+    #'fiskkit': fiskkit.main
 }
 
 scrape_factcheckers_functions = {
