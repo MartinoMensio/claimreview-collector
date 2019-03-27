@@ -5,6 +5,7 @@ import requests # not cache manager
 import os
 import plac
 
+from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from collections import defaultdict
 
@@ -48,10 +49,13 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
     results = []
     for r in reviews:
         try:
+            date_published = r[0][3][0][2]
+            if date_published:
+                date_published = datetime.utcfromtimestamp(date_published).isoformat()
             claimReview = {
                 '@context': "http://schema.org",
                 "@type": "ClaimReview",
-                #"datePublished": ?,
+                'datePublished': date_published,
                 'url': r[0][3][0][1],
                 'claimReviewed': r[0][0],
                 'author': {
@@ -83,6 +87,11 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
                 #'review_title': r[0][3][0][8],
                 #'claim_url': r[0][4][0][1] if len(r[0][4]) else None
             }
+            claim_urls = r[0][1][2]
+            if claim_urls:
+                claimReview['itemReviewed']['appearance'] = [{
+                    'url': u
+                } for u in claim_urls]
             results.append(claimReview)
         except IndexError as e:
             print(json.dumps(r))

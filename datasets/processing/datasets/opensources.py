@@ -18,7 +18,7 @@ def process(data, output_folder, source):
             #print(domain, classes)
             continue
         label = classes.pop()
-        results.append({'domain': domain, 'label': label, 'source': source})
+        results.append({'domain': domain.lower(), 'label': label, 'source': source})
 
     utils.write_json_with_path(results, output_folder, 'domains.json')
 

@@ -258,7 +258,7 @@ def load_into_db():
     database_builder.load_fact_checkers()
     # # load into database the beginning
     database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
-    database_builder.load_domains_zero(file_name='aggregated_domains_with_fact_checkers.json')
+    database_builder.load_domains_zero(file_name='aggregated_domains_with_factchecking_and_stats.json')
     database_builder.load_rebuttals_zero(
         file_name='aggregated_rebuttals_with_fcu.json')
     database_builder.load_fact_checking_urls_zero()
@@ -290,6 +290,8 @@ def extract_more():
     From fact_checking_urls:
     - if el['claim_url'] and el['label']: add url with label
     - if el['url']: add url with 'true' label (the fact checker is trustworthy??)
+    From fact_checkers:
+    - add domain to the list of domains
     """
     fact_checking_urls = utils.read_json(
         utils.data_location / 'aggregated_fact_checking_urls.json')
@@ -376,9 +378,38 @@ def retrieve_all_fact_checking_from_source():
     utils.write_json_with_path(result, utils.data_location, 'aggregated_fact_checking_urls_source.json')
     # TODO next step should use that
 
+def domain_aggregate_claim_urls():
+    """Computes for each domain statistics coming from fact_checking_urls"""
+    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+    domains = utils.read_json(utils.data_location / 'aggregated_domains_with_fact_checkers.json')
+    for k, v in domains.items():
+        v['factchecking_stats'] = defaultdict(set)
+    #domains_stats = defaultdict(lambda: defaultdict(set))
+    for fcu in fact_checking_urls:
+        url = fcu.get('url', None)
+        claim_url = fcu.get('claim_url', None)
+        label = fcu.get('label', None)
+        if claim_url and label:
+            for k,v in domains.items():
+                domain = utils.get_url_domain(claim_url)
+                #domains_stats[domain][label].add(url)
+                if k in domain:
+                    v['factchecking_stats'][label].add(url)
+
+    for k,v in domains.items():
+        #for l, v2 in v['factchecking_stats'].items():
+        v['factchecking_stats'] = {k2: list(v2) for k2,v2 in v['factchecking_stats'].items()}
+
+
+    #domains_stats = {k: {k2: list(v2) for k2,v2 in v.items()} for k,v in domains_stats.items()}
+    utils.write_json_with_path(domains, utils.data_location, 'aggregated_domains_with_factchecking_and_stats.json')
+    #print(len(domains_stats))
+
+
 
 def main():
     aggregate_initial()
     #retrieve_all_fact_checking_from_source()
     extract_more()
+    domain_aggregate_claim_urls()
     load_into_db()
