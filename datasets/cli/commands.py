@@ -1,6 +1,6 @@
 from ..processing import aggregate
 from ..processing.datasets import datacommons_factcheck, mrisdal_fakenews, golbeck_fakenews, liar, buzzface, opensources, fakenewsnet, rbutr, hyperpartisan, wikipedia, domain_list, jruvika_fakenews, factcheckni_list, buzzfeednews, pontes_fakenewssample, vlachos_factchecking  # datasets, factchecking_scrapers, fact_checker_lists
-from ..processing.scrapers import google_factcheck_explorer, datacommons_feeds, factcheckni, fullfact, leadstories, politifact, snopes, weeklystandard, metafact, truthsetter, fiskkit
+from ..processing.scrapers import google_factcheck_explorer, datacommons_feeds, factcheckni, fullfact, leadstories, politifact, snopes, weeklystandard, metafact, truthsetter, fiskkit, euvsdisinfo
 from ..processing.fact_checker_lists import ifcn, reporterslab
 
 processing_functions_datasets = {
@@ -46,6 +46,7 @@ scrape_factchecking_functions = {
     'metafact': metafact.main,
     'truthsetter': truthsetter.main,
     #'fiskkit': fiskkit.main
+    'euvsdisinfo': euvsdisinfo.main
 }
 
 scrape_factcheckers_functions = {
