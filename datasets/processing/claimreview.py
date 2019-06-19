@@ -132,7 +132,7 @@ def retrieve_claimreview(url):
 def _jsonld_parser(page):
     data = extruct.extract(page)
     json_lds = data['json-ld']
-    claimReviews = [el for el in json_lds if 'ClaimReview' in el['@type']]
+    claimReviews = [el for el in json_lds if 'ClaimReview' in el.get('@type', '')]
     return claimReviews
 
 def _microdata_parser(page):
