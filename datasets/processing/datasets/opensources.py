@@ -9,6 +9,8 @@ subfolder_zimdars = utils.data_location / 'melissa_zimdars'
 def process(data, output_folder, source):
     properties = ['type', '2nd type', '3rd type']
     results = []
+    assessments = []
+    source = 'http://www.opensources.co/'
     # find the properties belonging to the mappings in the samples, and assign a single label
     for domain, props in data.items():
         looking_at = [prop_value for prop_name, prop_value in props.items() if prop_name in properties and prop_value]
@@ -18,8 +20,19 @@ def process(data, output_folder, source):
             #print(domain, classes)
             continue
         label = classes.pop()
+        credibility = claimreview.credibility_score_from_label(label)
+        assessments.append({
+            'from': source,
+            'to': domain,
+            'link_type': 'assesses',
+            'credibility': credibility,
+            'confidence': 1.0,
+            'generated_by': 'opensources',
+            'original_evaluation': looking_at
+        })
         results.append({'domain': domain.lower(), 'label': label, 'source': source})
 
+    utils.write_json_with_path(assessments, output_folder, 'domain_assessments.json')
     utils.write_json_with_path(results, output_folder, 'domains.json')
 
 def main(which='opensources'):

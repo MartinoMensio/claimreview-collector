@@ -16,33 +16,36 @@ client = MongoClient()
 db = client['datasets_resources']
 
 domains_collection = db['domains']
+domain_assessments_collection = db['domain_assessments']
 urls_collection = db['urls']
 rebuttals_collection = db['rebuttals']
-datasets_collection = db['datasets']
+sources_collection = db['sources']
 fact_checkers_collection = db['fact_checkers']
 #claimReviews_collection = db['claim_reviews']
 url_redirects_collection = db['url_redirects']
 
 fact_checking_urls_collection = db['fact_checking_urls']
 
+graph_nodes_collection = db['graph_nodes']
+graph_links_collection = db['graph_links']
+
 def clean_db():
     # they are already dropped in _zero methods
     domains_collection.drop()
     urls_collection.drop()
     rebuttals_collection.drop()
-    datasets_collection.drop()
+    sources_collection.drop()
     fact_checkers_collection.drop()
     fact_checking_urls_collection.drop()
     #claimReviews_collection.drop()
 
 def load_datasets():
-    datasets_collection.drop()
+    sources_collection.drop()
 
     sources = utils.read_sources()
-    datasets = sources['datasets']
-    for k, v in datasets.items():
+    for k, v in sources.items():
         v['_id'] = k
-        datasets_collection.insert_one(v)
+        sources_collection.insert_one(v)
 
 
 def load_fact_checkers(file_name='aggregated_fact_checkers.json'):
@@ -69,6 +72,12 @@ def load_domains_zero(file_name='aggregated_domains.json'):
             'score': data
         }
         domains_collection.replace_one({'_id': doc['_id']}, doc, upsert=True)
+
+def load_domain_assessments(file_name='aggregated_domain_assessments.json'):
+    domain_assessments_collection.drop()
+
+    domain_assessments = utils.read_json(utils.data_location / file_name)
+    domain_assessments_collection.insert_many(domain_assessments)
 
 def load_url(url):
     raise NotImplementedError()
@@ -161,6 +170,20 @@ def load_fact_checking_url(fact_checking_url):
     else:
         # let mongo generate the _id
         return fact_checking_urls_collection.insert_one(fact_checking_url)
+
+
+def save_graph(graph):
+    nodes = []
+    for el_key, el in graph['nodes'].items():
+        el['_id'] = el_key
+        nodes.append(el)
+    links = graph['links']
+
+    graph_nodes_collection.drop()
+    graph_links_collection.drop()
+
+    graph_nodes_collection.insert_many(nodes)
+    graph_links_collection.insert_many(links)
 
 def main():
     print('don\'t use me directly! Run aggregate.py instead!!!')

@@ -16,6 +16,9 @@ if __name__ == '__main__':
         'process_single_factchecker_list': commands.process_single_factchecker_list,
         'process_datasets': commands.process_datasets,
         'process_single_dataset': commands.process_single_dataset,
+        'retrieve_graph_edges': commands.retrieve_graph_edges,
+        'save_graph_in_db': commands.save_graph_in_db,
+        'build_graph': commands.build_graph
     }
     if len(sys.argv) == 1:
         print('Available commands:', ', '.join(commands))

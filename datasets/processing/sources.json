@@ -1,434 +1,474 @@
 {
-    "datasets": {
-        "datacommons_factcheck": {
-            "name": "Fact Check Data from datacommons.org",
-            "url": "https://www.datacommons.org/factcheck/download",
-            "description": "The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field \"url\" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers' sites.",
-            "author": "https://www.datacommons.org/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": true,
-                "fact_checking_urls": true
-            }
+    "datacommons_factcheck": {
+        "name": "Fact Check Data from datacommons.org",
+        "url": "https://www.datacommons.org/factcheck/download",
+        "description": "The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field \"url\" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers' sites.",
+        "author": "https://www.datacommons.org/",
+        "type": "claimreview_aggregator",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": true,
+            "fact_checking_urls": true
+        }
+    },
+    "datacommons_feeds": {
+        "name": "Fact Check Markup Tool Data Feed",
+        "url": "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json",
+        "description": "This is a data feed of ClaimReview markups created via the Google Fact Check Markup Tool. The data in the feed also follows the schema.org ClaimReview standard, namely the same schema as the data in the historical research dataset. The feed itself is in DataFeed format. The compilation of the research dataset and the data feed from the Fact Check Markup Tool are licensed under CC BY. The license on the structured data of each ClaimReview markup is specified in the field sdLicense. Additionally, each publisher may have their own license terms for content on their website. Please refer to the website of the publisher.",
+        "author": "https://www.datacommons.org/",
+        "type": "claimreview_aggregator",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": true,
+            "fact_checking_urls": true
+        }
+    },
+    "mrisdal_fakenews": {
+        "name": "Getting Real about Fake News",
+        "url": "https://www.kaggle.com/mrisdal/fake-news",
+        "description": "Text & metadata from fake & biased news sources around the web. The dataset contains text and metadata from 244 websites and represents 12,999 posts in total from the past 30 days. The data was pulled using the webhose.io API; because it's coming from their crawler, not all websites identified by the BS Detector are present in this dataset. Each website was labeled according to the BS Detector as documented here. Data sources that were missing a label were simply assigned a label of \"bs\". There are (ostensibly) no genuine, reliable, or trustworthy news sources represented in this dataset (so far), so don't trust anything you read. https://github.com/mrisdal/bs-news-scraper",
+        "author": "https://www.kaggle.com/mrisdal",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": true,
+            "claimReviews": false
+        }
+    },
+    "golbeck_fakenews": {
+        "name": "Fake News vs Satire: a Data Set and Analysis",
+        "url": "https://github.com/jgolbeck/fakenews",
+        "description": "Fake news has become a major societal issue and a technical challenge for social media companies to identify. This content is difficult to identify because the term \"fake news\" covers intentionally false, deceptive stories as well as factual errors, satire, and sometimes, stories that a person just does not like. Addressing the problem requires clear definitions and examples. In this work, we present a dataset of fake news and satire stories that are hand coded, verified, and, in the case of fake news, include rebutting stories. We also include a thematic content analysis of the articles, identifying major themes that include hyperbolic support or condemnation of a figure, conspiracy theories, racist themes, and discrediting of reliable sources. In addition to releasing this dataset for research use, we analyze it and show results based on language that are promising for classification purposes. Overall, our contribution of a dataset and initial analysis are designed to support future work by fake news researchers.",
+        "author": "https://ischool.umd.edu/faculty-staff/jennifer-golbeck",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": true,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false,
+            "fact_checking_urls": true
+        }
+    },
+    "liar": {
+        "name": "Liar: a benchmark dataset for fake news detection",
+        "url": "https://www.cs.ucsb.edu/~william/data/liar_dataset.zip",
+        "description": "A new, publicly available dataset for fake news detection. We collected a decade-long, 12.8K manually labeled short statements in various contexts from POLITIFACT.COM, which provides detailed analysis report and links to source documents for each case. This dataset can be used for fact-checking research as well. Notably, this new dataset is an order of magnitude larger than previously largest public fake news datasets of similar type.",
+        "author": "https://www.cs.ucsb.edu/~william/index.html",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false,
+            "fact_checking_urls": true
+        }
+    },
+    "hoaxy": {
+        "name": "The Hoaxy Misinformation and Fact-Checking Diffusion Network",
+        "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/XSEHDL",
+        "description": "A large longitudinal dataset from Twitter, consisting of retweeted messages with links to misinformation and fact-checking articles collected by Hoaxy.",
+        "author": "https://hoaxy.iuni.iu.edu/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "buzzface": {
+        "name": "BuzzFace: a News Veracity Dataset with Facebook User Commentary and Egos",
+        "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/UP05PM",
+        "description": "BuzzFeed took all posts made by the Facebook pages of 9 various news outlets during a 10 day period in September 2016 and annotated them for veracity. This was the basis for a dataset. BuzzFace takes this dataset and expands upon it by giving the user the tools to capture the Facebook commentary, metadata, attachments, and the articles themselves associated with each post. (2018-04-06)",
+        "author": "https://www.buzzfeednews.com/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": true,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "opensources": {
+        "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+        "url": "http://www.opensources.co/",
+        "description": "OpenSources is a curated resource for assessing online information sources, available for public use. Websites in this resource range from credible news sources to misleading and outright fake websites. Headed by Melissa Zimdars of Merrimack College, our research team is dedicated to preserving the integrity and enhancing the transparency of information on the internet.",
+        "author": "http://www.opensources.co/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "fakenewsnet": {
+        "name": "FakeNewsNet",
+        "url": "https://www.kaggle.com/mdepak/fakenewsnet",
+        "description": "This is a repository for an ongoing data collection project for fake news research at ASU. We describe and compare FakeNewsNet with other existing datasets in Fake News Detection on Social Media: A Data Mining Perspective. We also perform a detail analysis of FakeNewsNet dataset, and build a fake news detection model on this dataset in Exploiting Tri-Relationship for Fake News Detection. https://github.com/KaiDMML/FakeNewsNet",
+        "author": "http://www.public.asu.edu/~skai2/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": true,
+            "rebuttal_suggestion": false,
+            "textual_claims": true,
+            "claimReviews": false
+        }
+    },
+    "rbutr": {
+        "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+        "url": "http://rbutr.com/rbutr/WebsiteServlet?requestType=browse",
+        "description": "rbutr is a community-driven app which connects webpages together on the basis that one page argues against the other. Visit a rebutted page and you will be told \"There are rebuttals to this page.\" You can then open up the rebutting article(s). Found a great rebuttal? Connect it to the page(s) it rebuts so that people reading those articles can know about it. Want a rebuttal for a page you have found? Submit a request to the community.",
+        "author": "http://rbutr.com/",
+        "type": "other",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": true,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "hyperpartisan": {
+        "name": "Hyperpartisan News Detection",
+        "url": "https://pan.webis.de/semeval19/semeval19-web/",
+        "description": "The dataset contains 1 million articles. It is split in training (200,000 left, 400,000 least, 200,000 right) and validation (50,000 left, 100,000 least, 50,000 right), where no publisher that occurs in the training set also occurs in the validation set. All articles are labeled by the overall bias of the publisher as provided by BuzzFeed journalists or MediaBiasFactCheck.com.",
+        "author": "https://factmata.com/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": true,
+            "claimReviews": false
+        }
+    },
+    "wikipedia": {
+        "name": "Wikipedia List of fake news websites",
+        "url": "https://en.wikipedia.org/wiki/List_of_fake_news_websites",
+        "description": "This is a list of fake news sites. These sites intentionally, but not necessarily solely, publish hoaxes and disinformation for purposes other than news satire. Some of these sites use homograph spoofing attacks, typosquatting and other deceptive strategies similar to those used in phishing attacks to resemble genuine news outlets.",
+        "author": "https://www.wikipedia.org/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_cbsnews": {
+        "name": "CBS News",
+        "url": "http://www.cbsnews.com/pictures/dont-get-fooled-by-these-fake-news-sites/",
+        "description": "List of fake news sites by CBS news",
+        "author": "http://www.cbsnews.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_dailydot": {
+        "name": "Daily Dot",
+        "url": "https://www.dailydot.com/layer8/fake-news-sites-list-facebook/",
+        "description": "List of fake news sites by Daily Dot",
+        "author": "https://www.dailydot.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_fakenewswatch": {
+        "name": "Fake News Watch",
+        "url": "https://web.archive.org/web/20180213181029/http://fakenewswatch.com/",
+        "description": "List of fake news sites by Fake News Watch",
+        "author": "http://fakenewswatch.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_newrepublic": {
+        "name": "New Republic",
+        "url": "https://newrepublic.com/article/118013/satire-news-websites-are-cashing-gullible-outraged-readers",
+        "description": "List of fake news sites by New Republic",
+        "author": "https://newrepublic.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_npr": {
+        "name": "NPR",
+        "url": "https://www.npr.org/sections/alltechconsidered/2016/11/23/503146770/npr-finds-the-head-of-a-covert-fake-news-operation-in-the-suburbs",
+        "description": "List of fake news sites by NPR",
+        "author": "https://www.npr.org/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_snopes": {
+        "name": "Snopes",
+        "url": "https://www.snopes.com/news/2016/01/14/fake-news-sites/",
+        "description": "List of fake news sites by Snopes",
+        "author": "https://www.snopes.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_thoughtco": {
+        "name": "ThoughtCo",
+        "url": "https://www.thoughtco.com/guide-to-fake-news-websites-3298824",
+        "description": "List of fake news sites by ThoughtCo",
+        "author": "https://www.thoughtco.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_usnews": {
+        "name": "US News",
+        "url": "http://www.usnews.com/news/national-news/articles/2016-11-14/avoid-these-fake-news-sites-at-all-costs",
+        "description": "List of fake news sites by US News",
+        "author": "http://www.usnews.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "domain_list_politifact": {
+        "name": "Politifact",
+        "url": "https://www.politifact.com/punditfact/article/2017/apr/20/politifacts-guide-fake-news-websites-and-what-they/",
+        "description": "List of fake news sites by Politifact",
+        "author": "https://www.politifact.com/",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "melissa_zimdars": {
+        "name": "False, Misleading, Clickbait-y, and/or Satirical \"News\" Sources",
+        "url": "https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/edit",
+        "description": "The below list of websites is a combination of my original list in this google document, numerous other lists on the internet, and suggestions from readers/internet users. All tagged websites have been analyzed by myself or one of the librarians I’m working with on OpenSources. All websites tagged as “unknown”  still need to be analyzed, and some of them may be removed entirely from the resource for various reasons (i.e. it doesn’t circulate “news” or the website no longer exists). Finally, please remember that all tags may be subject to revision based on feedback, discussion, continued analysis, or website changes etc. https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/preview",
+        "author": "https://www.merrimack.edu/live/profiles/586-melissa-mish-zimdars/_p/f",
+        "type": "domain_list",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "jruvika_fakenews": {
+        "name": "Kaggle Fake News detection",
+        "url": "https://www.kaggle.com/jruvika/fake-news-detection",
+        "description": "Fake News detection",
+        "author": "https://www.kaggle.com/jruvika",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": true,
+            "rebuttal_suggestion": false,
+            "textual_claims": true,
+            "claimReviews": false
+        }
+    },
+    "factcheckni_list": {
+        "name": "FactCheckNI Articles",
+        "url": "https://factcheckni.org/",
+        "description": "FactCheckNI Articles",
+        "author": "https://factcheckni.org/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false,
+            "fact_checking_urls": true
+        }
+    },
+    "google_factcheck_explorer": {
+        "name": "Google Fact Check Tools Explorer",
+        "url": "https://toolbox.google.com/factcheck/explorer",
+        "description": "This tool allows you to easily browse and search for fact checks. For example, you can search for a politician's statement, or for a topic. You can also restrict results to a specific publisher.",
+        "author": "https://www.google.com/",
+        "type": "claimreview_aggregator",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": true,
+            "fact_checking_urls": true
         },
-        "datacommons_feeds": {
-            "name": "Fact Check Markup Tool Data Feed",
-            "url": "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json",
-            "description": "This is a data feed of ClaimReview markups created via the Google Fact Check Markup Tool. The data in the feed also follows the schema.org ClaimReview standard, namely the same schema as the data in the historical research dataset. The feed itself is in DataFeed format. The compilation of the research dataset and the data feed from the Fact Check Markup Tool are licensed under CC BY. The license on the structured data of each ClaimReview markup is specified in the field sdLicense. Additionally, each publisher may have their own license terms for content on their website. Please refer to the website of the publisher.",
-            "author": "https://www.datacommons.org/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": true,
-                "fact_checking_urls": true
-            }
+        "graph_enabled": false
+    },
+    "buzzfeednews": {
+        "name": "Analysis of fake news sites and viral posts, 2016 - 2018",
+        "url": "https://github.com/BuzzFeedNews/2018-12-fake-news-top-50",
+        "description": "Over the past four years, BuzzFeed News has maintained lists of sites that publish completely fabricated stories. As we encounter new ones and debunk their content, we add them to the list. To produce this story, we used this list as well as some sites brought to our attention by fact-checking website, Lead Stories.",
+        "author": "https://www.buzzfeednews.com/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": true,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false
+        }
+    },
+    "pontes_fakenewssample": {
+        "name": "Fake News Sample",
+        "url": "https://www.kaggle.com/pontes/fake-news-sample",
+        "description": "Fake News Sample",
+        "author": "https://www.kaggle.com/pontes",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": true,
+            "claimReviews": false
+        }
+    },
+    "vlachos_factchecking": {
+        "name": "Fact checking corpus",
+        "url": "https://sites.google.com/site/andreasvlachos/resources/FactChecking_LTCSS2014_release.tsv?attredirects=0",
+        "description": "collected statements fact checked by journalists on two websites (politifact.com and Channel 4) in order to help us develop an automated fact checking system. As part of this process we recorded for 221 statements the text, the speaker, the time it was made, the verdict assigned by the journalists, the link to the webpage containing the full analysis of the verdict, the sources used and a judgement on whether we deem the statement as suitable for automated fact checking. The corpus is available in .ods and .tsv formats.",
+        "author": "http://andreasvlachos.github.io/",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false,
+            "fact_checking_urls": true
+        }
+    },
+    "hearvox_unreliable_news": {
+        "name": "Unreliable News Sites (UNS)",
+        "url": "https://github.com/hearvox/unreliable-news",
+        "description": "An index of fake-news, clickbait, and hate websites, for Columbia Journalism Review (to be published Jan. 2019).",
+        "author": "https://www.rjionline.org/account/profile/618",
+        "type": "dataset",
+        "contains": {
+            "domain_classification": false
+        }
+    },
+    "ifcn": {
+        "name": "International Fact-Checking Network",
+        "url": "https://ifcncodeofprinciples.poynter.org/signatories",
+        "description": "This code of principles is for organizations that regularly publish nonpartisan reports on the accuracy of statements by public figures, major institutions, and other widely circulated claims of interest to society. It is the result of consultations among fact-checkers from around the world and offers conscientious practitioners principles to aspire to in their everyday work.",
+        "author": "https://www.poynter.org/",
+        "type": "factcheckers_list",
+        "contains": {
+            "domain_classification": true,
+            "fact_checkers": true
         },
-        "mrisdal_fakenews": {
-            "name": "Getting Real about Fake News",
-            "url": "https://www.kaggle.com/mrisdal/fake-news",
-            "description": "Text & metadata from fake & biased news sources around the web. The dataset contains text and metadata from 244 websites and represents 12,999 posts in total from the past 30 days. The data was pulled using the webhose.io API; because it's coming from their crawler, not all websites identified by the BS Detector are present in this dataset. Each website was labeled according to the BS Detector as documented here. Data sources that were missing a label were simply assigned a label of \"bs\". There are (ostensibly) no genuine, reliable, or trustworthy news sources represented in this dataset (so far), so don't trust anything you read. https://github.com/mrisdal/bs-news-scraper",
-            "author": "https://www.kaggle.com/mrisdal",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false
-            }
-        },
-        "golbeck_fakenews": {
-            "name": "Fake News vs Satire: a Data Set and Analysis",
-            "url": "https://github.com/jgolbeck/fakenews",
-            "description": "Fake news has become a major societal issue and a technical challenge for social media companies to identify. This content is difficult to identify because the term \"fake news\" covers intentionally false, deceptive stories as well as factual errors, satire, and sometimes, stories that a person just does not like. Addressing the problem requires clear definitions and examples. In this work, we present a dataset of fake news and satire stories that are hand coded, verified, and, in the case of fake news, include rebutting stories. We also include a thematic content analysis of the articles, identifying major themes that include hyperbolic support or condemnation of a figure, conspiracy theories, racist themes, and discrediting of reliable sources. In addition to releasing this dataset for research use, we analyze it and show results based on language that are promising for classification purposes. Overall, our contribution of a dataset and initial analysis are designed to support future work by fake news researchers.",
-            "author": "https://ischool.umd.edu/faculty-staff/jennifer-golbeck",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": true,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false,
-                "fact_checking_urls": true
-            }
-        },
-        "liar": {
-            "name": "Liar: a benchmark dataset for fake news detection",
-            "url": "https://www.cs.ucsb.edu/~william/data/liar_dataset.zip",
-            "description": "A new, publicly available dataset for fake news detection. We collected a decade-long, 12.8K manually labeled short statements in various contexts from POLITIFACT.COM, which provides detailed analysis report and links to source documents for each case. This dataset can be used for fact-checking research as well. Notably, this new dataset is an order of magnitude larger than previously largest public fake news datasets of similar type.",
-            "author": "https://www.cs.ucsb.edu/~william/index.html",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false,
-                "fact_checking_urls": true
-            }
-        },
-        "hoaxy": {
-            "name": "The Hoaxy Misinformation and Fact-Checking Diffusion Network",
-            "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/XSEHDL",
-            "description": "A large longitudinal dataset from Twitter, consisting of retweeted messages with links to misinformation and fact-checking articles collected by Hoaxy.",
-            "author": "https://hoaxy.iuni.iu.edu/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "buzzface": {
-            "name": "BuzzFace: a News Veracity Dataset with Facebook User Commentary and Egos",
-            "url": "https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/UP05PM",
-            "description": "BuzzFeed took all posts made by the Facebook pages of 9 various news outlets during a 10 day period in September 2016 and annotated them for veracity. This was the basis for a dataset. BuzzFace takes this dataset and expands upon it by giving the user the tools to capture the Facebook commentary, metadata, attachments, and the articles themselves associated with each post. (2018-04-06)",
-            "author": "https://www.buzzfeednews.com/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": true,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "opensources": {
-            "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
-            "url": "http://www.opensources.co/",
-            "description": "OpenSources is a curated resource for assessing online information sources, available for public use. Websites in this resource range from credible news sources to misleading and outright fake websites. Headed by Melissa Zimdars of Merrimack College, our research team is dedicated to preserving the integrity and enhancing the transparency of information on the internet.",
-            "author": "http://www.opensources.co/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "fakenewsnet": {
-            "name": "FakeNewsNet",
-            "url": "https://www.kaggle.com/mdepak/fakenewsnet",
-            "description": "This is a repository for an ongoing data collection project for fake news research at ASU. We describe and compare FakeNewsNet with other existing datasets in Fake News Detection on Social Media: A Data Mining Perspective. We also perform a detail analysis of FakeNewsNet dataset, and build a fake news detection model on this dataset in Exploiting Tri-Relationship for Fake News Detection. https://github.com/KaiDMML/FakeNewsNet",
-            "author": "http://www.public.asu.edu/~skai2/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": true,
-                "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false
-            }
-        },
-        "rbutr": {
-            "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
-            "url": "http://rbutr.com/rbutr/WebsiteServlet?requestType=browse",
-            "description": "rbutr is a community-driven app which connects webpages together on the basis that one page argues against the other. Visit a rebutted page and you will be told \"There are rebuttals to this page.\" You can then open up the rebutting article(s). Found a great rebuttal? Connect it to the page(s) it rebuts so that people reading those articles can know about it. Want a rebuttal for a page you have found? Submit a request to the community.",
-            "author": "http://rbutr.com/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": true,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "hyperpartisan": {
-            "name": "Hyperpartisan News Detection",
-            "url": "https://pan.webis.de/semeval19/semeval19-web/",
-            "description": "The dataset contains 1 million articles. It is split in training (200,000 left, 400,000 least, 200,000 right) and validation (50,000 left, 100,000 least, 50,000 right), where no publisher that occurs in the training set also occurs in the validation set. All articles are labeled by the overall bias of the publisher as provided by BuzzFeed journalists or MediaBiasFactCheck.com.",
-            "author": "https://factmata.com/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false
-            }
-        },
-        "wikipedia": {
-            "name": "Wikipedia List of fake news websites",
-            "url": "https://en.wikipedia.org/wiki/List_of_fake_news_websites",
-            "description": "This is a list of fake news sites. These sites intentionally, but not necessarily solely, publish hoaxes and disinformation for purposes other than news satire. Some of these sites use homograph spoofing attacks, typosquatting and other deceptive strategies similar to those used in phishing attacks to resemble genuine news outlets.",
-            "author": "https://www.wikipedia.org/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_cbsnews": {
-            "name": "CBS News",
-            "url": "http://www.cbsnews.com/pictures/dont-get-fooled-by-these-fake-news-sites/",
-            "description": "List of fake news sites by CBS news",
-            "author": "http://www.cbsnews.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_dailydot": {
-            "name": "Daily Dot",
-            "url": "https://www.dailydot.com/layer8/fake-news-sites-list-facebook/",
-            "description": "List of fake news sites by Daily Dot",
-            "author": "https://www.dailydot.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_fakenewswatch": {
-            "name": "Fake News Watch",
-            "url": "https://web.archive.org/web/20180213181029/http://fakenewswatch.com/",
-            "description": "List of fake news sites by Fake News Watch",
-            "author": "http://fakenewswatch.com/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_newrepublic": {
-            "name": "New Republic",
-            "url": "https://newrepublic.com/article/118013/satire-news-websites-are-cashing-gullible-outraged-readers",
-            "description": "List of fake news sites by New Republic",
-            "author": "https://newrepublic.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_npr": {
-            "name": "NPR",
-            "url": "https://www.npr.org/sections/alltechconsidered/2016/11/23/503146770/npr-finds-the-head-of-a-covert-fake-news-operation-in-the-suburbs",
-            "description": "List of fake news sites by NPR",
-            "author": "https://www.npr.org/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_snopes": {
-            "name": "Snopes",
-            "url": "https://www.snopes.com/news/2016/01/14/fake-news-sites/",
-            "description": "List of fake news sites by Snopes",
-            "author": "https://www.snopes.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_thoughtco": {
-            "name": "ThoughtCo",
-            "url": "https://www.thoughtco.com/guide-to-fake-news-websites-3298824",
-            "description": "List of fake news sites by ThoughtCo",
-            "author": "https://www.thoughtco.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_usnews": {
-            "name": "US News",
-            "url": "http://www.usnews.com/news/national-news/articles/2016-11-14/avoid-these-fake-news-sites-at-all-costs",
-            "description": "List of fake news sites by US News",
-            "author": "http://www.usnews.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "domain_list_politifact": {
-            "name": "Politifact",
-            "url": "https://www.politifact.com/punditfact/article/2017/apr/20/politifacts-guide-fake-news-websites-and-what-they/",
-            "description": "List of fake news sites by Politifact",
-            "author": "https://www.politifact.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "melissa_zimdars": {
-            "name": "False, Misleading, Clickbait-y, and/or Satirical \"News\" Sources",
-            "url": "https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/edit",
-            "description": "The below list of websites is a combination of my original list in this google document, numerous other lists on the internet, and suggestions from readers/internet users. All tagged websites have been analyzed by myself or one of the librarians I’m working with on OpenSources. All websites tagged as “unknown”  still need to be analyzed, and some of them may be removed entirely from the resource for various reasons (i.e. it doesn’t circulate “news” or the website no longer exists). Finally, please remember that all tags may be subject to revision based on feedback, discussion, continued analysis, or website changes etc. https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/preview",
-            "author": "https://www.merrimack.edu/live/profiles/586-melissa-mish-zimdars/_p/f",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "jruvika_fakenews": {
-            "name": "Kaggle Fake News detection",
-            "url": "https://www.kaggle.com/jruvika/fake-news-detection",
-            "description": "Fake News detection",
-            "author": "https://www.kaggle.com/jruvika",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": true,
-                "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false
-            }
-        },
-        "factcheckni_list": {
-            "name": "FactCheckNI Articles",
-            "url": "https://factcheckni.org/",
-            "description": "FactCheckNI Articles",
-            "author": "https://factcheckni.org/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false,
-                "fact_checking_urls": true
-            }
-        },
-        "google_factcheck_explorer": {
-            "name": "Google Fact Check Tools Explorer",
-            "url": "https://toolbox.google.com/factcheck/explorer",
-            "description": "This tool allows you to easily browse and search for fact checks. For example, you can search for a politician's statement, or for a topic. You can also restrict results to a specific publisher.",
-            "author": "https://www.google.com/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": true,
-                "fact_checking_urls": true
-            }
-        },
-        "buzzfeednews": {
-            "name": "Analysis of fake news sites and viral posts, 2016 - 2018",
-            "url": "https://github.com/BuzzFeedNews/2018-12-fake-news-top-50",
-            "description": "Over the past four years, BuzzFeed News has maintained lists of sites that publish completely fabricated stories. As we encounter new ones and debunk their content, we add them to the list. To produce this story, we used this list as well as some sites brought to our attention by fact-checking website, Lead Stories.",
-            "author": "https://www.buzzfeednews.com/",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false
-            }
-        },
-        "pontes_fakenewssample": {
-            "name": "Fake News Sample",
-            "url": "https://www.kaggle.com/pontes/fake-news-sample",
-            "description": "Fake News Sample",
-            "author": "https://www.kaggle.com/pontes",
-            "contains": {
-                "domain_classification": true,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": true,
-                "claimReviews": false
-            }
-        },
-        "vlachos_factchecking": {
-            "name": "Fact checking corpus",
-            "url": "https://sites.google.com/site/andreasvlachos/resources/FactChecking_LTCSS2014_release.tsv?attredirects=0",
-            "description": "collected statements fact checked by journalists on two websites (politifact.com and Channel 4) in order to help us develop an automated fact checking system. As part of this process we recorded for 221 statements the text, the speaker, the time it was made, the verdict assigned by the journalists, the link to the webpage containing the full analysis of the verdict, the sources used and a judgement on whether we deem the statement as suitable for automated fact checking. The corpus is available in .ods and .tsv formats.",
-            "author": "http://andreasvlachos.github.io/",
-            "contains": {
-                "domain_classification": false,
-                "url_classification": false,
-                "rebuttal_suggestion": false,
-                "textual_claims": false,
-                "claimReviews": false,
-                "fact_checking_urls": true
-            }
-        },
-        "hearvox_unreliable_news": {
-            "name": "Unreliable News Sites (UNS)",
-            "url": "https://github.com/hearvox/unreliable-news",
-            "description": "An index of fake-news, clickbait, and hate websites, for Columbia Journalism Review (to be published Jan. 2019).",
-            "author": "https://www.rjionline.org/account/profile/618",
-            "contains": {
-                "domain_classification": false
-            }
-        },
-        "ifcn": {
-            "name": "International Fact-Checking Network",
-            "url": "https://ifcncodeofprinciples.poynter.org/signatories",
-            "description": "This code of principles is for organizations that regularly publish nonpartisan reports on the accuracy of statements by public figures, major institutions, and other widely circulated claims of interest to society. It is the result of consultations among fact-checkers from around the world and offers conscientious practitioners principles to aspire to in their everyday work.",
-            "author": "https://www.poynter.org/",
-            "contains": {
-                "domain_classification": false,
-                "fact_checkers": true
-            }
-        },
-        "reporterslab": {
-            "name": "Reporter's Lab",
-            "url": "https://reporterslab.org/fact-checking/#",
-            "description": "The Reporters’ Lab maintains a database of global fact-checking sites. You can use the map to explore sites around the world or use the menu below",
-            "author": "https://reporterslab.org/",
-            "contains": {
-                "domain_classification": false,
-                "fact_checkers": false
-            }
-        },
-        "factcheckni": {
-            "contains": {
-                "fact_checking_urls": true
-            }
-        },
-        "fullfact": {
-            "contains": {
-                "fact_checking_urls": true
-            }
-        },
-        "leadstories": {
-            "contains": {
-                "fact_checking_urls": true
-            }
-        },
-        "politifact": {
-            "contains": {
-                "fact_checking_urls": true
-            }
-        },
-        "snopes": {
-            "contains": {
-                "fact_checking_urls": true
-            }
-        },
-        "weeklystandard": {
-            "contains": {
-                "fact_checking_urls": true
-            }
+        "graph_enabled": true,
+        "assesses": [
+            "sources"
+        ]
+    },
+    "reporterslab": {
+        "name": "Reporter's Lab",
+        "url": "https://reporterslab.org/fact-checking/#",
+        "description": "The Reporters’ Lab maintains a database of global fact-checking sites. You can use the map to explore sites around the world or use the menu below",
+        "author": "https://reporterslab.org/",
+        "type": "factcheckers_list",
+        "contains": {
+            "domain_classification": false,
+            "fact_checkers": false
+        }
+    },
+    "factcheckni": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
+        }
+    },
+    "fullfact": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
+        }
+    },
+    "leadstories": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
+        }
+    },
+    "politifact": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
+        }
+    },
+    "snopes": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
+        }
+    },
+    "weeklystandard": {
+        "type": "factchecker",
+        "contains": {
+            "fact_checking_urls": true
         }
     }
 }

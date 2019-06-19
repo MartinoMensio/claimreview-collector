@@ -1,7 +1,9 @@
+from ..processing import utils
 from ..processing import aggregate
 from ..processing.datasets import datacommons_factcheck, mrisdal_fakenews, golbeck_fakenews, liar, buzzface, opensources, fakenewsnet, rbutr, hyperpartisan, wikipedia, domain_list, jruvika_fakenews, factcheckni_list, buzzfeednews, pontes_fakenewssample, vlachos_factchecking  # datasets, factchecking_scrapers, fact_checker_lists
 from ..processing.scrapers import google_factcheck_explorer, datacommons_feeds, factcheckni, fullfact, leadstories, politifact, snopes, weeklystandard, metafact, truthsetter, fiskkit, euvsdisinfo
 from ..processing.fact_checker_lists import ifcn, reporterslab
+from ..processing import database_builder
 
 processing_functions_datasets = {
     'datacommons_factcheck': datacommons_factcheck.main,
@@ -97,3 +99,49 @@ def process_single_dataset(key):
     print('processing {}...'.format(key))
     processing_functions_datasets[key]()
     print('done {}'.format(key))
+
+def find_processing_function(key):
+    if key in scrape_factcheckers_functions:
+        return scrape_factcheckers_functions[key]
+    elif key in scrape_factchecking_functions:
+        return scrape_factcheckers_functions[key]
+    elif key in processing_functions_datasets:
+        return processing_functions_datasets[key]
+    else:
+        raise ValueError(key)
+
+def retrieve_graph_edges(reprocess=False):
+    print('retrieving graph edges, reprocess = ', reprocess)
+    sources = utils.read_sources()
+
+    graph = {
+        'nodes': {},
+        'links': []
+    }
+
+    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
+    graph = claimreview.extract_graph_edges(fact_checking_urls)
+
+    for s_key, s in sources.items():
+        if s.get('graph_enabled', None):
+            # this source has been prepared for credibility graph
+            # so do what it requires
+            processing_function = find_processing_function(s_key)
+            if reprocess:
+                processing_function()
+            # and then collect the nodes and edges
+            subgraph = utils.read_json(utils.data_location / s_key / 'graph.json')
+            # TODO manage merge of nodes
+            graph['nodes'].update(subgraph['nodes'])
+            graph['links'].extend(subgraph['links'])
+
+    utils.write_json_with_path(graph, utils.data_location, 'graph.json')
+
+def save_graph_in_db():
+    graph = utils.read_json(utils.data_location / 'graph.json')
+    database_builder.save_graph(graph)
+
+
+def build_graph(reprocess=False):
+    retrieve_graph_edges(reprocess)
+    save_graph_in_db()

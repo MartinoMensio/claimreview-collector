@@ -164,7 +164,7 @@ def get_choices():
         'claimReviews': el['contains'].get('claimReviews', False),
         'fact_checking_urls': el['contains'].get('fact_checking_urls', False),
         'fact_checkers': el['contains'].get('fact_checkers', False)
-    } for k, el in utils.read_sources()['datasets'].items()}
+    } for k, el in utils.read_sources().items()}
 
     return choices
 
@@ -172,6 +172,7 @@ def get_choices():
 def aggregate_initial():
     all_urls = []
     all_domains = []
+    all_domain_assessments = []
     all_rebuttals = defaultdict(list)
     all_claimreviews = []
     aggregated_fact_checking_urls = []
@@ -184,9 +185,14 @@ def aggregate_initial():
                 utils.data_location / subfolder / 'urls.json')
             all_urls.extend(urls)
         if config['domains']:
-            domains = utils.read_json(
-                utils.data_location / subfolder / 'domains.json')
+            if subfolder != 'ifcn':
+                # ifcn is broken
+                domains = utils.read_json(
+                    utils.data_location / subfolder / 'domains.json')
             all_domains.extend(domains)
+            domain_assessments = utils.read_json(
+                utils.data_location / subfolder / 'domain_assessments.json')
+            all_domain_assessments.extend(domain_assessments)
         if config['rebuttals']:
             rebuttals = utils.read_json(
                 utils.data_location / subfolder / 'rebuttals.json')
@@ -232,6 +238,8 @@ def aggregate_initial():
     utils.write_json_with_path(
         aggregated_domains, utils.data_location, 'aggregated_domains.json')
     utils.write_json_with_path(
+        all_domain_assessments, utils.data_location, 'aggregated_domain_assessments.json')
+    utils.write_json_with_path(
         all_rebuttals, utils.data_location, 'aggregated_rebuttals.json')
     utils.write_json_with_path(
         all_claimreviews, utils.data_location, 'aggregated_claimReviews.json')
@@ -259,6 +267,7 @@ def load_into_db():
     # # load into database the beginning
     database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
     database_builder.load_domains_zero(file_name='aggregated_domains_with_factchecking_and_stats.json')
+    database_builder.load_domain_assessments()
     database_builder.load_rebuttals_zero(
         file_name='aggregated_rebuttals_with_fcu.json')
     database_builder.load_fact_checking_urls_zero()

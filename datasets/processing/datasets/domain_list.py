@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from .. import utils
+from .. import claimreview
 
 location = utils.data_location / 'domain_list'
 
@@ -51,6 +52,7 @@ def process_all():
     return all_domains
 
 def process_one_list(source):
+    # save separately the domains for each list
     mappings = filecolumns[source]
     data = utils.read_tsv(location / 'intermediate' / '{}.tsv'.format(source))
     print(source)
@@ -61,7 +63,24 @@ def process_one_list(source):
         'source': source_name
     } for el in data if el[mappings['label_col']] in mappings['true_vals']+mappings['fake_vals']]
 
-    # save separately the domains for each list
+    assessments = []
+    source = utils.read_sources()[source_name]['url']
+    for d in domains:
+        domain = d['domain']
+        label = d['label']
+        credibility = claimreview.credibility_score_from_label(label)
+        assessments.append({
+            'from': source,
+            'to': domain,
+            'link_type': 'assesses',
+            'credibility': credibility,
+            'confidence': 1.0,
+            'generated_by': source_name,
+            'original_evaluation': label
+        })
+
+    utils.write_json_with_path(assessments, utils.data_location / source_name, 'domain_assessments.json')
+
     utils.write_json_with_path(domains, utils.data_location / source_name, 'domains.json')
 
     return domains

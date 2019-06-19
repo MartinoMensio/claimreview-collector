@@ -36,8 +36,8 @@ def main():
 
     sources = utils.read_sources()
     # it's the author responsibility
-    source_url = sources['datasets']['golbeck_fakenews']['url']
-    verifier_url = sources['datasets']['golbeck_fakenews']['author']
+    source_url = sources['golbeck_fakenews']['url']
+    verifier_url = sources['golbeck_fakenews']['author']
     claimReviews = []
     for el in data:
         claimReview = {

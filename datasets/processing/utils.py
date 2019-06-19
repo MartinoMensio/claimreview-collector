@@ -108,3 +108,10 @@ def string_to_md5(string):
 def read_sources():
     path = Path(os.path.dirname(os.path.realpath(__file__))) / 'sources.json'
     return read_json(path)
+
+relationships_default_confidences = {
+    'publishes': 1.0,
+    'redirects': 1.0,
+    'published_by': 0.5,
+    'reviews': 1.0
+}

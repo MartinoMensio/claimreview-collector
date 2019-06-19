@@ -18,6 +18,27 @@ Maybe better in a virtual environment!
 
 ## Types of data
 
+### Source
+
+This type of document contains the sources of information
+
+```jsonc
+{
+    "id": "an identifier of this source",
+    "name": "A name to be displayed",
+    "url": "https://ifcncodeofprinciples.poynter.org/signatories",
+    "description": "This code of principles is for organizations that regularly publish nonpartisan reports on the accuracy of statements by public figures, major institutions, and other widely circulated claims of interest to society. It is the result of consultations among fact-checkers from around the world and offers conscientious practitioners principles to aspire to in their everyday work.",
+    "author": "https://www.poynter.org/",
+    "contains": {
+        "domain_classification": true,
+        "fact_checkers": true
+    },
+    "graph_enabled": true,
+    "type": "List of fact-checking organisations",
+    "assesses": ["sources"]
+}
+```
+
 ### fact_checking_url
 
 It is a flat object that contains fields from claimReview
@@ -47,7 +68,9 @@ Only the relevant fields are listed
     "url": "url", // the url where this ClaimReview belongs, is the fact checking article
     "claimReviewed": "text", // the specific textual claim that is being reviewed
     "itemReviewed": {
-        "url": "url", // when available, put here the url of the claim (can come from the author, ...)
+        "appearances": [{ // https://schema.org/Claim
+            "url": "url", // when available, put here the url of the claim (can come from the author, ...)
+        }]
     },
     "reviewRating": {
         "ratingValue": -1, // when available, the current value that belongs to the [worstValue, bestValue] interval
@@ -57,6 +80,22 @@ Only the relevant fields are listed
     },
     "author": {
     }
+}
+```
+
+### Domain_assessment
+
+This is an object of type `link`:
+
+```jsonc
+{
+    "from": "url",
+    "to": "domain",
+    "link_type": "assesses",
+    "credibility": 1.0, // a value in [-1, 1]
+    "confidence": 1.0, // a value in [0, 1]
+    "generated_by": "string", // the name of the script, to be able to debug
+    "original_evaluation": {} // json of the evaluation taken without interpretation
 }
 ```
 

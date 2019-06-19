@@ -16,7 +16,9 @@ from .. import utils
 from .. import claimreview
 
 load_dotenv(find_dotenv())
-subfolder_path = utils.data_location / 'google_factcheck_explorer'
+
+my_name = 'google_factcheck_explorer'
+subfolder_path = utils.data_location / my_name
 
 def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
     params = {
@@ -149,6 +151,46 @@ def extract_urls_rebuttals_domains_factcheckers(claimReviews):
     fact_checkers = {k: len(list(v)) for k, v in fact_checkers}
     utils.write_json_with_path(fact_checkers, subfolder_path, 'fact_checkers.json')
 
+def extract_graph_edges(claimReviews):
+    nodes = {}
+    links = []
+
+    for cr in claimReviews:
+        claim_urls = claimreview.get_claim_urls(cr)
+
+        review_url = cr['url']
+        reviewer_domain = utils.get_url_domain(review_url)
+
+        nodes[review_url] = {'id': review_url, 'type': 'document'}
+        nodes[reviewer_domain] = {'id': reviewer_domain, 'type': 'source'}
+
+        link1 = {'from': reviewer_domain, 'to': review_url, 'type': 'publishes', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['publishes'], 'source': my_name}
+
+        if claim_urls:
+            for cu in claim_urls:
+                claim_domain = utils.get_url_domain(cu)
+                nodes[cu] = {'id': cu, 'type': 'document'}
+                nodes[claim_domain] = {'id': claim_domain, 'type': 'document'}
+
+                truth_score = claimreview.get_claim_rating(cr)
+                if truth_score:
+                    credibility = truth_score * 2 - 1.0
+                else:
+                    credibility = 0.0
+
+                link2 = {'from': review_url, 'to': cu, 'type': 'reviews', 'credibility': credibility, 'confidence': utils.relationships_default_confidences['reviews'], 'source': my_name}
+                link3 = {'from': cu, 'to': claim_domain, 'type': 'published_by', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['published_by'], 'source': my_name}
+
+                # TODO add links to graph
+
+    graph = {
+        'nodes': nodes,
+        'links': links
+    }
+    # TODO save graph
+
+
+
 def main(scraping=False):
     print('scraping', scraping)
     if scraping:
@@ -157,3 +199,5 @@ def main(scraping=False):
         claimReviews = utils.read_json(subfolder_path / 'claimReviews.json')
 
     extract_urls_rebuttals_domains_factcheckers(claimReviews)
+
+    #extract_graph_edges(claimReviews)
