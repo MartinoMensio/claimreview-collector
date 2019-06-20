@@ -111,7 +111,8 @@ def fix_page(page):
     return page
 
 def retrieve_claimreview(url):
-    url_fixed = get_corrected_url(url)
+    # url_fixed = get_corrected_url(url)
+    url_fixed = url
     domain = utils.get_url_domain(url_fixed)
     try:
         parser = _domain_parser_map[domain]
@@ -176,6 +177,7 @@ _domain_parser_map = {
     'www.washingtonpost.com': _washingtonpost_parser,
     'www.weeklystandard.com': _weeklystandard_parser,
     'hoax-alert.leadstories.com': _jsonld_parser,
+    'teyit.org': _jsonld_parser,
     'fullfact.org': _jsonld_parser,
     'chequeado.com': _jsonld_parser,
     'nytimes.com': _jsonld_parser,
