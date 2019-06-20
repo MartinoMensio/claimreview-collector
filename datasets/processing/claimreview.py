@@ -108,6 +108,8 @@ def fix_page(page):
     page = re.sub('" "twitter": "', '", "twitter": "', page)
     # CDATA error
     page = re.sub('<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>', 'false', page)
+    # fixing double quotes in text
+    page = re.escape(page)
     return page
 
 def retrieve_claimreview(url):
