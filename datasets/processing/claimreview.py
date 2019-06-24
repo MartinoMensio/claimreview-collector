@@ -108,9 +108,18 @@ def fix_page(page):
     page = re.sub('" "twitter": "', '", "twitter": "', page)
     # CDATA error
     page = re.sub('<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>', 'false', page)
-    # fixing double quotes in text
-    page = re.escape(page)
+    # fixing double quote
+    try:
+        result = re.search('claimReviewed": "(.*)",', page)
+        double_quoted = result.group(1)
+        double_quoted_fixed = double_quoted.replace('"', '\'\'')
+        page = page.replace(double_quoted, double_quoted_fixed)
+    except:
+        print("unicode error")
     return page
+
+def fix_double_quote(jsonLds):
+    return re.sub(r'(?<![\[\:\{\,])\"(?![\:\}\,])','\\\"', jsonLds)
 
 def retrieve_claimreview(url):
     # url_fixed = get_corrected_url(url)
