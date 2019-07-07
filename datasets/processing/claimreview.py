@@ -7,6 +7,7 @@ import os
 from bs4 import BeautifulSoup
 import flatten_json
 from tqdm import tqdm
+import html
 
 from . import utils
 from . import unshortener
@@ -109,19 +110,18 @@ def fix_page(page):
     page = re.sub('" "twitter": "', '", "twitter": "', page)
     # CDATA error
     page = re.sub('<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>', 'false', page)
-
-
-
     # fixing double quote
-    # select_claim(page)
-    # page = re.sub(r'(:\s+")(.*(?:\n(?!\s*"[^"\n:]+":).*)*)",$', lambda x: '{}{}",'.format(x.group(1), x.group(2).replace('"', "''")), page, flags=re.M)
-    # re.sub(r'("[^"]+":\s+")(.*)"', lambda x: '{}{}"'.format(x.group(1), x.group(2).replace('"', "''")), s)
-        # result = re.search('claimReviewed": "(.*)",',page,re.UNICODE | re.IGNORECASE)
-        # if result is not None:
-        #     double_quoted = result.group(1)
-        #     print(double_quoted)
-        #     double_quoted_fixed = double_quoted.replace('"', '\'\'')
-        #     page = page.replace(double_quoted, double_quoted_fixed)
+    # page = re.sub(r'("[^"]+":\s+")(.*)"', lambda x: '{}{}"'.format(x.group(1), x.group(2).replace('"', "''")), page)
+    # try:
+    #     result = re.search('claimReviewed": "(.*)",', page, re.UNICODE | re.IGNORECASE)
+    #     if result is not None:
+    #         double_quoted = result.group(1)
+    #         print(double_quoted)
+    #         double_quoted_fixed = double_quoted.replace('"', '\'\'')
+    #         page = page.replace(double_quoted, double_quoted_fixed)
+    # except AttributeError as e:
+    #     print(e)
+
     return page
 
 def retrieve_claimreview(url):
@@ -135,19 +135,25 @@ def retrieve_claimreview(url):
         raise e
     # download the page
     page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
-    page_text = fix_page(page_text)
+    # page_text = fix_page(page_text)
     result = None
     try:
         result = parser(page_text)
     except json.decoder.JSONDecodeError:
-            soup = BeautifulSoup(page_text, 'html.parser')
-            matches = soup.find_all('script', attrs={'type': 'application/ld+json'})
-            # probably the broken ClaimReview will be in matches[0], but double check
-            # then here call the service to fix the json
-            for match in matches:
-                if "claimReviewed" in match.text:
-                    result = requests.post('http://localhost:12345', data=str.encode(matches[1].text),
-                                           headers={'content-type': 'text/plain'}).json()
+        pattern = re.compile('"claimReviewed": "(.*)",', re.UNICODE | re.MULTILINE)
+        soup = BeautifulSoup(page_text, 'html.parser')
+        matches = soup.find_all('script', attrs={'type': 'application/ld+json'})
+        # probably the broken ClaimReview will be in matches[0], but double check
+        # then here call the service to fix the json
+
+        for match in matches:
+            if "claimReviewed" in match.text:
+                matchPatterns = re.findall(pattern, match.text)
+                for matchPattern in matchPatterns:
+                    matchPatternUpdated = matchPattern.replace('"', '\'\'')
+                    page_text = match.text.replace(matchPattern,  matchPatternUpdated)
+                    result = requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
+                                  headers={'content-type': 'text/plain'}).json()
     except:
         print("Unhandled error")
     return url_fixed, result
