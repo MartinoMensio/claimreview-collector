@@ -260,17 +260,19 @@ def aggregate_initial():
 
 def load_into_db():
     # build the database
-    database_builder.clean_db()
-    database_builder.create_indexes()
-    database_builder.load_datasets()
-    database_builder.load_fact_checkers()
-    # # load into database the beginning
-    database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
-    database_builder.load_domains_zero(file_name='aggregated_domains_with_factchecking_and_stats.json')
-    database_builder.load_domain_assessments()
-    database_builder.load_rebuttals_zero(
-        file_name='aggregated_rebuttals_with_fcu.json')
-    database_builder.load_fact_checking_urls_zero()
+    # database_builder.clean_db()
+    # database_builder.create_indexes()
+    # database_builder.load_datasets()
+    # database_builder.load_fact_checkers()
+    # # # load into database the beginning
+    # database_builder.load_urls_zero(file_name='aggregated_urls_with_fcu.json')
+    # database_builder.load_domains_zero(file_name='aggregated_domains_with_factchecking_and_stats.json')
+    # database_builder.load_domain_assessments()
+    # database_builder.load_rebuttals_zero(
+    #     file_name='aggregated_rebuttals_with_fcu.json')
+    # database_builder.load_fact_checking_urls_zero()
+
+    database_builder.load_claimReviews()
 
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):
@@ -417,8 +419,8 @@ def domain_aggregate_claim_urls():
 
 
 def main():
-    aggregate_initial()
-    #retrieve_all_fact_checking_from_source()
-    extract_more()
-    domain_aggregate_claim_urls()
+    # aggregate_initial()
+    # #retrieve_all_fact_checking_from_source()
+    # extract_more()
+    # domain_aggregate_claim_urls()
     load_into_db()

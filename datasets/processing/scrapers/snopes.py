@@ -28,6 +28,7 @@ def main():
         #print(response.text)
         soup = BeautifulSoup(response.text, 'lxml')
 
+        # TODO selector is broken!!!
         for s in soup.select('main.main article.list-group-item'):
             url = s.select('a.fact_check')[0]['href']
             title = s.select('h2.card-title')[0].text.strip()

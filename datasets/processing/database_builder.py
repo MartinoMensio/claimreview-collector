@@ -21,7 +21,7 @@ urls_collection = db['urls']
 rebuttals_collection = db['rebuttals']
 sources_collection = db['sources']
 fact_checkers_collection = db['fact_checkers']
-#claimReviews_collection = db['claim_reviews']
+claimReviews_collection = db['claim_reviews']
 url_redirects_collection = db['url_redirects']
 
 fact_checking_urls_collection = db['fact_checking_urls']
@@ -37,7 +37,7 @@ def clean_db():
     sources_collection.drop()
     fact_checkers_collection.drop()
     fact_checking_urls_collection.drop()
-    #claimReviews_collection.drop()
+    claimReviews_collection.drop()
 
 def load_datasets():
     sources_collection.drop()
@@ -117,14 +117,16 @@ def load_rebuttals_zero(file_name='aggregated_rebuttals.json'):
             'rebuttals': data
         })
 
-"""
+
 def load_claimReviews():
     claimReviews_collection.drop()
 
     claimReviews = utils.read_json(utils.data_location / 'aggregated_claimReviews.json')
+    claimReviews_collection.insert_many(claimReviews)
+    """
     for claimReview in claimReviews:
         claimReviews_collection.insert_one(claimReview)
-"""
+    """
 
 def add_redirections(input_file_path):
     """The input file contains a JSON with k:v for redirections"""
