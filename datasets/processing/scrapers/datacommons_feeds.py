@@ -21,28 +21,70 @@ def download_feed(feed_url):
         raise ValueError(response.status_code)
     data = response.json()
     utils.write_json_with_path(data, subfolder_path / 'source', version + '.json')
+    return data
 
-def extract_data(data_feed):
-    claimReviews = data_feed['dataFeedElement']
-
-    results = [{'url': el['url'], 'label': 'true', 'source': 'datacommons_feeds'} for el in claimReviews]
-
-    fact_checking_urls = []
+def extract_claimreviews(data_feed):
     claim_reviews = []
-    for item in claimReviews:
-        cr = item['item'][0]
-        claim_reviews.append(cr)
-        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_feeds'))
 
+    for item in data_feed['dataFeedElement']:
+        if not item['item']:
+            break
+        for cr in item['item']:
+            if cr:
+                # some have "item": null
+                claim_reviews.append(cr)
+
+    utils.write_json_with_path(claim_reviews, subfolder_path, 'claimReviews.json')
+
+    return claim_reviews
+
+def extract_data(claim_reviews):
+    fact_checking_urls = []
+    for cr in claim_reviews:
+        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_feeds'))
     utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
 
-    utils.write_json_with_path(claimReviews, subfolder_path, 'claimReviews.json')
 
-    utils.write_json_with_path(results, subfolder_path, 'urls.json')
+def get_credibility_measures(claim_review):
+    rating = claimreview.get_claim_rating(claim_review)
+    if rating is None:
+        credibility = 0.0
+        confidence = 0.0
+    else:
+        print(rating, claim_review['reviewRating'])
+        credibility = (rating - 0.5) * 2
+        confidence = 1.0
+    return {'credibility': credibility, 'confidence': confidence}
 
-    by_domain = utils.compute_by_domain(results)
+def extract_graph_data_from_claim_review(claim_review):
+    graph_data = []
 
-    utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
+    item_reviewed = claim_review.get('itemReviewed', {})
+    appearances = item_reviewed.get('appearances', [])
+    first_appearance = item_reviewed.get('firstAppearance', None)
+    if first_appearance:
+        appearances.append(first_appearance)
+
+    appearances_urls = [el['url'] for el in appearances if el.get('url', None)]
+    review_url = claim_review.get('url', None)
+    review_rating = claim_review.get('reviewRating', {})
+
+    if review_url:
+        review_domain = utils.get_url_domain(review_url)
+        graph_data.append((review_domain, {'@type': 'publishes', 'source': dataset}, review_url))
+        for claim_url in appearances_urls:
+            claim_domain = utils.get_url_domain(claim_url)
+            graph_data.append((claim_domain, {'@type': 'publishes', 'source': dataset}, claim_url))
+            graph_data.append((review_url, {
+                    '@type': 'assesses',
+                    'original': review_rating,
+                    'credibility': get_credibility_measures(claim_review),
+                    'source': dataset
+                }, claim_url))
+
+
+    return graph_data
+
 
 def download_all_feeds():
     response = requests.get(feed_directory)
@@ -60,6 +102,16 @@ def download_all_feeds():
         print(key)
         download_feed(key)
 
+def download_latest_feed():
+    return download_feed(latest_feed)
 
 def main():
-    download_all_feeds()
+    #download_all_feeds()
+    feed_data = download_latest_feed()
+    claim_reviews = extract_claimreviews(feed_data)
+    extract_data(claim_reviews)
+    #graph_data = extract_graph_data_from_feed(feed_data)
+    #utils.write_json_with_path(graph_data, subfolder_path, 'graph_data.json')
+
+if __name__ == "__main__":
+    main()
