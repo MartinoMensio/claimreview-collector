@@ -444,7 +444,8 @@
     "fullfact": {
         "type": "factchecker",
         "contains": {
-            "fact_checking_urls": true
+            "fact_checking_urls": true,
+            "claimReviews": true
         }
     },
     "leadstories": {
@@ -477,6 +478,16 @@
         "url": "https://www.lemonde.fr/les-decodeurs/",
         "description": "",
         "author": "https://www.lemonde.fr/",
+        "type": "factchecker",
+        "contains": {
+            "claimReviews": true
+        }
+    },
+    "euvsdisinfo": {
+        "name": "EU vs DISINFORMATION",
+        "url": "https://euvsdisinfo.eu/",
+        "description": "",
+        "author": "https://euvsdisinfo.eu/",
         "type": "factchecker",
         "contains": {
             "claimReviews": true
