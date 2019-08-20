@@ -5,8 +5,8 @@ import tqdm
 import json
 from bs4 import BeautifulSoup
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 url_list_articles = 'https://api.fiskkit.com/api/v1/articles/'
 url_single_article_base = 'https://api.fiskkit.com/api/v1/articles/'

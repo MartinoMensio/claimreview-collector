@@ -12,8 +12,8 @@ from collections import defaultdict
 from pprint import pprint
 from itertools import groupby
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 load_dotenv(find_dotenv())
 
@@ -201,3 +201,6 @@ def main(scraping=False):
     extract_urls_rebuttals_domains_factcheckers(claimReviews)
 
     #extract_graph_edges(claimReviews)
+
+if __name__ == "__main__":
+    main(True)

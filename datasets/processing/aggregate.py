@@ -180,11 +180,11 @@ def aggregate_initial():
     all_fact_checkers = []
     # step 1: load types of data natively
     for subfolder, config in get_choices().items():
-        if config['urls']:
+        if config['urls'] and False:
             urls = utils.read_json(
                 utils.data_location / subfolder / 'urls.json')
             all_urls.extend(urls)
-        if config['domains']:
+        if config['domains'] and False:
             if subfolder != 'ifcn':
                 # ifcn is broken
                 domains = utils.read_json(
@@ -193,7 +193,7 @@ def aggregate_initial():
             domain_assessments = utils.read_json(
                 utils.data_location / subfolder / 'domain_assessments.json')
             all_domain_assessments.extend(domain_assessments)
-        if config['rebuttals']:
+        if config['rebuttals'] and False:
             rebuttals = utils.read_json(
                 utils.data_location / subfolder / 'rebuttals.json')
             for source_url, rebuttal_l in rebuttals.items():
@@ -204,7 +204,7 @@ def aggregate_initial():
             claimReview = utils.read_json(
                 utils.data_location / subfolder / 'claimReviews.json')
             all_claimreviews.extend(claimReview)
-        if config['fact_checking_urls']:
+        if config['fact_checking_urls'] and False:
             fact_checking_urls = utils.read_json(
                 utils.data_location / subfolder / 'fact_checking_urls.json')
             for fcu in fact_checking_urls:
@@ -216,7 +216,7 @@ def aggregate_initial():
                 #matches = database_builder.get_fact_checking_urls(fcu['url'])
                 merge_fact_checking_urls(aggregated_fact_checking_urls, all_fact_checking_urls_by_url, fcu)
 
-        if config['fact_checkers']:
+        if config['fact_checkers'] and False:
             fact_checkers = utils.read_json(utils.data_location / subfolder / 'fact_checkers.json')
             for fc in fact_checkers:
                 merge_fact_checkers(all_fact_checkers, fc)
@@ -419,7 +419,7 @@ def domain_aggregate_claim_urls():
 
 
 def main():
-    # aggregate_initial()
+    aggregate_initial()
     # #retrieve_all_fact_checking_from_source()
     # extract_more()
     # domain_aggregate_claim_urls()

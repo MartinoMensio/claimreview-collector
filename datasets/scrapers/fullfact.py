@@ -5,7 +5,7 @@ import os
 from bs4 import BeautifulSoup
 import dateparser
 
-from .. import utils
+from ..processing import utils
 
 facts_url = 'https://fullfact.org/'
 

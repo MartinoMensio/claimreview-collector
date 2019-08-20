@@ -4,9 +4,10 @@ import requests
 import re
 import os
 from bs4 import BeautifulSoup
+import tqdm
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
 
@@ -18,7 +19,7 @@ labels_in_title = [
     'Hoax Alert: '
 ]
 
-def main():
+def retrieve_factchecking_urls():
     page = 1
     if os.path.exists(my_path / 'fact_checking_urls.json'):
         all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
@@ -72,3 +73,21 @@ def main():
 
 
     utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
+
+def download_claimReviews():
+    fcus = utils.read_json(my_path / 'fact_checking_urls.json')
+    results = []
+    for fcu in tqdm.tqdm(fcus):
+        url = fcu['url']
+        res = claimreview.get_claimreview_from_factcheckers(url)
+        results.extend(res)
+
+    utils.write_json_with_path(results, my_path, 'claimReviews.json')
+    
+
+def main():
+    retrieve_factchecking_urls()
+    download_claimReviews()
+
+if __name__ == "__main__":
+    main()

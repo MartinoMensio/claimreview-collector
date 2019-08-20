@@ -3,8 +3,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 get_url = 'https://metafact.io/factchecks/load_factchecks?filter=popular&offset=0&limit=5000'
 fact_checking_base_url = 'https://metafact.io/factchecks/'

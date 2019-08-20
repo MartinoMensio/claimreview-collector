@@ -3,8 +3,8 @@ import requests
 import re
 from xml.etree import ElementTree
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 dataset = 'datacommons_feeds'
 subfolder_path = utils.data_location / 'datacommons_feeds'

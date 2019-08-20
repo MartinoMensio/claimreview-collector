@@ -3,7 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from .. import utils
+from ..processing import utils
 
 LIST_URL = 'https://www.factcheck.org/page/{}/'
 

@@ -89,7 +89,7 @@ label_maps = {
 }
 
 
-def get_corrected_url(url, resolve=True):
+def get_corrected_url(url, resolve=False):
     #url = re.sub(r'http://(punditfact.com)/(.*)', r'https://politifact.com/\2', url)
     corrections = {
         'http://www.puppetstringnews.com/blog/obama-released-10-russian-agents-from-us-custody-in-2010-during-hillarys-uranium-deal': 'https://www.politifact.com/punditfact/statements/2017/dec/06/puppetstringnewscom/story-misleads-tying-obama-russian-spy-swap-hillar/',
@@ -206,6 +206,7 @@ _domain_parser_map = {
     'www.washingtonpost.com': _washingtonpost_parser,
     'www.weeklystandard.com': _weeklystandard_parser,
     'hoax-alert.leadstories.com': _jsonld_parser,
+    'satire.leadstories.com': _jsonld_parser,
     'teyit.org': _jsonld_parser,
     'fullfact.org': _jsonld_parser,
     'chequeado.com': _jsonld_parser,

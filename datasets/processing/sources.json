@@ -450,7 +450,8 @@
     "leadstories": {
         "type": "factchecker",
         "contains": {
-            "fact_checking_urls": true
+            "fact_checking_urls": true,
+            "claimReviews": true
         }
     },
     "politifact": {

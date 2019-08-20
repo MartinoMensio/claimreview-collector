@@ -5,7 +5,7 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-from .. import utils
+from ..processing import utils
 
 LIST_URL = 'https://factcheckni.org/page/{}/'
 

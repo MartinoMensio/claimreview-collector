@@ -3,8 +3,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 origin_url = 'https://truthsetter.com/api/news-feed/fact-checked'
 fact_checking_base_url = 'https://metafact.io/factchecks/'

@@ -5,7 +5,7 @@ import os
 from bs4 import BeautifulSoup
 import dateparser
 
-from .. import utils
+from ..processing import utils
 
 LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
 
@@ -13,10 +13,11 @@ my_path = utils.data_location / 'snopes'
 
 def main():
     page = 1
-    if os.path.exists(my_path / 'fact_checking_urls.json'):
-        all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
-    else:
-        all_statements = []
+    # if os.path.exists(my_path / 'fact_checking_urls.json'):
+    #     all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+    # else:
+    #     all_statements = []
+    all_statements = []
     go_on = True
     while go_on:
         facts_url = LIST_URL.format(page)
@@ -29,15 +30,15 @@ def main():
         soup = BeautifulSoup(response.text, 'lxml')
 
         # TODO selector is broken!!!
-        for s in soup.select('main.main article.list-group-item'):
-            url = s.select('a.fact_check')[0]['href']
-            title = s.select('h2.card-title')[0].text.strip()
-            subtitle = s.select('p.card-subtitle')
+        for s in soup.select('main.base-main article.media-wrapper'):
+            url = s.select_one('a.fact_check')['href']
+            title = s.select_one('h5.title').text.strip()
+            subtitle = s.select('p.subtitle')
             if subtitle:
                 subtitle = subtitle[0].text.strip()
             else:
                 subtitle = None
-            date = s.select('p.card-subtitle span.date')
+            date = s.select('span.date')
             if date:
                 date = date[0].text.strip()
                 date = dateparser.parse(date).isoformat()
@@ -63,3 +64,6 @@ def main():
 
 
     utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
+
+if __name__ == "__main__":
+    main()

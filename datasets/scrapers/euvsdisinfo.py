@@ -3,8 +3,8 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from .. import utils
-from .. import cache_manager
+from ..processing import utils
+from ..processing import cache_manager
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 

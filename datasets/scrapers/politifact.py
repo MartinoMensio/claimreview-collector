@@ -5,8 +5,8 @@ import os
 from bs4 import BeautifulSoup
 import dateparser
 
-from .. import utils
-from .. import claimreview
+from ..processing import utils
+from ..processing import claimreview
 
 LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
 STATEMENT_SELECTOR = 'div.statement'
