@@ -492,5 +492,35 @@
         "contains": {
             "claimReviews": true
         }
+    },
+    "istinomer": {
+        "name": "Istinomer",
+        "url": "http://www.istinomer.rs/",
+        "description": "",
+        "author": "http://www.istinomer.rs/",
+        "type": "factchecker",
+        "contains": {
+            "claimReviews": true
+        }
+    },
+    "kallxo_kripometer": {
+        "name": "KRYPOMETRI",
+        "url": "https://www.kallxo.com/krypometer/",
+        "description": "",
+        "author": "https://www.kallxo.com/",
+        "type": "factchecker",
+        "contains": {
+            "claimReviews": true
+        }
+    },
+    "teyit_org": {
+        "name": "Teyit",
+        "url": "https://teyit.org/",
+        "description": "",
+        "author": "https://teyit.org/",
+        "type": "factchecker",
+        "contains": {
+            "claimReviews": true
+        }
     }
 }

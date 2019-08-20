@@ -152,8 +152,8 @@ def retrieve_claimreview(url):
                 for matchPattern in matchPatterns:
                     matchPatternUpdated = matchPattern.replace('"', '\'\'')
                     page_text = match.text.replace(matchPattern,  matchPatternUpdated)
-                    result = requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
-                                  headers={'content-type': 'text/plain'}).json()
+                    result = [requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
+                                  headers={'content-type': 'text/plain'}).json()]
     except:
         print("Unhandled error")
     return url_fixed, result
@@ -218,7 +218,9 @@ _domain_parser_map = {
     'newtral.es': _fake_parser,
     'factcheckni.org': _fake_parser,
     'www.lemonde.fr': _fake_parser,
-    'verafiles.org': _fake_parser
+    'verafiles.org': _fake_parser,
+    'www.istinomer.rs': _microdata_parser,
+    'kallxo.com': _jsonld_parser
 }
 
 def clean_claim_url(url):

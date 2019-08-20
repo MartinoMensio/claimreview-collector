@@ -115,79 +115,41 @@ def scrape():
     utils.write_json_with_path(claimReviews, subfolder_path, 'claimReviews.json')
     return claimReviews
 
-def extract_urls_rebuttals_domains_factcheckers(claimReviews):
-    urls = []
-    rebuttals = defaultdict(lambda: defaultdict(list))
-    # if os.path.exists(subfolder_path / 'fact_checking_urls.json'):
-    #     fact_checking_urls = utils.read_json(subfolder_path / 'fact_checking_urls.json')
-    # else:
-    fact_checking_urls = []
+# def extract_urls_rebuttals_domains_factcheckers(claimReviews):
+#     urls = []
+#     rebuttals = defaultdict(lambda: defaultdict(list))
+#     # if os.path.exists(subfolder_path / 'fact_checking_urls.json'):
+#     #     fact_checking_urls = utils.read_json(subfolder_path / 'fact_checking_urls.json')
+#     # else:
+#     fact_checking_urls = []
 
-    for j, claimReview in enumerate(claimReviews):
-        claim_urls = claimreview.get_claim_urls(claimReview)
-        fixed_url = claimReview['url']
-        if claim_urls:
-            rebuttals[claim_urls][fixed_url] = ['google_factcheck_explorer']
-            label = claimreview.get_label(claimReview)
-            if label:
-                urls.append({'url': claim_urls, 'label': label, 'source': 'google_factcheck_explorer'})
+#     for j, claimReview in enumerate(claimReviews):
+#         claim_urls = claimreview.get_claim_urls(claimReview)
+#         fixed_url = claimReview['url']
+#         if claim_urls:
+#             rebuttals[claim_urls][fixed_url] = ['google_factcheck_explorer']
+#             label = claimreview.get_label(claimReview)
+#             if label:
+#                 urls.append({'url': claim_urls, 'label': label, 'source': 'google_factcheck_explorer'})
 
-        # found = next((item for item in fact_checking_urls if (item['url'] == claimReview['url'] and item['claim'] == claimReview.get('claimReviewed', None))), None)
-        # if found:
-        #     print('found')
-        #     break
+#         # found = next((item for item in fact_checking_urls if (item['url'] == claimReview['url'] and item['claim'] == claimReview.get('claimReviewed', None))), None)
+#         # if found:
+#         #     print('found')
+#         #     break
 
-        fact_checking_urls.append(claimreview.to_fact_checking_url(claimReview, 'google_factcheck_explorer'))
+#         fact_checking_urls.append(claimreview.to_fact_checking_url(claimReview, 'google_factcheck_explorer'))
 
-    utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')
-    utils.write_json_with_path(urls, subfolder_path, 'urls.json')
-    by_domain = utils.compute_by_domain(urls)
-    utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
-    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
+#     utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')
+#     utils.write_json_with_path(urls, subfolder_path, 'urls.json')
+#     by_domain = utils.compute_by_domain(urls)
+#     utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
+#     utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
 
-    fact_checkers = list(set([utils.get_url_domain(el['url']) for el in claimReviews]))
-    lambda_aggregator = lambda el: utils.get_url_domain(el['url'])
-    fact_checkers = groupby(sorted(claimReviews, key=lambda_aggregator), key=lambda_aggregator)
-    fact_checkers = {k: len(list(v)) for k, v in fact_checkers}
-    utils.write_json_with_path(fact_checkers, subfolder_path, 'fact_checkers.json')
-
-def extract_graph_edges(claimReviews):
-    nodes = {}
-    links = []
-
-    for cr in claimReviews:
-        claim_urls = claimreview.get_claim_urls(cr)
-
-        review_url = cr['url']
-        reviewer_domain = utils.get_url_domain(review_url)
-
-        nodes[review_url] = {'id': review_url, 'type': 'document'}
-        nodes[reviewer_domain] = {'id': reviewer_domain, 'type': 'source'}
-
-        link1 = {'from': reviewer_domain, 'to': review_url, 'type': 'publishes', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['publishes'], 'source': my_name}
-
-        if claim_urls:
-            for cu in claim_urls:
-                claim_domain = utils.get_url_domain(cu)
-                nodes[cu] = {'id': cu, 'type': 'document'}
-                nodes[claim_domain] = {'id': claim_domain, 'type': 'document'}
-
-                truth_score = claimreview.get_claim_rating(cr)
-                if truth_score:
-                    credibility = truth_score * 2 - 1.0
-                else:
-                    credibility = 0.0
-
-                link2 = {'from': review_url, 'to': cu, 'type': 'reviews', 'credibility': credibility, 'confidence': utils.relationships_default_confidences['reviews'], 'source': my_name}
-                link3 = {'from': cu, 'to': claim_domain, 'type': 'published_by', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['published_by'], 'source': my_name}
-
-                # TODO add links to graph
-
-    graph = {
-        'nodes': nodes,
-        'links': links
-    }
-    # TODO save graph
+#     fact_checkers = list(set([utils.get_url_domain(el['url']) for el in claimReviews]))
+#     lambda_aggregator = lambda el: utils.get_url_domain(el['url'])
+#     fact_checkers = groupby(sorted(claimReviews, key=lambda_aggregator), key=lambda_aggregator)
+#     fact_checkers = {k: len(list(v)) for k, v in fact_checkers}
+#     utils.write_json_with_path(fact_checkers, subfolder_path, 'fact_checkers.json')
 
 
 
@@ -198,7 +160,7 @@ def main(scraping=False):
     else:
         claimReviews = utils.read_json(subfolder_path / 'claimReviews.json')
 
-    extract_urls_rebuttals_domains_factcheckers(claimReviews)
+    #extract_urls_rebuttals_domains_factcheckers(claimReviews)
 
     #extract_graph_edges(claimReviews)
 
