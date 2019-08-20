@@ -471,5 +471,15 @@
         "contains": {
             "fact_checking_urls": true
         }
+    },
+    "lemonde_decodex_hoax": {
+        "name": "Le Monde -  Les Decodeurs",
+        "url": "https://www.lemonde.fr/les-decodeurs/",
+        "description": "",
+        "author": "https://www.lemonde.fr/",
+        "type": "factchecker",
+        "contains": {
+            "claimReviews": true
+        }
     }
 }
