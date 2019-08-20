@@ -16,6 +16,19 @@ Goal: have a list of URL labelled with `fake` / `true`
 Maybe better in a virtual environment!
 `pip install -r requirements.txt`
 
+## Usage
+
+### Collect from a specific origin
+
+`python -m datasets scrape_single_factchecking ORIGIN_ID`
+
+### Collect all
+
+`python -m datasets scrape_factchecking`
+
+### Load in the database
+`python -m datasets aggregate_all`
+
 ## Types of data
 
 ### Source
