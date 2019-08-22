@@ -9,16 +9,12 @@ HOMEPAGE = 'https://teyit.org'
 my_path = utils.data_location / 'teyit_org'
 
 
-def update_page_url(claim_label, page_no):
-    result = f"https://teyit.org/konu/analiz/{claim_label}/page/{page_no}"
-    print(result)
-    return result
 
 
-def collect_article_urls(claim_label):
+def collect_article_urls(list_page_url):
     page_no = 1
 
-    page_url = update_page_url(claim_label, page_no)
+    page_url = f'{list_page_url}page/{page_no}'
     response = requests.get(page_url)
 
     urls = []
@@ -33,13 +29,13 @@ def collect_article_urls(claim_label):
             urls.append(article_url)
             #print(cl_review)
         page_no = page_no + 1
-        page_url = update_page_url(claim_label, page_no)
+        page_url = f'{list_page_url}page/{page_no}'
         response = requests.get(page_url)
     return urls
 
 def test():
     url = "https://teyit.org/a-haberin-chpnin-akil-almaz-nanoteknolojik-hilesi-alt-bandi-kullandigi-iddiasi/"
-    print(claimreview.retrieve_claimreview(url))
+    print(claimreview.get_claimreview_from_factcheckers(url))
 
 
 def get_all_articles_url():
@@ -48,26 +44,27 @@ def get_all_articles_url():
         raise ValueError(response.status_code)
 
     soup = BeautifulSoup(response.text, 'lxml')
-    categories = soup.select('div.sayac_widget div.single-sayac div')
+    categories = soup.select('div.sayac_widget a')
 
     all_urls = []
     for c in categories:
-        category_label = c['class'][0]
-        print(category_label)
-        category_urls = collect_article_urls(category_label)
+        category_list_url = c['href']
+        print(category_list_url)
+        category_urls = collect_article_urls(category_list_url)
+        print(len(category_urls), 'found at', category_list_url)
         all_urls.extend(category_urls)
 
     utils.write_json_with_path(all_urls, my_path / 'source', 'urls.json')
     return all_urls
 
 def get_claim_reviews(all_urls):
-    claim_reviews = []
+    all_claim_reviews = []
     for u in tqdm(all_urls):
-        claim_review = claimreview.retrieve_claimreview(u)[1]
-        if not isinstance(claim_review, list):
-            print('not a list at', u, claim_review)
+        claim_reviews = claimreview.get_claimreview_from_factcheckers(u)
+        if not isinstance(claim_reviews, list):
+            print('not a list at', u, claim_reviews)
             continue
-        if not claim_review:
+        if not claim_reviews:
             print('no claimReview for', u)
             # TODO understand why not able to fix the json of:
             # - https://teyit.org/a-haberin-abdyi-tl-korkusu-sardi-seklinde-bir-alt-bant-kullandigi-iddiasi/
@@ -81,9 +78,9 @@ def get_claim_reviews(all_urls):
             # - https://teyit.org/a-haberin-muharrem-ince-icin-universiteyi-8-donemde-bitirmis-alt-bandi-kullandigi-iddiasi/
             # - https://teyit.org/adalet-partisi-genel-baskani-vecdet-ozun-tayyip-size-mustahak-dedigi-iddiasi/
             continue
-        claim_reviews.extend(claim_review)
+        all_claim_reviews.extend(claim_reviews)
 
-    utils.write_json_with_path(claim_reviews, my_path, 'claimReviews.json')
+    utils.write_json_with_path(all_claim_reviews, my_path, 'claimReviews.json')
 
 def scrape_all():
     all_urls = get_all_articles_url()

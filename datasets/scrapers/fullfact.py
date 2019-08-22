@@ -149,18 +149,18 @@ def scrape_all():
 def get_claimreviews():
     debunks = utils.read_json(my_path / 'source' / 'all_debunks.json')
 
-    claim_reviews = []
+    all_claim_reviews = []
     for debunk in tqdm(debunks.values()):
         url = debunk['url']
-        claim_review = claimreview.retrieve_claimreview(url)[1]
+        claim_reviews = claimreview.get_claimreview_from_factcheckers(url)
         #print(type(claim_review), claim_review)
-        claim_reviews.extend(claim_review)
-    utils.write_json_with_path(claim_reviews, my_path, 'claimReviews.json')
+        all_claim_reviews.extend(claim_reviews)
+    utils.write_json_with_path(all_claim_reviews, my_path, 'claimReviews.json')
 
-    print(len(claim_reviews))
-    return claim_reviews
+    print(len(all_claim_reviews))
+    return all_claim_reviews
 
 
 def main():
-    #scrape_all()
+    scrape_all()
     get_claimreviews()

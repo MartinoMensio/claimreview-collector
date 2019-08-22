@@ -140,6 +140,7 @@ def retrieve_claimreview(url):
     try:
         result = parser(page_text)
     except json.decoder.JSONDecodeError:
+        print('failed for', url, ' --> Trying with superpowers')
         pattern = re.compile('"claimReviewed": "(.*)",', re.UNICODE | re.MULTILINE)
         soup = BeautifulSoup(page_text, 'html.parser')
         matches = soup.find_all('script', attrs={'type': 'application/ld+json'})
@@ -154,8 +155,10 @@ def retrieve_claimreview(url):
                     page_text = match.text.replace(matchPattern,  matchPatternUpdated)
                     result = [requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
                                   headers={'content-type': 'text/plain'}).json()]
-    except:
+        print('superpowers worked!')
+    except Exception:
         print("Unhandled error")
+        raise e
     return url_fixed, result
 
 # the two main parsers: json_ld and html/sharethefacts
@@ -379,7 +382,7 @@ def get_claimreviews_from_factcheckers(original_claimreviews):
     return result
 """
 
-def get_claimreview_from_factcheckers(original_claimreview_url):
+def get_claimreview_from_factcheckers(original_claimreview_url, ignore_cache=False):
     """This method enriches a claimReview item with more data by going to the url of the publisher"""
 
     result = []
@@ -397,7 +400,7 @@ def get_claimreview_from_factcheckers(original_claimreview_url):
     partial_file_name = '{}.json'.format(id)
     partial_file_path = subfolder_path / partial_file_name
     #print(partial_file_name)
-    if os.path.isfile(partial_file_path):
+    if not ignore_cache and os.path.isfile(partial_file_path):
         # if it's been already saved, read it
         partial = utils.read_json(partial_file_path)
     else:

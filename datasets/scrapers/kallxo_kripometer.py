@@ -39,13 +39,13 @@ def get_urls():
     return urls
 
 def get_claim_reviews(all_urls):
-    claim_reviews = []
+    all_claim_reviews = []
     for u in tqdm(all_urls):
-        claim_review = claimreview.retrieve_claimreview(u)
-        claim_reviews.extend(claim_review[1])
+        claim_reviews = claimreview.get_claimreview_from_factcheckers(u)
+        all_claim_reviews.extend(claim_reviews)
 
-    utils.write_json_with_path(claim_reviews, my_path, 'claimReviews.json')
-    return claim_reviews
+    utils.write_json_with_path(all_claim_reviews, my_path, 'claimReviews.json')
+    return all_claim_reviews
 
 def main():
     urls = get_urls()
