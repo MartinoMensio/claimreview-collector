@@ -38,7 +38,7 @@ processing_functions_datasets = {
 
 scrape_factchecking_functions = {
     'google_factcheck_explorer': lambda: google_factcheck_explorer.main(True),
-    #'esi_api': esi_api.main,
+    'esi_api': esi_api.main,
     'datacommons_feeds': datacommons_feeds.main,
     'factcheckni': factcheckni.main,
     'fullfact': fullfact.main,

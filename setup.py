@@ -25,5 +25,7 @@ setup(name='datasets',
           'dateparser',
           'unidecode',
           'pycountry',
-          'dirtyjson'
+          'dirtyjson',
+          'rdflib-jsonld',
+          'pyld'
       ])

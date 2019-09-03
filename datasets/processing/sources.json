@@ -29,6 +29,21 @@
             "fact_checking_urls": true
         }
     },
+    "esi_api": {
+        "name": "ESI API",
+        "url": "https://coinform.expertsystemcustomer.com/",
+        "description": "",
+        "author": "https://expertsystemcustomer.com/",
+        "type": "claimreview_aggregator",
+        "contains": {
+            "domain_classification": false,
+            "url_classification": false,
+            "rebuttal_suggestion": false,
+            "textual_claims": false,
+            "claimReviews": false,
+            "fact_checking_urls": false
+        }
+    },
     "mrisdal_fakenews": {
         "name": "Getting Real about Fake News",
         "url": "https://www.kaggle.com/mrisdal/fake-news",
