@@ -78,7 +78,7 @@ def scrape():
             #outlets = s.select('data-column="Outlets"')[0].text.strip()
             country = s.select('div.cell-country')[0].text.strip()
             if url in all_reviews:
-                pass
+                continue
                 """
                 # already found, stop now
                 go_on = False
