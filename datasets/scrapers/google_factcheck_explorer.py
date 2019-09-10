@@ -81,7 +81,8 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
                         '@type': 'Person',
                         'name': r[0][1][0],
                         'sameAs': r[0][4][0][1] if len(r[0][4]) else None
-                    } if len(r[0][1]) else {}
+                    } if len(r[0][1]) else {},
+                    'url': r[0][10]
                 }
                 #'claim_author': r[0][1][0] if len(r[0][1]) else None,
                 #'id': r[0][2],
@@ -89,11 +90,17 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
                 #'review_title': r[0][3][0][8],
                 #'claim_url': r[0][4][0][1] if len(r[0][4]) else None
             }
-            claim_urls = r[0][1][2]
-            if claim_urls:
+            appearance = r[0][1][2]
+            firstAppearance = len(r[0]) > 13 and r[0][13]
+            if appearance:
                 claimReview['itemReviewed']['appearance'] = [{
                     'url': u
-                } for u in claim_urls]
+                } for u in appearance]
+            if firstAppearance:
+                claimReview['itemReviewed']['firstAppearance'] = {
+                    'type': 'CreativeWork',
+                    'url': firstAppearance
+                }
             results.append(claimReview)
         except IndexError as e:
             print(json.dumps(r))
