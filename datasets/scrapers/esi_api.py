@@ -23,6 +23,7 @@ def get_all_collection(collection_name):
             'start': start,
             'q_schema_org_cr_n3':'*'
         }
+        # TODO the certificate verification has to be enabled!
         response = requests.get(ESI_ENDPOINT, params=params, auth=HTTPBasicAuth(ESI_USER, ESI_PASS), verify=False)
         print(response.url)
         if response.status_code == 429:
@@ -118,7 +119,7 @@ def filter_other_ns(obj):
 
 
 
-def main(scraping=False):
+def main(scraping=True):
     if scraping:
         get_all_collection('factcheckers')
         get_all_collection('fc-dev')

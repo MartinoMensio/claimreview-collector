@@ -205,6 +205,7 @@ def aggregate_initial():
                 utils.data_location / subfolder / 'claimReviews.json')
             all_claimreviews.extend(claimReview)
         if config['fact_checking_urls'] and False:
+            # TODO add these URLs to the collection list, they are needed for retrieving even more claimReviews
             fact_checking_urls = utils.read_json(
                 utils.data_location / subfolder / 'fact_checking_urls.json')
             for fcu in fact_checking_urls:

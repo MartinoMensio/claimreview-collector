@@ -17,6 +17,18 @@ Each of the [origins](claimreviews/scrapers/) can either:
 
 While for the first group, the work of this project is just to aggregate them, the second requires scraping the pages and dealing with possibly broken metadata.
 
+## Run the collection
+
+```bash
+python -m datasets scrape_factchecking
+```
+
+Or to run a single scraper:
+
+```
+python -m datasets scrape_single_factchecking $NAME
+```
+
 ## Data information
 
 For an approximate size of each of the origins, look at https://docs.google.com/spreadsheets/d/1etGJjS_l9iyWyWzBmqKYoGwz9_QKQKia4mUyfJWag9o/edit?pli=1#gid=0
