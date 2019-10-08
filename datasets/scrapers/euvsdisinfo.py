@@ -94,18 +94,18 @@ def scrape():
 
                 shortlink = soup.select_one('link[rel="shortlink"]')['href']
 
-                details = soup.select('div.report-meta-item')
+                details = soup.select('ul.b-catalog__repwidget-list li')
                 for d in details:
                     if 'Reported in:' in d.text:
                         issue_id = d.text.replace('Reported in:', '').replace('Issue', '').strip()
-                    elif 'Language:' in d.text:
-                        language = d.text.replace('Language:', '').strip()
+                    elif 'Language/target audience:' in d.text:
+                        language = d.text.replace('Language/target audience:', '').strip()
                     elif 'Keywords:' in d.text:
                         keywords = d.text.replace('Keywords:', '').strip()
 
-                report_summary = soup.select_one('div.report-summary-text').text.strip()
+                report_summary = soup.select_one('div.b-report__summary-text').text.strip()
 
-                claim_urls_all = soup.select('div.report-disinfo-link')
+                claim_urls_all = soup.select('div.b-catalog__repwidget-source')
 
                 claim_urls = claim_urls_all[0].select('a')
                 claim_urls = [el['href'] for el in claim_urls]
@@ -115,7 +115,7 @@ def scrape():
                 else:
                     archived_claim_urls = []
 
-                disproof = soup.select_one('div.report-disproof-text').text.strip()
+                disproof = soup.select_one('div.b-report__disproof-text').text.strip()
 
 
                 all_reviews[url] = {
