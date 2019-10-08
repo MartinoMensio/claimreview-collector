@@ -199,7 +199,7 @@ def clean_claim_url(url):
         if re.match(r'.*wikipedia\.org', domain):
             result = None
         # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
-        elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?', result):
+        elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?$', result):
             result = None
     return result
 
