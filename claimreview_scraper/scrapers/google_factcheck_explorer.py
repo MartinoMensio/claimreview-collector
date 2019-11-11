@@ -28,6 +28,7 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
         'force': 'false',
         'offset': offset
     }
+    # print(os.environ['GOOGLE_FACTCHECK_EXPLORER_COOKIE'])
     headers = {
         'dnt': '1',
         'accept-encoding': 'gzip, deflate, br',
@@ -36,7 +37,7 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
         'accept': 'application/json, text/plain, */*',
         'referer': 'https://toolbox.google.com/factcheck/explorer/search/list:recent;hl=en;gl=',
         'authority': 'toolbox.google.com',
-        'cookie': os.environ.get('GOOGLE_FACTCHECK_EXPLORER_COOKIE')
+        'cookie': os.environ['GOOGLE_FACTCHECK_EXPLORER_COOKIE']
     }
     response = requests.get('https://toolbox.google.com/factcheck/api/search', params=params, headers=headers)
     if response.status_code != 200:

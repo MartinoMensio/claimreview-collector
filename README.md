@@ -1,6 +1,15 @@
 # ClaimReview collector
 
-We want all the `claimReview` items!
+This library can be used to deal with `claimReview` items:
+- retrieve from aggregators
+- scrape from fact-checkers
+- normalize from other representations (e.g. n3 triples, microdata)
+- get flattened simplified representation
+
+## Requirements
+
+Install this library with `pip` (that uses `setup.py`).
+It is highly recommended that you have a MongoDB instance locally, so that the caching mechanism will make everything faster.
 
 ## How it works
 

@@ -10,9 +10,14 @@ from urllib.parse import urlparse
 
 csv.field_size_limit(sys.maxsize)
 
+# default value
 data_location = Path(os.path.dirname(os.path.realpath(__file__))) / '..'/ '..' / 'data'
-
 print('data location:', data_location)
+
+def set_data_location(new_data_location):
+    global data_location
+    data_location = Path(str(new_data_location))
+    print('data location:', data_location)
 
 def read_json(input_path):
     with open(input_path) as f:

@@ -2,13 +2,13 @@
 
 from setuptools import setup
 
-setup(name='datasets',
+setup(name='claimreview_scraper',
       version='1.0',
-      description='Dataset aggregation for MisinfoMe',
+      description='ClaimReview Scraper for MisinfoMe',
       author='AAA',
       author_email='a@a.a',
       url='https://a.a.a',
-      packages=['datasets'],
+      packages=['claimreview_scraper'],
       python_requires='>=3',
       install_requires=[
           'extruct',
