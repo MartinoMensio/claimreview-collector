@@ -13,7 +13,7 @@ from . import utils
 from . import unshortener
 from . import cache_manager
 
-subfolder_path = utils.data_location / 'claimreviews'
+# subfolder_path = 'data'# utils.data_location / 'claimreviews'
 
 # the values of truthiness for the simplified labels
 simplified_labels_scores = {
@@ -86,21 +86,24 @@ label_maps = {
     'Negative': 'fake',
     'Uncertain': 'mixed',
     #'Not Enough Experts': ??
+    'disinfo': 'fake'
 }
 
 
-def get_corrected_url(url, resolve=False):
+def get_corrected_url(url, unshorten=False):
     #url = re.sub(r'http://(punditfact.com)/(.*)', r'https://politifact.com/\2', url)
     corrections = {
         'http://www.puppetstringnews.com/blog/obama-released-10-russian-agents-from-us-custody-in-2010-during-hillarys-uranium-deal': 'https://www.politifact.com/punditfact/statements/2017/dec/06/puppetstringnewscom/story-misleads-tying-obama-russian-spy-swap-hillar/',
         'http://static.politifact.com.s3.amazonaws.com/politifact/mugs/Noah_Smith_mug.jpg': 'https://www.politifact.com/punditfact/statements/2018/mar/08/noah-smith/has-automation-driven-job-losses-steel-industry/',
         'http://static.politifact.com.s3.amazonaws.com/politifact/mugs/NYT_TRUMP_CAMPAIGN_5.jpg': 'https://www.politifact.com/truth-o-meter/article/2017/feb/23/promises-kept-promises-stalled-rating-donald-trump/',
-        'http://rebootillinois.com/2016/12/22/heres-one-place-indiana-illinois-workers-comp-laws-agree/': 'https://www.politifact.com/illinois/statements/2016/dec/19/david-menchetti/illinois-indiana-work-comp-law-same-words-differen/'
+        'http://rebootillinois.com/2016/12/22/heres-one-place-indiana-illinois-workers-comp-laws-agree/': 'https://www.politifact.com/illinois/statements/2016/dec/19/david-menchetti/illinois-indiana-work-comp-law-same-words-differen/',
+        'in an ad': 'https://www.politifact.com/ohio/statements/2016/may/13/fighting-ohio-pac/fighting-ohio-pac-ad-takes-ted-stricklands-mixed-a/',
+        'https://hingtonpost.com/news/fact-checker/wp/2016/09/15/clintons-claim-that-its-legal-for-workers-to-be-retaliated-against-for-talking-about-their-pay/': 'https://www.washingtonpost.com/news/fact-checker/wp/2016/09/15/clintons-claim-that-its-legal-for-workers-to-be-retaliated-against-for-talking-about-their-pay/',
     }
-    resolved = corrections.get(url, url)
-    if resolve:
-        resolved = unshortener.unshorten(resolved)
-    return resolved
+    unshortened = corrections.get(url, url)
+    if unshorten:
+        unshortened = unshortener.unshorten(unshortened)
+    return unshortened
 
 def fix_page(page):
     # page = re.sub('"claimReviewed": ""([^"]*)"', r'"claimReviewed": "\1"', page)
@@ -128,15 +131,21 @@ def retrieve_claimreview(url):
     # url_fixed = get_corrected_url(url)
     url_fixed = url
     domain = utils.get_url_domain(url_fixed)
+    verify = True
+    # these domain has SSL certificate that does not cover its own subdomain
+    # ['live-video.leadstories.com', 'trending-gifs.leadstories.com', 'trending-videos.leadstories.com']
+    if domain.endswith('leadstories.com'):
+        verify = False
+        domain = 'leadstories.com'
     try:
         parser = _domain_parser_map[domain]
     except Exception as e:
         print(domain, url, url_fixed)
         raise e
     # download the page
-    page_text = cache_manager.get(url_fixed, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
+    page_text = cache_manager.get(url_fixed, verify=verify, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
     # page_text = fix_page(page_text)
-    result = None
+    result = []
     try:
         result = parser(page_text)
     except json.decoder.JSONDecodeError:
@@ -153,19 +162,72 @@ def retrieve_claimreview(url):
                 for matchPattern in matchPatterns:
                     matchPatternUpdated = matchPattern.replace('"', '\'\'')
                     page_text = match.text.replace(matchPattern,  matchPatternUpdated)
-                    result = [requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
-                                  headers={'content-type': 'text/plain'}).json()]
+                    # docker run -dit --restart always --name dirtyjson-rest -p 12345:12345 martinomensio/dirtyjson
+                    res = requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
+                                  headers={'content-type': 'text/plain'})
+                    if res.status_code != 200:
+                        result = [] # TODO fix logging
+                    else:
+                        result = [res.json()]
         print('superpowers worked!')
-    except Exception:
-        print("Unhandled error")
+    except Exception as e:
+        print("Unhandled error at", url)
         raise e
+
+    if not result:
+        # try with sharethefacts widget scraping:
+        # for (list avaliable here http://www.sharethefacts.org/about):
+        # - PolitiFact # solution available from decoding https://static.politifact.com/js/sharethefacts-v1.js
+        # - The Washington Post # seems not to have it (let's see)
+        # - FactCheck.org # from https://dhpikd1t89arn.cloudfront.net/js/include/sharethefacts-v1.js but no page has it
+        # - Gossip Cop
+        # - Pagella Politica
+        # - AGI
+        # - La Stampa
+        # - The Ferret
+        # - ClimateFeedback
+        # - Demagog
+        # - NewsWeek
+        # - Vera Files Fact Check
+        # - BOOM
+        # - Faktiskt
+
+        # First find sharethefacts_id
+        soup = BeautifulSoup(page_text, 'html.parser')
+        a_hrefs = [el.get('href', '') for el in soup.select('a')]
+        sharethefacts_microdata_embed_ids = [el.get('data-sharethefacts-uuid', None) for el in soup.select('div.sharethefacts_microdata_embed')]
+        # some don't have the property...
+        sharethefacts_microdata_embed_ids = [el for el in sharethefacts_microdata_embed_ids if el]
+        sharethefacts_ids = [el.split('/')[-1] for el in a_hrefs if 'sharethefacts.co/share/' in el] + sharethefacts_microdata_embed_ids
+        print(domain, 'sharethefacts_ids', sharethefacts_ids, url)
+        if sharethefacts_ids:
+            if domain == 'www.politifact.com' or domain == 'www.factcheck.org' or domain == 'www.washingtonpost.com':
+                for el in sharethefacts_ids:
+                    embed_url = f"https://dhpikd1t89arn.cloudfront.net/html-{el}.html"
+                    response_text = cache_manager.get(embed_url)
+                    # print(response.text)
+                    try:
+                        result = _jsonld_parser(response_text)
+                    except Exception as e:
+                        print('exception', e, 'at', embed_url)
+                        result = []
+                    # print(result)
+            else:
+                raise NotImplementedError(url_fixed)
+    for r in result:
+        r_url = r.get('url')
+        if r_url != url_fixed:
+            print('different ClaimReview.url. asked for:', url_fixed, 'and received:', r_url)
+            r['url'] = url_fixed
     return url_fixed, result
 
 # the two main parsers: json_ld and html/sharethefacts
 def _jsonld_parser(page):
-    data = extruct.extract(page)
+    data = extruct.extract(page, syntaxes=['json-ld'])
     json_lds = data['json-ld']
+    # print(json_lds)
     claimReviews = [el for el in json_lds if 'ClaimReview' in el.get('@type', '')]
+    # print(claimReviews)
     return claimReviews
 
 def _microdata_parser(page):
@@ -174,7 +236,7 @@ def _microdata_parser(page):
     #print(matches)
     #for m in matches:
     #
-    data = extruct.extract(page)
+    data = extruct.extract(page, syntaxes=['microdata'])
     # filter before flattening otherwise merge errors
     microdata = [el for el in data['microdata'] if el['type'] == 'http://schema.org/ClaimReview']
     jsonld = _to_jsonld(microdata)
@@ -185,31 +247,41 @@ def _microdata_parser(page):
 def _fake_parser(page):
     return []
 
-def _snopes_parser(page):
-    return _jsonld_parser(page)
-
-def _factcheck_parser(page):
-    return _jsonld_parser(page)
-
-def _politifact_parser(page):
-    return _microdata_parser(page)
-
-def _washingtonpost_parser(page):
-    return _microdata_parser(page)
-
-def _weeklystandard_parser(page):
-    return _jsonld_parser(page)
-
 
 _domain_parser_map = {
-    'snopes.com': _snopes_parser,
-    'www.snopes.com': _snopes_parser,
-    'www.factcheck.org': _factcheck_parser,
-    "www.politifact.com": _politifact_parser,
-    'www.washingtonpost.com': _washingtonpost_parser,
-    'www.weeklystandard.com': _weeklystandard_parser,
-    'hoax-alert.leadstories.com': _jsonld_parser,
-    'satire.leadstories.com': _jsonld_parser,
+    'snopes.com': _jsonld_parser,
+    'www.snopes.com': _jsonld_parser,
+    'www.factcheck.org': _jsonld_parser,
+    "www.politifact.com": _microdata_parser,
+    'www.washingtonpost.com': _microdata_parser,
+    'www.weeklystandard.com': _jsonld_parser,
+    'www.washingtonexaminer.com': _jsonld_parser,
+    'leadstories.com': _jsonld_parser,
+    # 'hoax-alert.leadstories.com': _jsonld_parser,
+    # 'satire.leadstories.com': _jsonld_parser,
+    # 'analysis.leadstories.com': _jsonld_parser,
+    # 'politics.leadstories.com': _jsonld_parser,
+    # 'entertainment.leadstories.com': _jsonld_parser,
+    # 'live-video.leadstories.com': _jsonld_parser,
+    # 'europe.leadstories.com': _jsonld_parser,
+    # 'happening-now.leadstories.com': _jsonld_parser,
+    # 'happening-now.leadstories.com': _jsonld_parser,
+    # 'opinion.leadstories.com': _jsonld_parser,
+    # 'tech.leadstories.com': _jsonld_parser,
+    # 'trendolizer-picks.leadstories.com': _jsonld_parser,
+    # 'trending-videos.leadstories.com': _jsonld_parser,
+    # 'video.leadstories.com': _jsonld_parser,
+    # 'movies.leadstories.com': _jsonld_parser,
+    # 'trending-gifs.leadstories.com': _jsonld_parser,
+    # 'donald-trump.leadstories.com': _jsonld_parser,
+    # 'hillary-clinton.leadstories.com': _jsonld_parser,
+    # 'hollywood-film-festival.leadstories.com': _jsonld_parser,
+    # 'campaign-2016-trendolizer.leadstories.com': _jsonld_parser,
+    # 'kardashian-trendolizer.leadstories.com': _jsonld_parser,
+    # 'today-in-technology.leadstories.com': _jsonld_parser,
+    # 'marilyn-monroe.leadstories.com': _jsonld_parser,
+    # 'us-congress-news.leadstories.com': _jsonld_parser,
+    # 'us-congress-news.leadstories.com': _jsonld_parser,
     'teyit.org': _jsonld_parser,
     'fullfact.org': _jsonld_parser,
     'chequeado.com': _jsonld_parser,
@@ -269,7 +341,7 @@ def get_claim_urls(claimReview):
     # TODO also return sameAs if present on the claim directly, other links there!!
     if type(result) == list:
         # TODO consider multiple values
-        result = clean_claim_url(result[0])
+        result = [clean_claim_url(el) for el in result]
     else:
         result = clean_claim_url(result)
     return result
@@ -382,101 +454,49 @@ def get_claimreviews_from_factcheckers(original_claimreviews):
     return result
 """
 
-def get_claimreview_from_factcheckers(original_claimreview_url, ignore_cache=False):
-    """This method enriches a claimReview item with more data by going to the url of the publisher"""
+# def get_claimreview_from_factcheckers(original_claimreview_url, ignore_cache=False):
+#     """This method enriches a claimReview item with more data by going to the url of the publisher"""
 
-    result = []
+#     result = []
 
-    # get the correct URL (some of them are wrong in the original dataset)
-    fixed_url = get_corrected_url(original_claimreview_url)
+#     # get the correct URL (some of them are wrong in the original dataset)
+#     fixed_url = get_corrected_url(original_claimreview_url)
 
-    # this part with id and file saving is just to be able to restore the operation after a failure so that the single claims are saved onto disk on by one
-    try:
-        id = utils.string_to_md5(fixed_url)
-        #print(id)
-    except Exception as e:
-        print(fixed_url)
-        raise e
-    partial_file_name = '{}.json'.format(id)
-    partial_file_path = subfolder_path / partial_file_name
-    #print(partial_file_name)
-    if not ignore_cache and os.path.isfile(partial_file_path):
-        # if it's been already saved, read it
-        partial = utils.read_json(partial_file_path)
-    else:
-        # otherwise download the original claimReview from the fact checker
-        try:
-            url, partial = retrieve_claimreview(fixed_url)
-            # and save it to disk
-            utils.write_json_with_path(partial, subfolder_path, partial_file_name)
-        except Exception as e:
-            print(e)
-            return result
-    if not partial:
-        # in this case there is no claimReview metadata on the fact checker website
-        #print(c['url'])
-        # return the original claimreview
-        return []
-    if len(partial):
-        # there can be multiple claimReviews in a single fact checking page
-        for j, claimReview in enumerate(partial):
-            claimReview['url'] = fixed_url
-            # save this in the result
-            #result['{}::{}'.format(fixed_url, j)] = claimReview
-            result.append(claimReview)
+#     # this part with id and file saving is just to be able to restore the operation after a failure so that the single claims are saved onto disk on by one
+#     try:
+#         id = utils.string_to_md5(fixed_url)
+#         #print(id)
+#     except Exception as e:
+#         print(fixed_url)
+#         raise e
+#     partial_file_name = '{}.json'.format(id)
+#     partial_file_path = subfolder_path / partial_file_name
+#     #print(partial_file_name)
+#     if not ignore_cache and os.path.isfile(partial_file_path):
+#         # if it's been already saved, read it
+#         partial = utils.read_json(partial_file_path)
+#     else:
+#         # otherwise download the original claimReview from the fact checker
+#         try:
+#             url, partial = retrieve_claimreview(fixed_url)
+#             # and save it to disk
+#             utils.write_json_with_path(partial, subfolder_path, partial_file_name)
+#         except Exception as e:
+#             print(e)
+#             return result
+#     if not partial:
+#         # in this case there is no claimReview metadata on the fact checker website
+#         #print(c['url'])
+#         # return the original claimreview
+#         return []
+#     if len(partial):
+#         # there can be multiple claimReviews in a single fact checking page
+#         for j, claimReview in enumerate(partial):
+#             # the wrong claimReview.url needs to be fixed
+#             claimReview['url'] = fixed_url
+#             # save this in the result
+#             #result['{}::{}'.format(fixed_url, j)] = claimReview
+#             result.append(claimReview)
 
-    return result
+#     return result
 
-def extract_graph_edges(fact_checking_url):
-    """TODO This function does not work, look at https://github.com/MartinoMensio/credibility_graph"""
-    nodes = {}
-    links = []
-
-    for cr in fact_checking_url:
-        claim_url = cr['claim_url']
-
-        review_url = cr['url']
-        reviewer_domain = utils.get_url_domain(review_url)
-
-        nodes[review_url] = {'id': review_url, 'type': 'document'}
-        nodes[reviewer_domain] = {'id': reviewer_domain, 'type': 'source'}
-
-        link1 = {'from': reviewer_domain, 'to': review_url, 'type': 'publishes', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['publishes'], 'source': my_name}
-
-        if claim_url:
-            claim_domain = utils.get_url_domain(cu)
-            nodes[cu] = {'id': cu, 'type': 'document'}
-            nodes[claim_domain] = {'id': claim_domain, 'type': 'document'}
-
-            label = cr['label']
-            if label:
-                if label == 'true':
-                    truth_score = 1.0
-                elif label == 'fake':
-                    truth_score = 0.0
-                else:
-                    truth_score = 0.5
-                credibility = truth_score * 2 - 1.0
-            else:
-                credibility = 0.0
-
-            link2 = {'from': review_url, 'to': cu, 'type': 'reviews', 'credibility': credibility, 'confidence': utils.relationships_default_confidences['reviews'], 'source': my_name}
-            link3 = {'from': cu, 'to': claim_domain, 'type': 'published_by', 'credibility': 1.0, 'confidence': utils.relationships_default_confidences['published_by'], 'source': my_name}
-
-            # TODO add links to graph
-
-    graph = {
-        'nodes': nodes,
-        'links': links
-    }
-    # TODO save graph
-    return graph
-
-
-
-def main():
-    res = plac.call(get_claimreview_from_factcheckers)
-    print(json.dumps(res))
-
-if __name__ == "__main__":
-    main()

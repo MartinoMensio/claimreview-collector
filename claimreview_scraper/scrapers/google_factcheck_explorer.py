@@ -12,15 +12,25 @@ from collections import defaultdict
 from pprint import pprint
 from itertools import groupby
 
+from . import Scraper
 from ..processing import utils
 from ..processing import claimreview
+from ..processing import database_builder
 
 load_dotenv(find_dotenv())
 
-my_name = 'google_factcheck_explorer'
-subfolder_path = utils.data_location / my_name
+class GoogleFactcheckScraper(Scraper):
+    
+    def __init__(self):
+        self.id = 'google_factcheck_explorer'
+        Scraper.__init__(self)
 
-def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
+    def scrape(self, update=True):
+        res = retrieve(self.id, scraping=update)
+        
+        return res
+
+def get_recent(self_id, lang='', offset=0, num_results=1000, query='list:recent'):
     params = {
         'hl': lang, # the language to search
         'num_results': num_results,
@@ -47,10 +57,27 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
 
     content = json.loads(response.text[5:])
     reviews = content[0][1]
-    utils.write_json_with_path(content, subfolder_path / 'intermediate', 'raw_{}.json'.format(offset))
+    if reviews:
+        database_builder.save_original_data(self_id, [{'raw': el} for el in reviews], clean = offset==0)
+    return reviews
 
+
+def retrieve(self_id, scraping=False):
+    if scraping:
+        offset = 0
+        raws = []
+        while True:
+            print('offset', offset)
+            raw_piece = get_recent(self_id, offset=offset)
+            if not raw_piece:
+                break
+            offset += len(raw_piece)
+            raws.extend(raw_piece)
+    else:
+        raws = [el['raw'] for el in database_builder.get_original_data(self_id)]
+    
     results = []
-    for r in reviews:
+    for r in raws:
         try:
             date_published = r[0][3][0][2]
             if date_published:
@@ -106,22 +133,9 @@ def get_recent(lang='', offset=0, num_results=1000, query='list:recent'):
         except IndexError as e:
             print(json.dumps(r))
             raise(e)
-    #print(len(results))
+    
+    database_builder.add_ClaimReviews(self_id, results)
     return results
-
-def scrape():
-    offset = 0
-    claimReviews = []
-    while True:
-        print('offset', offset)
-        claims = get_recent(offset=offset)
-        if not claims:
-            break
-        offset += len(claims)
-        claimReviews.extend(claims)
-
-    utils.write_json_with_path(claimReviews, subfolder_path, 'claimReviews.json')
-    return claimReviews
 
 # def extract_urls_rebuttals_domains_factcheckers(claimReviews):
 #     urls = []
@@ -161,16 +175,9 @@ def scrape():
 
 
 
-def main(scraping=False):
-    print('scraping', scraping)
-    if scraping:
-        claimReviews = scrape()
-    else:
-        claimReviews = utils.read_json(subfolder_path / 'claimReviews.json')
-
-    #extract_urls_rebuttals_domains_factcheckers(claimReviews)
-
-    #extract_graph_edges(claimReviews)
+def main(update=True):
+    scraper = GoogleFactcheckScraper()
+    scraper.scrape(update=update)
 
 if __name__ == "__main__":
-    main(True)
+    main()

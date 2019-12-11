@@ -3,13 +3,28 @@ import requests
 import re
 from xml.etree import ElementTree
 
+from . import Scraper
 from ..processing import utils
 from ..processing import claimreview
+from ..processing import database_builder
 
-dataset = 'datacommons_feeds'
-subfolder_path = utils.data_location / 'datacommons_feeds'
 feed_directory = 'https://storage.googleapis.com/datacommons-feeds/'
 latest_feed = 'claimreview/latest/data.json'
+
+class DatacommonsScraper(Scraper):
+    
+    def __init__(self):
+        self.id = 'datacommons_feeds'
+        Scraper.__init__(self)
+
+    def scrape(self):
+        feed_data = download_latest_feed()
+        data_list = feed_data['dataFeedElement']
+        database_builder.save_original_data(self.id, data_list)
+        claim_reviews = extract_claimreviews(data_list)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+        return claim_reviews
+
 
 def download_feed(feed_url):
     pieces = feed_url.split('/')
@@ -20,13 +35,12 @@ def download_feed(feed_url):
     if response.status_code != 200:
         raise ValueError(response.status_code)
     data = response.json()
-    utils.write_json_with_path(data, subfolder_path / 'source', version + '.json')
     return data
 
-def extract_claimreviews(data_feed):
+def extract_claimreviews(data_list):
     claim_reviews = []
 
-    for item in data_feed['dataFeedElement']:
+    for item in data_list:
         if not item['item']:
             break
         for cr in item['item']:
@@ -34,16 +48,7 @@ def extract_claimreviews(data_feed):
                 # some have "item": null
                 claim_reviews.append(cr)
 
-    utils.write_json_with_path(claim_reviews, subfolder_path, 'claimReviews.json')
-
     return claim_reviews
-
-def extract_data(claim_reviews):
-    fact_checking_urls = []
-    for cr in claim_reviews:
-        fact_checking_urls.append(claimreview.to_fact_checking_url(cr, 'datacommons_feeds'))
-    utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
-
 
 def get_credibility_measures(claim_review):
     rating = claimreview.get_claim_rating(claim_review)
@@ -55,35 +60,6 @@ def get_credibility_measures(claim_review):
         credibility = (rating - 0.5) * 2
         confidence = 1.0
     return {'credibility': credibility, 'confidence': confidence}
-
-def extract_graph_data_from_claim_review(claim_review):
-    graph_data = []
-
-    item_reviewed = claim_review.get('itemReviewed', {})
-    appearances = item_reviewed.get('appearances', [])
-    first_appearance = item_reviewed.get('firstAppearance', None)
-    if first_appearance:
-        appearances.append(first_appearance)
-
-    appearances_urls = [el['url'] for el in appearances if el.get('url', None)]
-    review_url = claim_review.get('url', None)
-    review_rating = claim_review.get('reviewRating', {})
-
-    if review_url:
-        review_domain = utils.get_url_domain(review_url)
-        graph_data.append((review_domain, {'@type': 'publishes', 'source': dataset}, review_url))
-        for claim_url in appearances_urls:
-            claim_domain = utils.get_url_domain(claim_url)
-            graph_data.append((claim_domain, {'@type': 'publishes', 'source': dataset}, claim_url))
-            graph_data.append((review_url, {
-                    '@type': 'assesses',
-                    'original': review_rating,
-                    'credibility': get_credibility_measures(claim_review),
-                    'source': dataset
-                }, claim_url))
-
-
-    return graph_data
 
 
 def download_all_feeds():
@@ -106,12 +82,8 @@ def download_latest_feed():
     return download_feed(latest_feed)
 
 def main():
-    #download_all_feeds()
-    feed_data = download_latest_feed()
-    claim_reviews = extract_claimreviews(feed_data)
-    extract_data(claim_reviews)
-    #graph_data = extract_graph_data_from_feed(feed_data)
-    #utils.write_json_with_path(graph_data, subfolder_path, 'graph_data.json')
+    scraper = DatacommonsScraper()
+    scraper.scrape()
 
 if __name__ == "__main__":
     main()

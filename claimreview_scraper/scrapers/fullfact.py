@@ -6,12 +6,29 @@ from bs4 import BeautifulSoup
 import dateparser
 from tqdm import tqdm
 
+from . import Scraper
 from ..processing import utils
 from ..processing import claimreview
+from ..processing import database_builder
 
 facts_url = 'https://fullfact.org/'
 
-my_path = utils.data_location / 'fullfact'
+class FullfactScraper(Scraper):
+    def __init__(self):
+        self.id = 'fullfact'
+        Scraper.__init__(self)
+
+    def scrape(self, update=True):
+        if update:
+            all_reviews = scrape_all(self.id)
+        else:
+            all_reviews = database_builder.get_original_data(self.id)
+            all_reviews = [el for el in all_reviews]
+        claim_reviews = []
+        for r in tqdm(all_reviews):
+            url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
+            claim_reviews.extend(cr)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
 
 
 def postlist_selector(soup):
@@ -53,10 +70,11 @@ def feed_selector(soup):
     return result
 
 
-def scrape_fb_3rd_party():
+def scrape_fb_3rd_party(self_id):
     """The page https://fullfact.org/online/ contains all the debunks published for the Facebook 3rd party fact-checking"""
     page = 1
-    debunks = {}
+    already_here = database_builder.get_original_data(self_id)
+    debunks = {el['url']: el for el in already_here}
     while True:
         listing_page_url = f'https://fullfact.org/online/?page={page}'
         print(listing_page_url)
@@ -69,19 +87,20 @@ def scrape_fb_3rd_party():
         articles = postlist_selector(soup)
         for a in articles:
             url = a['url']
-            debunks[url] = a
+            if url not in debunks:
+                debunks[url] = a
+                database_builder.save_original_data(self_id, [a], clean=False)
 
         page += 1
 
     print('online 3rd party', len(debunks))
+    
     return debunks
 
 
-def scrape_latest():
-    if os.path.exists(my_path / 'source' / 'latest.json'):
-        all_statements = utils.read_json(my_path / 'source' / 'latest.json')
-    else:
-        all_statements = {}
+def scrape_latest(self_id):
+    already_here = database_builder.get_original_data(self_id)
+    all_statements = {el['url']: el for el in already_here}
 
     print(facts_url)
     response = requests.get(facts_url)
@@ -94,14 +113,18 @@ def scrape_latest():
     articles = feed_selector(soup.select_one('div.news-feed #mostRecent'))
     for a in articles:
         url = a['url']
-        all_statements[url] = a
+        if url not in all_statements:
+            all_statements[url] = a
+            database_builder.save_original_data(self_id, [a], clean=False)
 
     print('latest', len(all_statements))
-    utils.write_json_with_path(all_statements, my_path / 'source', 'latest.json')
 
     return all_statements
 
-def deep_scrape():
+def deep_scrape(self_id):
+    already_here = database_builder.get_original_data(self_id)
+    all_statements = {el['url']: el for el in already_here}
+
     result = {}
     # nested by category
     homepage = requests.get('https://fullfact.org/')
@@ -130,37 +153,28 @@ def deep_scrape():
                 url = a['url']
 
                 result[url] = a
+                if url not in all_statements:
+                    all_statements[url] = a
+                    database_builder.save_original_data(self_id, [a], clean=False)
 
-    utils.write_json_with_path(result, my_path / 'source', 'deep_scrape.json')
     return result
 
 
 
-def scrape_all():
-    online_3rd = scrape_fb_3rd_party()
-    latest = scrape_latest()
-    deep = deep_scrape()
+def scrape_all(self_id):
+    online_3rd = scrape_fb_3rd_party(self_id)
+    latest = scrape_latest(self_id)
+    deep = deep_scrape(self_id)
     all_debunks = {**online_3rd, **latest, **deep}
     print('total articles', len(all_debunks))
 
-    utils.write_json_with_path(all_debunks, my_path / 'source', 'all_debunks.json')
-    return all_debunks
+    return all_debunks.values()
 
-def get_claimreviews():
-    debunks = utils.read_json(my_path / 'source' / 'all_debunks.json')
-
-    all_claim_reviews = []
-    for debunk in tqdm(debunks.values()):
-        url = debunk['url']
-        claim_reviews = claimreview.get_claimreview_from_factcheckers(url)
-        #print(type(claim_review), claim_review)
-        all_claim_reviews.extend(claim_reviews)
-    utils.write_json_with_path(all_claim_reviews, my_path, 'claimReviews.json')
-
-    print(len(all_claim_reviews))
-    return all_claim_reviews
 
 
 def main():
-    scrape_all()
-    get_claimreviews()
+    scraper = FullfactScraper()
+    scraper.scrape()
+
+if __name__ == "__main__":
+    main()

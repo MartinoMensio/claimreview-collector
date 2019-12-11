@@ -2,12 +2,12 @@
 
 import requests
 
-endpoint = 'http://localhost:5000/misinfo/api/resolve_url'
+# endpoint = 'https://misinfo.me/misinfo/api/utils/unshorten'
+endpoint = 'http://localhost:5000/misinfo/api/utils/unshorten'
 
 def unshorten(url):
     result = requests.get(endpoint, params={'url': url}).json()
-
-    return result
+    return result['url_full']
 
 
 

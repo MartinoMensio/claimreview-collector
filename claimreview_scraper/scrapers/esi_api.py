@@ -7,55 +7,71 @@ import rdflib
 from pyld import jsonld
 import json
 
+from . import Scraper
+from ..processing import database_builder
 from ..processing import utils
 
-subfolder_path = utils.data_location / 'esi_api'
+class EsiScraper(Scraper):
+    def __init__(self):
+        self.id = 'esi_api'
+        Scraper.__init__(self)
+        # TODO set environment variables
 
-def get_all_collection(collection_name):
-    ESI_USER = os.environ['ESI_USER']
-    ESI_PASS = os.environ['ESI_PASS']
-    ESI_ENDPOINT = 'https://coinform.expertsystemcustomer.com/cc/api/v1/search'
-    start = 0
-    all_docs = []
-    while True:
-        params = {
-            'collection': collection_name,
-            'start': start,
-            'q_schema_org_cr_n3':'*'
-        }
-        # TODO the certificate verification has to be enabled!
-        response = requests.get(ESI_ENDPOINT, params=params, auth=HTTPBasicAuth(ESI_USER, ESI_PASS), verify=False)
-        print(response.url)
-        if response.status_code == 429:
-            print(response.text)
-            print('sleeping for 1 minute')
-            time.sleep(60)
-            continue
-        if response.status_code != 200:
-            print(response.text)
-            raise ValueError(response.status_code)
+    def scrape(self, scraping=False):
+        # TODO set scraping to True when ESI dataset will be updated
+        if scraping:
+            database_builder.db[self.id].drop()
+            self.get_all_collection('factcheckers')
+            self.get_all_collection('fc-dev')
 
-        response_json = response.json()
-        docs = response_json['response']['docs']
-        if not docs:
-            break
-        print(collection_name, start, len(docs))
-        utils.write_json_with_path(response_json, subfolder_path / 'source', f'responses_{collection_name}_{start}.json')
+        all_docs = self.read_docs()
+        claimreviews = extract_claimreviews(all_docs)
+        database_builder.add_ClaimReviews(self.id, claimreviews)
 
-        all_docs.extend(docs)
-        start += len(docs)
 
-    utils.write_json_with_path(all_docs, subfolder_path / 'source', f'docs_{collection_name}.json')
+    def get_all_collection(self, collection_name):
+        ESI_USER = os.environ['ESI_USER']
+        ESI_PASS = os.environ['ESI_PASS']
+        ESI_ENDPOINT = 'https://coinform.expertsystemcustomer.com/cc/api/v1/search'
+        start = 0
+        all_docs = []
+        first = True # if it is the first iteration or not
+        while True:
+            params = {
+                'collection': collection_name,
+                'start': start,
+                'q_schema_org_cr_n3':'*'
+            }
+            # TODO the certificate verification has to be enabled!
+            response = requests.get(ESI_ENDPOINT, params=params, auth=HTTPBasicAuth(ESI_USER, ESI_PASS), verify=False)
+            print(response.url)
+            if response.status_code == 429:
+                print(response.text)
+                print('sleeping for 1 minute')
+                time.sleep(60)
+                continue
+            if response.status_code != 200:
+                print(response.text)
+                raise ValueError(response.status_code)
 
-def read_docs():
-    files = [subfolder_path / 'source' / 'docs_factcheckers.json', subfolder_path / 'source' / 'docs_fc-dev.json']
+            response_json = response.json()
+            docs = response_json['response']['docs']
+            if not docs:
+                break
+            print(collection_name, start, len(docs))
+            database_builder.save_original_data(self.id, docs, clean=False)
 
-    all_docs = []
-    for f_name in files:
-        docs = utils.read_json(f_name)
-        all_docs.extend(docs)
+            all_docs.extend(docs)
+            start += len(docs)
+            first = False
 
-    return all_docs
+        return all_docs
+
+    def read_docs(self):
+        all_docs = database_builder.get_original_data(self.id)
+        all_docs = [el for el in all_docs]
+
+        return all_docs
 
 def extract_claimreviews(all_docs):
     #context = {"@vocab": "http://schema.org/"}
@@ -119,14 +135,9 @@ def filter_other_ns(obj):
 
 
 
-def main(scraping=True):
-    if scraping:
-        get_all_collection('factcheckers')
-        get_all_collection('fc-dev')
-
-    all_docs = read_docs()
-    claimreviews = extract_claimreviews(all_docs)
-    utils.write_json_with_path(claimreviews, subfolder_path, 'claimReviews.json')
+def main():
+    scraper = EsiScraper()
+    scraper.scrape()
 
 if __name__ == "__main__":
     load_dotenv()

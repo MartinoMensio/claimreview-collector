@@ -37,7 +37,7 @@ processing_functions_datasets = {
 }
 
 scrape_factchecking_functions = {
-    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(True),
+    'google_factcheck_explorer': lambda: google_factcheck_explorer.main(),
     'esi_api': esi_api.main,
     'datacommons_feeds': datacommons_feeds.main,
     'factcheckni': factcheckni.main,
@@ -115,38 +115,3 @@ def find_processing_function(key):
     else:
         raise ValueError(key)
 
-def retrieve_graph_edges(reprocess=False):
-    print('retrieving graph edges, reprocess = ', reprocess)
-    sources = utils.read_sources()
-
-    graph = {
-        'nodes': {},
-        'links': []
-    }
-
-    fact_checking_urls = utils.read_json(utils.data_location / 'aggregated_fact_checking_urls.json')
-    graph = claimreview.extract_graph_edges(fact_checking_urls)
-
-    for s_key, s in sources.items():
-        if s.get('graph_enabled', None):
-            # this source has been prepared for credibility graph
-            # so do what it requires
-            processing_function = find_processing_function(s_key)
-            if reprocess:
-                processing_function()
-            # and then collect the nodes and edges
-            subgraph = utils.read_json(utils.data_location / s_key / 'graph.json')
-            # TODO manage merge of nodes
-            graph['nodes'].update(subgraph['nodes'])
-            graph['links'].extend(subgraph['links'])
-
-    utils.write_json_with_path(graph, utils.data_location, 'graph.json')
-
-def save_graph_in_db():
-    graph = utils.read_json(utils.data_location / 'graph.json')
-    database_builder.save_graph(graph)
-
-
-def build_graph(reprocess=False):
-    retrieve_graph_edges(reprocess)
-    save_graph_in_db()

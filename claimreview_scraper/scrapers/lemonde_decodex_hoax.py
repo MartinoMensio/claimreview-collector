@@ -3,9 +3,24 @@ import time
 import requests
 import itertools
 
-from ..processing import utils
+from ..processing import utils, claimreview, database_builder
+from . import Scraper
+import tqdm
 
-subfolder_path = utils.data_location / 'lemonde_decodex_hoax'
+class LemondeDecodexHoaxScraper(Scraper):
+    def __init__(self):
+        self.id = 'lemonde_decodex_hoax'
+        Scraper.__init__(self)
+
+    def scrape(self, update=True):
+        if update:
+            hoaxes = download_hoaxes()
+            # TODO change serialisation, keys cannot contain dots etc...
+            # database_builder.save_original_data(self.id, [hoaxes])
+        else:
+            hoaxes = database_builder.get_original_data(self.id)[0]
+        claim_reviews = create_claimreview_from_hoaxes(hoaxes)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
 
 hoaxes_location = 'https://s1.lemde.fr/mmpub/data/decodex/hoax/hoax_debunks.json'
 
@@ -18,7 +33,7 @@ def get_rating_value(label):
     }[label]
 
 
-def interpret_hoaxes(hoaxes):
+def create_claimreview_from_hoaxes(hoaxes):
     def by_id_fn(el): return el[1]
     appearances_by_debunk_id = itertools.groupby(
         sorted(hoaxes['hoaxes'].items(), key=by_id_fn), key=by_id_fn)
@@ -58,8 +73,6 @@ def interpret_hoaxes(hoaxes):
 
         claim_reviews.append(claim_review)
 
-    utils.write_json_with_path(claim_reviews, subfolder_path, 'claimReviews.json')
-
     return claim_reviews
 
 
@@ -70,10 +83,13 @@ def download_hoaxes():
         raise ValueError(response.status_code)
 
     result = response.json()
-    utils.write_json_with_path(result, subfolder_path / 'source', 'response.json')
     return result
 
 
+
 def main():
-    hoaxes = download_hoaxes()
-    interpret_hoaxes(hoaxes)
+    scraper = LemondeDecodexHoaxScraper()
+    scraper.scrape()
+
+if __name__ == "__main__":
+    main()

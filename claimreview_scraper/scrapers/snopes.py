@@ -4,14 +4,37 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import dateparser
+import tqdm
+from multiprocessing.pool import ThreadPool
 
-from ..processing import utils
+from ..processing import utils, database_builder, claimreview
+from . import Scraper
 
 LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
 
-my_path = utils.data_location / 'snopes'
+class SnopesScraper(Scraper):
+    def __init__(self):
+        self.id = 'snopes'
+        Scraper.__init__(self)
 
-def main():
+    def scrape(self, update=True):
+        if update:
+            all_reviews = retrieve_factchecking_urls(self.id)
+        else:
+            all_reviews = database_builder.get_original_data(self.id)
+            all_reviews = [el for el in all_reviews]
+        claim_reviews = []
+        with ThreadPool(8) as pool:
+            urls = [r['url'] for r in all_reviews]
+            for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+                url_fixed, cr = one_result
+                claim_reviews.extend(cr)
+        # for r in tqdm(all_reviews):
+        #     url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
+        #     claim_reviews.extend(cr)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+
+def retrieve_factchecking_urls(self_id):
     page = 1
     # if os.path.exists(my_path / 'fact_checking_urls.json'):
     #     all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
@@ -63,7 +86,13 @@ def main():
         page += 1
 
 
-    utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
+    database_builder.save_original_data(self_id, all_statements)
+    return all_statements
+
+
+def main():
+    scraper = SnopesScraper()
+    scraper.scrape()
 
 if __name__ == "__main__":
     main()

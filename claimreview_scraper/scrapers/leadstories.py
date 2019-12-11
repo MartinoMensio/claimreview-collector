@@ -5,13 +5,15 @@ import re
 import os
 from bs4 import BeautifulSoup
 import tqdm
+from multiprocessing.pool import ThreadPool
 
+from . import Scraper
 from ..processing import utils
 from ..processing import claimreview
+from ..processing import database_builder
 
 LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
 
-my_path = utils.data_location / 'leadstories'
 
 labels_in_title = [
     'Old Fake News: ',
@@ -19,12 +21,34 @@ labels_in_title = [
     'Hoax Alert: '
 ]
 
-def retrieve_factchecking_urls():
+class LeadStoriesScraper(Scraper):
+    def __init__(self):
+        self.id = 'leadstories'
+        Scraper.__init__(self)
+
+    def scrape(self, update=True):
+        if update:
+            all_reviews = retrieve_factchecking_urls(self.id)
+        else:
+            all_reviews = database_builder.get_original_data(self.id)
+            all_reviews = [el for el in all_reviews]
+        claim_reviews = []
+        with ThreadPool(8) as pool:
+            urls = [r['url'] for r in all_reviews]
+            for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+                url_fixed, cr = one_result
+                claim_reviews.extend(cr)
+        # for r in tqdm(all_reviews):
+        #     url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
+        #     claim_reviews.extend(cr)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+
+def retrieve_factchecking_urls(self_id):
     page = 1
-    if os.path.exists(my_path / 'fact_checking_urls.json'):
-        all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
-    else:
-        all_statements = []
+    # if os.path.exists(my_path / 'fact_checking_urls.json'):
+    #     all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+    # else:
+    all_statements = []
     go_on = True
     while go_on:
         facts_url = LIST_URL.format(page)
@@ -53,11 +77,11 @@ def retrieve_factchecking_urls():
                     label = claimreview.simplify_label(label)
                     break
 
-            found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
-            if found:
-                print('found')
-                go_on = False
-                break
+            # found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
+            # if found:
+            #     print('found')
+            #     go_on = False
+            #     break
 
             all_statements.append({
                 'url': url,
@@ -71,23 +95,13 @@ def retrieve_factchecking_urls():
         print(len(all_statements))
         page += 1
 
+    database_builder.save_original_data(self_id, all_statements)
+    return all_statements
 
-    utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
-
-def download_claimReviews():
-    fcus = utils.read_json(my_path / 'fact_checking_urls.json')
-    results = []
-    for fcu in tqdm.tqdm(fcus):
-        url = fcu['url']
-        res = claimreview.get_claimreview_from_factcheckers(url)
-        results.extend(res)
-
-    utils.write_json_with_path(results, my_path, 'claimReviews.json')
-    
 
 def main():
-    retrieve_factchecking_urls()
-    download_claimReviews()
+    scraper = LeadStoriesScraper()
+    scraper.scrape()
 
 if __name__ == "__main__":
     main()

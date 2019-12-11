@@ -13,25 +13,22 @@ from pathlib import Path
 
 from . import unshortener
 from . import utils
+from . import database_builder
 
 
-cache_path = utils.data_location / '..' / 'cache'
-web_pages_path = cache_path / 'pages'
-index_file = cache_path / 'index.json'
+# cache_path = utils.data_location / '..' / 'cache'
+# web_pages_path = cache_path / 'pages'
+# index_file = cache_path / 'index.json'
 
 index = {}
 
-def read_file(path):
-    with open(path) as f:
-        return f.read()
+# def read_file(path):
+#     with open(path) as f:
+#         return f.read()
 
-def write_file(path, content):
-    with open(path, 'w') as f:
-        f.write(content)
-
-def save_index():
-    with open(index_file, 'w') as f:
-        json.dump(index, f, indent=2)
+# def write_file(path, content):
+#     with open(path, 'w') as f:
+#         f.write(content)
 
 def string_to_md5(string):
     return hashlib.md5(string.encode()).hexdigest()
@@ -39,30 +36,29 @@ def string_to_md5(string):
 def url_to_filename(url):
     return '{}.cache'.format(string_to_md5(url))
 
-def get(url, unshorten=False, force_refresh=False, headers={}):
+def get(url, unshorten=True, force_refresh=False, verify=True, headers={}):
     if unshorten:
-        raise NotImplementedError()
-    filename = url_to_filename(url)
-    if filename in index and not force_refresh:
+        url_short = url
+        url = unshortener.unshorten(url_short)
+    cache_hit = database_builder.cache_get(url)
+    if cache_hit and not force_refresh:
         # cached
-        return read_file(web_pages_path / filename)
+        return cache_hit['html']
     else:
         # new
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=verify)
         if response.status_code != 200:
             print('WARN', response.status_code, 'for', url)
-        body = response.text
-        write_file(web_pages_path / filename, body)
-        index[filename] = url
-        save_index()
-        return body
+        html = response.text
+        database_builder.cache_put(url, html)
+        return html
 
 
 
 
-if not os.path.isdir(cache_path):
-    os.makedirs(cache_path)
-if not os.path.isdir(web_pages_path):
-    os.makedirs(web_pages_path)
-if os.path.isfile(index_file):
-    index = json.loads(read_file(index_file))
+# if not os.path.isdir(cache_path):
+#     os.makedirs(cache_path)
+# if not os.path.isdir(web_pages_path):
+#     os.makedirs(web_pages_path)
+# if os.path.isfile(index_file):
+#     index = json.loads(read_file(index_file))

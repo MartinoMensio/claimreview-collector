@@ -3,21 +3,40 @@
 import requests
 import re
 import os
+from tqdm import tqdm
 from bs4 import BeautifulSoup
 
+from . import Scraper
 from ..processing import utils
+from ..processing import database_builder
+from ..processing import claimreview
+
+# FactcheckNI does not embed ClaimReview!!! (everything here is useless)
 
 LIST_URL = 'https://factcheckni.org/page/{}/'
 
-my_path = utils.data_location / 'factcheckni'
+class FactcheckNIScraper(Scraper):
+    def __init__(self):
+        self.id = 'factcheckni'
+        Scraper.__init__(self)
 
-def main():
+    def scrape(self, update=True):
+        if update:
+            all_reviews = retrieve(self.id)
+        else:
+            all_reviews = database_builder.get_original_data(self.id)
+            all_reviews = [el for el in all_reviews]
+        claim_reviews = []
+        for r in tqdm(all_reviews):
+            url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
+            claim_reviews.extend(cr)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+
+def retrieve(self_id):
     page = 1
-    if os.path.exists(my_path / 'fact_checking_urls.json'):
-        all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
-    else:
-        all_statements = []
     go_on = True
+    first = True
+    all_statements = []
     while go_on:
         facts_url = LIST_URL.format(page)
         print(facts_url)
@@ -28,6 +47,7 @@ def main():
 
         soup = BeautifulSoup(response.text, 'lxml')
 
+        assessments = []
         for s in soup.select('main#main article'):
             url = s.select('h2.entry-title a')[0]['href']
             title = s.select('h2.entry-title a')[0].text.strip()
@@ -46,7 +66,7 @@ def main():
                 go_on = False
                 break
 
-            all_statements.append({
+            assessments.append({
                 'url': url,
                 'title': title,
                 'subtitle': subtitle,
@@ -54,10 +74,17 @@ def main():
                 'date': date,
                 'source': 'factcheckni'
             })
-
+        all_statements.extend(assessments)
         print(len(all_statements))
+        database_builder.save_original_data(self_id, assessments, clean=first)
+        first = False
         page += 1
 
+    return all_statements
 
+def main():
+    scraper = FactcheckNIScraper()
+    scraper.scrape()
 
-    utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
+if __name__ == "__main__":
+    main()

@@ -3,12 +3,22 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+from . import Scraper
+from ..processing import database_builder
 from ..processing import utils
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 
-my_name = 'euvsdisinfo'
-my_path = utils.data_location / my_name
+class EuVsDisinfoScraper(Scraper):
+    def __init__(self):
+        self.id = 'euvsdisinfo'
+        Scraper.__init__(self)
+
+    def scrape(self):
+        all_reviews = retrieve(self.id)
+        claim_reviews = create_claim_reviews(all_reviews)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+
 
 def get_credibility_measures(original_review):
     return {'credibility': -1.0, 'confidence': 1.0}
@@ -35,7 +45,7 @@ def create_claim_reviews(all_reviews):
                 "ratingValue": 1,
                 "bestRating": 5,
                 "worstRating": 1,
-                "alternateName": 'misinfo'
+                "alternateName": 'disinfo'
             },
             "itemReviewed": {
                 "@type": "Claim",
@@ -46,17 +56,14 @@ def create_claim_reviews(all_reviews):
 
         claim_reviews.append(claim_review)
 
-    utils.write_json_with_path(claim_reviews, my_path, 'claimReviews.json')
     return claim_reviews
 
 
-def scrape():
+def retrieve(self_id):
     offset = 0
-    if os.path.exists(my_path / 'source' / 'all_reviews.json'):
-        all_reviews = utils.read_json(my_path / 'source' / 'all_reviews.json')
-    else:
-        all_reviews = {}
+    all_reviews = {el['url']: el for el in database_builder.get_original_data(self_id)}
     go_on = True
+    first = True
     while go_on:
         facts_url = LIST_URL.format(offset)
         print(facts_url)
@@ -118,7 +125,7 @@ def scrape():
                 disproof = soup.select_one('div.b-report__disproof-text').text.strip()
 
 
-                all_reviews[url] = {
+                new_report = {
                     'url': url,
                     'title': title,
                     'date': date,
@@ -131,17 +138,24 @@ def scrape():
                     'claim_urls': claim_urls,
                     'archived_claim_urls': archived_claim_urls,
                     'disproof': disproof,
-                    'source': my_name
+                    'source': self_id
                 }
+                all_reviews[url] = new_report
+                # clean always false, the check on duplicate is already done by the dict all_reviews
+                database_builder.save_original_data(self_id, [new_report], clean=False)
+                first = False
 
         print(len(all_reviews))
         #print(all_statements)
         offset += 10
 
-    utils.write_json_with_path(all_reviews, my_path / 'source', 'all_reviews.json')
     return all_reviews
 
 
 def main():
-    all_reviews = scrape()
-    create_claim_reviews(all_reviews)
+    scraper = EuVsDisinfoScraper()
+    scraper.scrape()
+
+
+if __name__ == "__main__":
+    main()

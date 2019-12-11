@@ -273,7 +273,8 @@ def load_into_db():
     #     file_name='aggregated_rebuttals_with_fcu.json')
     # database_builder.load_fact_checking_urls_zero()
 
-    database_builder.load_claimReviews()
+    # database_builder.load_claimReviews()
+    raise NotImplementedError()
 
 
 def check_and_add_url(new_url, new_label, new_sources, aggregated_urls):

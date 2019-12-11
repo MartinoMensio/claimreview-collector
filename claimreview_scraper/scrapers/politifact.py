@@ -4,22 +4,46 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import dateparser
+import tqdm
+from multiprocessing.pool import ThreadPool
 
 from ..processing import utils
-from ..processing import claimreview
+from ..processing import claimreview, database_builder
+from . import Scraper
 
 LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
 STATEMENT_SELECTOR = 'div.statement'
 
 
-my_path = utils.data_location / 'politifact'
+class PolitifactScraper(Scraper):
+    def __init__(self):
+        self.id = 'politifact'
+        Scraper.__init__(self)
 
-def main():
+    def scrape(self, update=True):
+        if update:
+            all_reviews = retrieve_factchecking_urls(self.id)
+        else:
+            all_reviews = database_builder.get_original_data(self.id)
+            all_reviews = [el for el in all_reviews]
+        claim_reviews = []
+        with ThreadPool(8) as pool:
+            urls = [r['url'] for r in all_reviews]
+            for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+                url_fixed, cr = one_result
+                if not cr:
+                    # print('unrecovered from', url_fixed)
+                    pass
+                else:
+                    claim_reviews.extend(cr)
+        # for r in tqdm(all_reviews):
+        #     url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
+        #     claim_reviews.extend(cr)
+        database_builder.add_ClaimReviews(self.id, claim_reviews)
+
+def retrieve_factchecking_urls(self_id):
     page = 1
-    if os.path.exists(my_path / 'fact_checking_urls.json'):
-        all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
-    else:
-        all_statements = []
+    all_statements = []
     go_on = True
     while go_on:
         facts_url = LIST_URL.format(page)
@@ -45,11 +69,11 @@ def main():
             date = s.select('p.statement__edition span.article__meta')[0].text
             date = dateparser.parse(date).isoformat()
 
-            found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
-            if found:
-                print('found')
-                go_on = False
-                break
+            # found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
+            # if found:
+            #     print('found')
+            #     go_on = False
+            #     break
 
             #print(link, author, rating)
             all_statements.append({
@@ -67,4 +91,14 @@ def main():
         page += 1
 
 
-    utils.write_json_with_path(all_statements, my_path, 'fact_checking_urls.json')
+    database_builder.save_original_data(self_id, all_statements)
+    return all_statements
+
+
+
+def main():
+    scraper = PolitifactScraper()
+    scraper.scrape()
+
+if __name__ == "__main__":
+    main()
