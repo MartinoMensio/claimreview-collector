@@ -1,4 +1,6 @@
 data
+dump.tar.gz
+dump/**
 cache/**
 .DS_Store
 .vscode/**

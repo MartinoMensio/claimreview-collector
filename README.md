@@ -75,10 +75,22 @@ For an approximate size of each of the origins, look at https://docs.google.com/
 If you want to get from mongodb the ClaimReviews that match a certain query:
 
 ```bash
-mongoexport -d datasets_resources -c claim_reviews -q '{url: /sciencefeedback|climatefeedback|healthfeedback/}' | sed '$!s/$/,/' > sciencefeedback.json
+mongoexport -d claimreview_scraper -c claim_reviews -q '{url: /sciencefeedback|climatefeedback|healthfeedback/}' | sed '$!s/$/,/' > sciencefeedback.json
 echo -e "[$(cat sciencefeedback.json)]" > sciencefeedback.json
 ```
 
+## Dumps
+
+```bash
+mongodump -d claimreview_scraper -o dump
+tar -zcvf dump.tar.gz dump
+```
+
+Import
+```bash
+tar -xvzf dump.tar.gz
+mongorestore --db claimreview_scraper dump/claimreview_scraper
+```
 
 ## TODOs
 
