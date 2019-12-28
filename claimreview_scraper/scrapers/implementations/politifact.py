@@ -18,6 +18,9 @@ STATEMENT_SELECTOR = 'div.statement'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'politifact'
+        self.homepage = 'https://www.politifact.com/truth-o-meter/'
+        self.name = 'PolitiFact'
+        self.description = 'PolitiFact Truth-o-meter.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

@@ -10,6 +10,9 @@ import tqdm
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'lemonde_decodex_hoax'
+        self.homepage = 'https://www.lemonde.fr/verification/'
+        self.name = 'Le Monde - Les Decodeurs'
+        self.description = 'The Decodex is a tool to help you check the information circulating on the Internet and find rumors, exaggerations or distortions.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

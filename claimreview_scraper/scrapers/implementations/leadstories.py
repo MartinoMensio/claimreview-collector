@@ -24,6 +24,9 @@ labels_in_title = [
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'leadstories'
+        self.homepage = 'https://leadstories.com/'
+        self.name = 'Lead Stories'
+        self.description = '''Lead Stories is an innovative fact checking and debunking website at the intersection of big data and journalism that launched in 2015. Our editorial team used the technology provided by Trendolizer™ (patent pending) to quickly find the most trending content on the internet to write about but our mantra has always been "Just Because It's Trending Doesn't Mean It's True."'''
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

@@ -18,6 +18,9 @@ LIST_URL = 'https://factcheckni.org/page/{}/'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'factcheckni'
+        self.homepage = 'https://factcheckni.org/'
+        self.name = 'FactCheck Northern Ireland'
+        self.description = 'Misinformation, disinformation and rumours have the potential to spread rapidly on social media, undermining trust in public discourse and damaging social cohesion. FactCheckNI established Northern Ireland’s first and only dedicated fact-checking service.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

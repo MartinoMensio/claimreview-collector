@@ -21,6 +21,9 @@ class Scraper(ScraperBase):
     
     def __init__(self):
         self.id = 'datacommons_research_dataset'
+        self.homepage = 'https://www.datacommons.org/factcheck/download#research-data'
+        self.name = 'DataCommons - Research Dataset'
+        self.description = 'The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field "url" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers\' sites.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
@@ -33,13 +36,13 @@ class Scraper(ScraperBase):
 
 def download_latest_release():
     # find the latest release
-    homepage = 'https://www.datacommons.org'
-    response = requests.get(f'{homepage}/factcheck/download')
+    base_link = 'https://www.datacommons.org'
+    response = requests.get(f'{base_link}/factcheck/download')
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'lxml')
 
     download_a = soup.select_one('a#download')
-    link = f"{homepage}{download_a['href']}"
+    link = f"{base_link}{download_a['href']}"
     file_name = link.split('/')[-1]
     version = file_name.split('.')[0]
     print('version:', version)

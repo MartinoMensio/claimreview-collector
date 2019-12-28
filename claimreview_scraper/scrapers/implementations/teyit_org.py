@@ -13,6 +13,9 @@ HOMEPAGE = 'https://teyit.org'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'teyit_org'
+        self.homepage = 'https://teyit.org/'
+        self.name = 'teyit.org'
+        self.description = 'teyit.org is an independent fact-checking organization based in Turkey. At a time when the trust in media is at all-time low, our main aims are to prevent false information from spreading online, help media consumers develop their media literacy skills, and develop methods to promote critical thinking.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

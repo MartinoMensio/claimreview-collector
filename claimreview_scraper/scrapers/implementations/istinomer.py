@@ -13,6 +13,9 @@ from .. import ScraperBase
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'istinomer'
+        self.homepage = 'https://www.istinomer.rs/'
+        self.name = 'Istinomer'
+        self.description = 'Istinomer is a member of The Press Council and respects Serbian Journalists’ Code of Ethics'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

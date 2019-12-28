@@ -15,6 +15,9 @@ LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'snopes'
+        self.homepage = 'https://www.snopes.com/fact-check/'
+        self.name = 'Snopes'
+        self.description = 'Snopes got its start in 1994, investigating urban legends, hoaxes, and folklore. Founder David Mikkelson, later joined by his wife, was publishing online before most people were connected to the internet. As demand for reliable fact checks grew, so did Snopes. Now it’s the oldest and largest fact-checking site online, widely regarded by journalists, folklorists, and readers as an invaluable research companion.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

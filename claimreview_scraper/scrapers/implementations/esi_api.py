@@ -14,6 +14,9 @@ from ...processing import utils
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'esi_api'
+        self.homepage = 'https://coinform.expertsystemcustomer.com/'
+        self.name = 'ESI API - CoInform'
+        self.description = 'API developed by ESI to collect and analyse articles. We query the articles that contain ClaimReview annotations.'
         ScraperBase.__init__(self)
         # TODO set environment variables
 

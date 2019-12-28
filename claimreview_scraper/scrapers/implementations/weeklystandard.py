@@ -16,6 +16,9 @@ LIST_URL = 'https://www.washingtonexaminer.com/tag/tws-fact-check'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'weeklystandard'
+        self.homepage = 'https://www.washingtonexaminer.com/'
+        self.name = 'Washington Examiner'
+        self.description = '''The Washington Examiner brings the best in breaking news and analysis on politics. With in-depth news coverage, diligent investigative reporting and thoughtful commentary, we'll make sure you're always in the know about Washington's latest exploits'''
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

@@ -15,6 +15,9 @@ LIST_URL = 'https://www.factcheck.org/page/{}/'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'factcheck_org'
+        self.homepage = 'https://www.factcheck.org/'
+        self.name = 'FactCheck.org'
+        self.description = 'FactCheck.org is a project of the Annenberg Public Policy Center of the University of Pennsylvania. The APPC was established by publisher and philanthropist Walter Annenberg to create a community of scholars within the University of Pennsylvania that would address public policy issues at the local, state and federal levels.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):

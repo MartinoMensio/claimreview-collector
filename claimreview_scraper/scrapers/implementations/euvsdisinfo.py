@@ -12,6 +12,9 @@ LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'euvsdisinfo'
+        self.homepage = 'https://euvsdisinfo.eu/disinformation-cases/'
+        self.name = 'EU vs Disinfo - Disinfo database'
+        self.description = 'EUvsDisinfo is the flagship project of the European External Action Service’s East StratCom Task Force. It was established in 2015 to better forecast, address, and respond to the Russian Federation’s ongoing disinformation campaigns affecting the European Union, its Member States, and countries in the shared neighbourhood.\n EUvsDisinfo’s core objective is to increase public awareness and understanding of the Kremlin’s disinformation operations, and to help citizens in Europe and beyond develop resistance to digital information and media manipulation.'
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
