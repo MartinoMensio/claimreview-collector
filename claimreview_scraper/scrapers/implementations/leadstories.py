@@ -1,24 +1,30 @@
 #!/usr/bin/env python
 
 import requests
+import re
 import os
 from bs4 import BeautifulSoup
-import dateparser
 import tqdm
 from multiprocessing.pool import ThreadPool
 
-from ..processing import utils
-from ..processing import claimreview, database_builder
-from . import Scraper
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import claimreview
+from ...processing import database_builder
 
-LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
-STATEMENT_SELECTOR = 'div.statement'
+LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
 
 
-class PolitifactScraper(Scraper):
+labels_in_title = [
+    'Old Fake News: ',
+    'Fake News: ',
+    'Hoax Alert: '
+]
+
+class Scraper(ScraperBase):
     def __init__(self):
-        self.id = 'politifact'
-        Scraper.__init__(self)
+        self.id = 'leadstories'
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -31,11 +37,7 @@ class PolitifactScraper(Scraper):
             urls = [r['url'] for r in all_reviews]
             for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
                 url_fixed, cr = one_result
-                if not cr:
-                    # print('unrecovered from', url_fixed)
-                    pass
-                else:
-                    claim_reviews.extend(cr)
+                claim_reviews.extend(cr)
         # for r in tqdm(all_reviews):
         #     url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
         #     claim_reviews.extend(cr)
@@ -43,6 +45,9 @@ class PolitifactScraper(Scraper):
 
 def retrieve_factchecking_urls(self_id):
     page = 1
+    # if os.path.exists(my_path / 'fact_checking_urls.json'):
+    #     all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
+    # else:
     all_statements = []
     go_on = True
     while go_on:
@@ -52,22 +57,25 @@ def retrieve_factchecking_urls(self_id):
         if response.status_code != 200:
             print('status code', response.status_code)
             break
-        #print(response.text)
+
         soup = BeautifulSoup(response.text, 'lxml')
-        page_number_real = soup.select('div.pagination span.step-links__current')[0].text
-        if str(page) not in page_number_real:
-            print(page_number_real)
+        current_page = soup.select('a.is_current')
+        if not current_page:
             break
-        statements = soup.select(STATEMENT_SELECTOR)
-        #print(statements)
-        for s in statements:
-            url = 'https://www.politifact.com' + s.select('p.statement__text a.link')[0]['href']
-            claim = s.select('p.statement__text a.link')[0].text
-            author = s.select('div.statement__source a')[0].text
-            label = s.select('div.meter img')[0]['alt']
-            reason = s.select('div.meter p.quote')[0].text
-            date = s.select('p.statement__edition span.article__meta')[0].text
-            date = dateparser.parse(date).isoformat()
+
+        for s in soup.select('li article'):
+            url = s.select('h1 a')[0]['href']
+            title = s.select('h1 a')[0].text.strip()
+            subtitle = s.select('div.e_descr')[0].text.strip()
+            date = s.select('ul.e_data_list li ')[0].text.strip()
+            date = re.sub(r'.*"([^]]+)".*', r'\1', date)
+
+            label = None
+            for l in labels_in_title:
+                if title.startswith(l):
+                    label = l[:-2]
+                    label = claimreview.simplify_label(label)
+                    break
 
             # found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
             # if found:
@@ -75,29 +83,24 @@ def retrieve_factchecking_urls(self_id):
             #     go_on = False
             #     break
 
-            #print(link, author, rating)
             all_statements.append({
                 'url': url,
-                'claim': claim,
-                'author': author,
-                'label': claimreview.simplify_label(label),
-                'original_label': label,
-                'reason': reason,
+                'title': title,
+                'subtitle': subtitle,
+                'label': label,
                 'date': date,
-                'source': 'politifact'
+                'source': 'leadstories'
             })
 
         print(len(all_statements))
         page += 1
 
-
     database_builder.save_original_data(self_id, all_statements)
     return all_statements
 
 
-
 def main():
-    scraper = PolitifactScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

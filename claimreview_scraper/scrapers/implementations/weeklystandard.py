@@ -6,17 +6,17 @@ from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
 import tqdm
 
-from ..processing import utils, claimreview, database_builder
-from . import Scraper
+from ...processing import utils, claimreview, database_builder
+from .. import ScraperBase
 
 # WeeklyStandard fact-check is https://www.washingtonexaminer.com/
 
 LIST_URL = 'https://www.washingtonexaminer.com/tag/tws-fact-check'
 
-class WeeklystandardScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'weeklystandard'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -89,7 +89,7 @@ def get_all_articles_url(self_id):
 
 
 def main():
-    scraper = WeeklystandardScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

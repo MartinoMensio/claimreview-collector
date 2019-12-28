@@ -5,17 +5,17 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
 
-from . import Scraper
-from ..processing import utils
-from ..processing import claimreview
-from ..processing import database_builder
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import claimreview
+from ...processing import database_builder
 
 LIST_URL = 'https://www.factcheck.org/page/{}/'
 
-class FactCheckOrgScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'factcheck_org'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -71,7 +71,7 @@ def retrieve_factchecking_urls(self_id):
     return all_statements
 
 def main():
-    scraper = FactCheckOrgScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

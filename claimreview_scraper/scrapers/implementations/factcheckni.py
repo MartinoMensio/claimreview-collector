@@ -6,19 +6,19 @@ import os
 from tqdm import tqdm
 from bs4 import BeautifulSoup
 
-from . import Scraper
-from ..processing import utils
-from ..processing import database_builder
-from ..processing import claimreview
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import database_builder
+from ...processing import claimreview
 
 # FactcheckNI does not embed ClaimReview!!! (everything here is useless)
 
 LIST_URL = 'https://factcheckni.org/page/{}/'
 
-class FactcheckNIScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'factcheckni'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -83,7 +83,7 @@ def retrieve(self_id):
     return all_statements
 
 def main():
-    scraper = FactcheckNIScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

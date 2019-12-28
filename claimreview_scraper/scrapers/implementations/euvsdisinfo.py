@@ -3,18 +3,18 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from . import Scraper
-from ..processing import database_builder
-from ..processing import utils
+from .. import ScraperBase
+from ...processing import database_builder
+from ...processing import utils
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 
-class EuVsDisinfoScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'euvsdisinfo'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
-    def scrape(self):
+    def scrape(self, update=True):
         all_reviews = retrieve(self.id)
         claim_reviews = create_claim_reviews(all_reviews)
         database_builder.add_ClaimReviews(self.id, claim_reviews)
@@ -153,7 +153,7 @@ def retrieve(self_id):
 
 
 def main():
-    scraper = EuVsDisinfoScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 

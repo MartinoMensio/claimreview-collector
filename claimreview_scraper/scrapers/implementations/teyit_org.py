@@ -3,17 +3,17 @@ from bs4 import BeautifulSoup
 import tqdm
 from multiprocessing.pool import ThreadPool
 
-from ..processing import claimreview, utils, database_builder
-from .. import logger
-from . import Scraper
+from ...processing import claimreview, utils, database_builder
+from ... import logger
+from .. import ScraperBase
 
 HOMEPAGE = 'https://teyit.org'
 
 
-class Teyit_orgScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'teyit_org'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -109,7 +109,7 @@ def get_all_articles_url(self_id):
 #     database_builder.add
 
 def main():
-    scraper = Teyit_orgScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

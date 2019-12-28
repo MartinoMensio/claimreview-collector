@@ -3,21 +3,21 @@ import requests
 import re
 from xml.etree import ElementTree
 
-from . import Scraper
-from ..processing import utils
-from ..processing import claimreview
-from ..processing import database_builder
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import claimreview
+from ...processing import database_builder
 
 feed_directory = 'https://storage.googleapis.com/datacommons-feeds/'
 latest_feed = 'claimreview/latest/data.json'
 
-class DatacommonsScraper(Scraper):
+class Scraper(ScraperBase):
     
     def __init__(self):
         self.id = 'datacommons_feeds'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
-    def scrape(self):
+    def scrape(self, update=True):
         feed_data = download_latest_feed()
         data_list = feed_data['dataFeedElement']
         database_builder.save_original_data(self.id, data_list)
@@ -82,7 +82,7 @@ def download_latest_feed():
     return download_feed(latest_feed)
 
 def main():
-    scraper = DatacommonsScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

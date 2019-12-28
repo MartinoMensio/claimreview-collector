@@ -7,13 +7,13 @@ import dateparser
 from multiprocessing.pool import ThreadPool
 import tqdm
 
-from ..processing import utils, claimreview, database_builder
-from . import Scraper
+from ...processing import utils, claimreview, database_builder
+from .. import ScraperBase
 
-class IstinomerScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'istinomer'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -86,7 +86,7 @@ def retrieve_factchecking_urls(self_id):
     return fc_urls
 
 def main():
-    scraper = IstinomerScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

@@ -3,8 +3,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-from ..processing import utils
-from ..processing import claimreview
+from ...processing import utils
+from ...processing import claimreview
 
 # TODO broken: gives 406, probably they added a cookie or another check
 get_url = 'https://metafact.io/factchecks/load_factchecks?filter=popular&offset=0&limit=5000'

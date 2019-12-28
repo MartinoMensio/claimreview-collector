@@ -13,17 +13,17 @@ import gzip
 from multiprocessing.pool import ThreadPool
 
 
-from ..processing import utils, unshortener
-from ..processing import claimreview, database_builder
-from . import Scraper
+from ...processing import utils, unshortener
+from ...processing import claimreview, database_builder
+from .. import ScraperBase
 
-class DatacommonsResearchScraper(Scraper):
+class Scraper(ScraperBase):
     
     def __init__(self):
         self.id = 'datacommons_research_dataset'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
-    def scrape(self):
+    def scrape(self, update=True):
         original_contents = download_latest_release()
         claim_reviews = load_jsonld(original_contents)
         database_builder.save_original_data(self.id, claim_reviews)
@@ -112,7 +112,7 @@ def enrich_claimReviews(claim_reviews):
 
 
 def main():
-    scraper = DatacommonsResearchScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 

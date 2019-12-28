@@ -12,18 +12,18 @@ from collections import defaultdict
 from pprint import pprint
 from itertools import groupby
 
-from . import Scraper
-from ..processing import utils
-from ..processing import claimreview
-from ..processing import database_builder
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import claimreview
+from ...processing import database_builder
 
 load_dotenv(find_dotenv())
 
-class GoogleFactcheckScraper(Scraper):
+class Scraper(ScraperBase):
     
     def __init__(self):
         self.id = 'google_factcheck_explorer'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         res = retrieve(self.id, scraping=update)
@@ -176,7 +176,7 @@ def retrieve(self_id, scraping=False):
 
 
 def main(update=True):
-    scraper = GoogleFactcheckScraper()
+    scraper = Scraper()
     scraper.scrape(update=update)
 
 if __name__ == "__main__":

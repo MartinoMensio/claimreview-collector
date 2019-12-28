@@ -3,14 +3,14 @@ import time
 import requests
 import itertools
 
-from ..processing import utils, claimreview, database_builder
-from . import Scraper
+from ...processing import utils, claimreview, database_builder
+from .. import ScraperBase
 import tqdm
 
-class LemondeDecodexHoaxScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'lemonde_decodex_hoax'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -88,7 +88,7 @@ def download_hoaxes():
 
 
 def main():
-    scraper = LemondeDecodexHoaxScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

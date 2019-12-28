@@ -6,17 +6,17 @@ from bs4 import BeautifulSoup
 import dateparser
 from tqdm import tqdm
 
-from . import Scraper
-from ..processing import utils
-from ..processing import claimreview
-from ..processing import database_builder
+from .. import ScraperBase
+from ...processing import utils
+from ...processing import claimreview
+from ...processing import database_builder
 
 facts_url = 'https://fullfact.org/'
 
-class FullfactScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'fullfact'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -173,7 +173,7 @@ def scrape_all(self_id):
 
 
 def main():
-    scraper = FullfactScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

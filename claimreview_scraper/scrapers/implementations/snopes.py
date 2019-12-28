@@ -7,15 +7,15 @@ import dateparser
 import tqdm
 from multiprocessing.pool import ThreadPool
 
-from ..processing import utils, database_builder, claimreview
-from . import Scraper
+from ...processing import utils, database_builder, claimreview
+from .. import ScraperBase
 
 LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
 
-class SnopesScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'snopes'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
 
     def scrape(self, update=True):
         if update:
@@ -91,7 +91,7 @@ def retrieve_factchecking_urls(self_id):
 
 
 def main():
-    scraper = SnopesScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import dateparser
 from tqdm import tqdm
 
-from ..processing import utils, claimreview
+from ...processing import utils, claimreview
 
 my_path = utils.data_location / 'kallxo_kripometer'
 

@@ -7,19 +7,19 @@ import rdflib
 from pyld import jsonld
 import json
 
-from . import Scraper
-from ..processing import database_builder
-from ..processing import utils
+from .. import ScraperBase
+from ...processing import database_builder
+from ...processing import utils
 
-class EsiScraper(Scraper):
+class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'esi_api'
-        Scraper.__init__(self)
+        ScraperBase.__init__(self)
         # TODO set environment variables
 
-    def scrape(self, scraping=False):
+    def scrape(self, update=False):
         # TODO set scraping to True when ESI dataset will be updated
-        if scraping:
+        if update:
             database_builder.db[self.id].drop()
             self.get_all_collection('factcheckers')
             self.get_all_collection('fc-dev')
@@ -136,7 +136,7 @@ def filter_other_ns(obj):
 
 
 def main():
-    scraper = EsiScraper()
+    scraper = Scraper()
     scraper.scrape()
 
 if __name__ == "__main__":
