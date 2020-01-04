@@ -28,4 +28,7 @@ def scrape_all():
     # scrapers = {k: v for i, (k, v) in enumerate(scrapers.items()) if i >= 12}
     for k,v in scrapers.items():
         print('scraping', k)
-        v.scrape()
+        try:
+            v.scrape()
+        except Exception as e:
+            print(e)

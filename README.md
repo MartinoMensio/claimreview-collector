@@ -28,17 +28,14 @@ While for the first group, the work of this project is just to aggregate them, t
 
 ## Run the collection
 
+Update all:
+
 ```bash
-python -m datasets scrape_factchecking
+python -m claimreview_scraper.scrapers
 ```
 
-Or to run a single scraper:
+Update commands for each origin:
 
-```
-python -m datasets scrape_single_factchecking $NAME
-```
-
-Updated instructions by origin
 ```bash
 python -m claimreview_scraper.scrapers.datacommons_feeds # 3406
 python -m claimreview_scraper.scrapers.datacommons_research_dataset # 11501 (from 5764 initial + 5737 full rescraped)
