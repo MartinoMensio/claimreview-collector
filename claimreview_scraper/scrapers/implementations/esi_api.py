@@ -119,11 +119,16 @@ def extract_claimreviews(all_docs):
 
 def filter_other_ns(obj):
     if isinstance(obj, list):
-        for el in obj:
+        for i, el in enumerate(obj):
+            if '@value' in el:
+                obj[i] = el['@value']
             filter_other_ns(el)
     elif isinstance(obj, dict):
         keys = [k for k in obj.keys()]
         for k in keys:
+            # remove this @type/@language, @value thing 
+            if '@value' in obj[k]:
+                obj[k] = obj[k]['@value']
             if 'url' == k:
                 # move up the URLs
                 if '@id' in obj[k]:
