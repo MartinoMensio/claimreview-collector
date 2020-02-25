@@ -5,6 +5,7 @@ from requests.auth import HTTPBasicAuth
 import rdflib
 from pyld import jsonld
 import json
+import traceback
 
 from .. import ScraperBase
 from ...processing import database_builder
@@ -110,7 +111,7 @@ def extract_claimreviews(all_docs):
             # TODO need to avoid unnecessary nesting of fields (failing credibility import)
         except Exception as e:
             # TODO understand why KeyError 'http://schema.org/url'
-            print('EXCEPTION GENERATED', d['id'], type(e), e)
+            print('EXCEPTION GENERATED', d['id'], type(e), e, traceback.format_exc())
             exception_count += 1
 
 
@@ -120,14 +121,15 @@ def extract_claimreviews(all_docs):
 def filter_other_ns(obj):
     if isinstance(obj, list):
         for i, el in enumerate(obj):
-            if '@value' in el:
+            # remove this @type/@language, @value thing 
+            if isinstance(el, dict) and '@value' in el:
                 obj[i] = el['@value']
             filter_other_ns(el)
     elif isinstance(obj, dict):
         keys = [k for k in obj.keys()]
         for k in keys:
             # remove this @type/@language, @value thing 
-            if '@value' in obj[k]:
+            if isinstance(obj[k], dict) and '@value' in obj[k]:
                 obj[k] = obj[k]['@value']
             if 'url' == k:
                 # move up the URLs
@@ -144,7 +146,7 @@ def filter_other_ns(obj):
 
 def main():
     scraper = Scraper()
-    scraper.scrape(update=True)
+    scraper.scrape(update=False)
 
 if __name__ == "__main__":
     main()
