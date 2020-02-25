@@ -6,7 +6,6 @@ import os
 import plac
 
 from datetime import datetime
-from dotenv import load_dotenv, find_dotenv
 from collections import defaultdict
 
 from pprint import pprint
@@ -16,8 +15,6 @@ from .. import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
-
-load_dotenv(find_dotenv())
 
 class Scraper(ScraperBase):
     
