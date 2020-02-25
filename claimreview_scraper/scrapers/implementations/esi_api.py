@@ -2,7 +2,6 @@ import os
 import time
 import requests
 from requests.auth import HTTPBasicAuth
-from dotenv import load_dotenv
 import rdflib
 from pyld import jsonld
 import json
@@ -20,7 +19,7 @@ class Scraper(ScraperBase):
         ScraperBase.__init__(self)
         # TODO set environment variables
 
-    def scrape(self, update=False):
+    def scrape(self, update=True):
         # TODO set scraping to True when ESI dataset will be updated
         if update:
             database_builder.db[self.id].drop()
@@ -140,8 +139,7 @@ def filter_other_ns(obj):
 
 def main():
     scraper = Scraper()
-    scraper.scrape()
+    scraper.scrape(update=True)
 
 if __name__ == "__main__":
-    load_dotenv()
     main()

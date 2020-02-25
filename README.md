@@ -37,21 +37,23 @@ python -m claimreview_scraper.scrapers
 Update commands for each origin:
 
 ```bash
-python -m claimreview_scraper.scrapers.datacommons_feeds # 3406
-python -m claimreview_scraper.scrapers.datacommons_research_dataset # 11501 (from 5764 initial + 5737 full rescraped)
-python -m claimreview_scraper.scrapers.esi_api # 1311
-python -m claimreview_scraper.scrapers.euvsdisinfo # 7053
-python -m claimreview_scraper.scrapers.factcheck_org # 623 (from 2280 urls) (distinct url in datasets_resources.claim_reviews: 1120, claimreview_scraper.claim_reviews: 1095)
-python -m claimreview_scraper.scrapers.factcheckni # useless, no ClaimReview here (85 vs 79 old)
-python -m claimreview_scraper.scrapers.fullfact # 924 (from 689 urls) (1439 vs 1348)
-python -m claimreview_scraper.scrapers.google_factcheck_explorer # 45822
-python -m claimreview_scraper.scrapers.istinomer # 4077 (from 4077 urls)
-python -m claimreview_scraper.scrapers.leadstories # 1754 (from 4217 urls)
-python -m claimreview_scraper.scrapers.lemonde_decodex_hoax # 371
-python -m claimreview_scraper.scrapers.politifact # 3981 (from 16770 urls)
-python -m claimreview_scraper.scrapers.snopes # 350 (from 8204 urls)
-python -m claimreview_scraper.scrapers.teyit_org # 1187 (from 1197 urls)
-python -m claimreview_scraper.scrapers.weeklystandard # 129 (from 170 urls)
+python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 5953
+python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
+python -m claimreview_scraper.scrapers.implementations.esi_api # 674
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 7645
+python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623
+python -m claimreview_scraper.scrapers.implementations.factcheckni # useless, no ClaimReview here (85 vs 79 old)
+python -m claimreview_scraper.scrapers.implementations.fullfact # 604
+python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 44104
+python -m claimreview_scraper.scrapers.implementations.istinomer # 4122
+python -m claimreview_scraper.scrapers.implementations.leadstories # 2032
+python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 382
+python -m claimreview_scraper.scrapers.implementations.politifact # 1278
+python -m claimreview_scraper.scrapers.implementations.snopes # 567
+python -m claimreview_scraper.scrapers.implementations.teyit_org # 1315
+python -m claimreview_scraper.scrapers.implementations.weeklystandard # 129
+
+# SIZE indicated by db.getCollection('claim_reviews').distinct('url', {retrieved_by: 'COLLECTION_NAME'})
 ```
 
 By fact-checker see table https://docs.google.com/spreadsheets/d/1etGJjS_l9iyWyWzBmqKYoGwz9_QKQKia4mUyfJWag9o/edit#gid=0

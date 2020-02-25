@@ -11,8 +11,8 @@ from ...processing import utils
 from ...processing import claimreview, database_builder
 from .. import ScraperBase
 
-LIST_URL = 'https://www.politifact.com/truth-o-meter/statements/?page={}'
-STATEMENT_SELECTOR = 'div.statement'
+LIST_URL = 'https://www.politifact.com/factchecks/list/?page={}&category=truth-o-meter'
+STATEMENT_SELECTOR = 'article.m-statement'
 
 
 class Scraper(ScraperBase):
@@ -57,19 +57,20 @@ def retrieve_factchecking_urls(self_id):
             break
         #print(response.text)
         soup = BeautifulSoup(response.text, 'lxml')
-        page_number_real = soup.select('div.pagination span.step-links__current')[0].text
-        if str(page) not in page_number_real:
-            print(page_number_real)
-            break
+        # page_number_real = soup.select('div.pagination span.step-links__current')[0].text
+        # if str(page) not in page_number_real:
+        #     print(page_number_real)
+        #     break
         statements = soup.select(STATEMENT_SELECTOR)
         #print(statements)
         for s in statements:
-            url = 'https://www.politifact.com' + s.select('p.statement__text a.link')[0]['href']
-            claim = s.select('p.statement__text a.link')[0].text
-            author = s.select('div.statement__source a')[0].text
-            label = s.select('div.meter img')[0]['alt']
-            reason = s.select('div.meter p.quote')[0].text
-            date = s.select('p.statement__edition span.article__meta')[0].text
+            url = 'https://www.politifact.com' + s.select_one('div.m-statement__quote a')['href']
+            claim = s.select_one('div.m-statement__quote a').text
+            author = s.select_one('div.m-statement__author a').text
+            label = s.select_one('div.m-statement__meter img')['alt']
+            # reason = s.select_one('div.meter p.quote')[0].text
+            date = s.select_one('footer.m-statement__footer').text
+            date = date.split('•')[-1]
             date = dateparser.parse(date).isoformat()
 
             # found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
@@ -85,7 +86,7 @@ def retrieve_factchecking_urls(self_id):
                 'author': author,
                 'label': claimreview.simplify_label(label),
                 'original_label': label,
-                'reason': reason,
+                # 'reason': reason,
                 'date': date,
                 'source': 'politifact'
             })
