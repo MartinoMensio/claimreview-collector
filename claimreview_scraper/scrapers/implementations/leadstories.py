@@ -48,10 +48,9 @@ class Scraper(ScraperBase):
 
 def retrieve_factchecking_urls(self_id):
     page = 1
-    # if os.path.exists(my_path / 'fact_checking_urls.json'):
-    #     all_statements = utils.read_json(my_path / 'fact_checking_urls.json')
-    # else:
-    all_statements = []
+    
+    already_saved = {el['url']: el for el in database_builder.get_original_data(self_id)}
+    found_consecutively = 0
     go_on = True
     while go_on:
         facts_url = LIST_URL.format(page)
@@ -67,37 +66,46 @@ def retrieve_factchecking_urls(self_id):
             break
 
         for s in soup.select('li article'):
+            if found_consecutively >= 10:
+                # this is the moment to stop. We already retrieved from now on
+                print(f'Interrupting after finding {found_consecutively} elements already stored')
+                go_on = False
+                break
+
             url = s.select('h1 a')[0]['href']
-            title = s.select('h1 a')[0].text.strip()
-            subtitle = s.select('div.e_descr')[0].text.strip()
-            date = s.select('ul.e_data_list li ')[0].text.strip()
-            date = re.sub(r'.*"([^]]+)".*', r'\1', date)
 
-            label = None
-            for l in labels_in_title:
-                if title.startswith(l):
-                    label = l[:-2]
-                    label = claimreview.simplify_label(label)
-                    break
+            if url in already_saved:
+                found_consecutively += 1
+                new_item = already_saved[url]
+            else:
+                found_consecutively = 0
 
-            # found = next((item for item in all_statements if (item['url'] == url and item['date'] == date)), None)
-            # if found:
-            #     print('found')
-            #     go_on = False
-            #     break
+                title = s.select('h1 a')[0].text.strip()
+                subtitle = s.select('div.e_descr')[0].text.strip()
+                date = s.select('ul.e_data_list li ')[0].text.strip()
+                date = re.sub(r'.*"([^]]+)".*', r'\1', date)
 
-            all_statements.append({
-                'url': url,
-                'title': title,
-                'subtitle': subtitle,
-                'label': label,
-                'date': date,
-                'source': 'leadstories'
-            })
+                label = None
+                for l in labels_in_title:
+                    if title.startswith(l):
+                        label = l[:-2]
+                        label = claimreview.simplify_label(label)
+                        break
 
-        print(len(all_statements))
+                new_item = {
+                    'url': url,
+                    'title': title,
+                    'subtitle': subtitle,
+                    'label': label,
+                    'date': date,
+                    'source': 'leadstories'
+                }
+                already_saved[url] = new_item
+
+        print(len(already_saved.keys()))
         page += 1
 
+    all_statements = list(already_saved.values())
     database_builder.save_original_data(self_id, all_statements)
     return all_statements
 
