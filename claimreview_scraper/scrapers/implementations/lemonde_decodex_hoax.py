@@ -28,11 +28,14 @@ class Scraper(ScraperBase):
 hoaxes_location = 'https://s1.lemde.fr/mmpub/data/decodex/hoax/hoax_debunks.json'
 
 def get_rating_value(label):
+    label = label.lower()
     return {
-        'FAUX': 1,
-        'DOUTEUX': 2,
-        'CONTESTABLE': 3,
-        'TROMPEUR': 3 # misleading
+        'faux': 0,
+        'douteux': 0,
+        'contestable': 1,
+        'trompeur': 0, # misleading
+        'c’est plus compliqué': 1, # more complicated
+        'prudence': 1
     }[label]
 
 
@@ -63,8 +66,8 @@ def create_claimreview_from_hoaxes(hoaxes):
             "reviewRating": {
                 "@type": "Rating",
                 "ratingValue": ratingValue,
-                "bestRating": 5,
-                "worstRating": 1,
+                "bestRating": 2,
+                "worstRating": 0,
                 "alternateName": label
             },
             "itemReviewed": {
