@@ -67,6 +67,7 @@ def retrieve(self_id):
     all_reviews = {el['url']: el for el in database_builder.get_original_data(self_id)}
     go_on = True
     first = True
+    found_consecutively = 0 # we will stop after a number of matches without interruption (next iterations)
     while go_on:
         facts_url = LIST_URL.format(offset)
         print(facts_url)
@@ -82,20 +83,21 @@ def retrieve(self_id):
             go_on = False
             break
         for s in articles:
+            if found_consecutively >= 10:
+                # this is the moment to stop. We already retrieved from now on
+                print(f'Interrupting after finding {found_consecutively} elements already stored')
+                go_on = False
+                break
             url = s.select('a')[0]['href']
             title = s.select('div.cell-title')[0].text.strip()
             date = s.select('div.disinfo-db-date')[0].text.strip()
             #outlets = s.select('data-column="Outlets"')[0].text.strip()
             country = s.select('div.cell-country')[0].text.strip()
             if url in all_reviews:
+                found_consecutively += 1
                 continue
-                """
-                # already found, stop now
-                go_on = False
-                print('already in all_reviews', url)
-                break
-                """
             else:
+                found_consecutively = 0
                 response = requests.get(url)
                 if response.status_code != 200:
                     raise ValueError(response.status_code)
@@ -116,14 +118,25 @@ def retrieve(self_id):
                 report_summary = soup.select_one('div.b-report__summary-text').text.strip()
 
                 claim_urls_all = soup.select('div.b-catalog__repwidget-source')
-
-                claim_urls = claim_urls_all[0].select('a')
-                claim_urls = [el['href'] for el in claim_urls]
-                if len(claim_urls_all) > 1:
-                    archived_claim_urls = claim_urls_all[1].select('a')
-                    archived_claim_urls = [el['href'] for el in archived_claim_urls]
+                if claim_urls_all:
+                    # old way of presenting (view original, view archived)
+                    claim_urls = claim_urls_all[0].select('a')
+                    claim_urls = [el['href'] for el in claim_urls]
+                    if len(claim_urls_all) > 1:
+                        archived_claim_urls = claim_urls_all[1].select('a')
+                        archived_claim_urls = [el['href'] for el in archived_claim_urls]
+                    else:
+                        archived_claim_urls = []
                 else:
+                    # new way of presenting (original (archived))
+                    claim_urls_all = soup.select('div.b-catalog__link')
+                    claim_urls = []
                     archived_claim_urls = []
+                    for u in claim_urls_all:
+                        links = u.select('a')
+                        claim_urls.append(links[0]['href'])
+                        if len(links) > 1:
+                            archived_claim_urls.extend([el['href'] for el in links[1:]])
 
                 disproof = soup.select_one('div.b-report__disproof-text').text.strip()
 
@@ -151,6 +164,9 @@ def retrieve(self_id):
         print(len(all_reviews))
         #print(all_statements)
         offset += 10
+
+        # if offset > 20:
+        #     break
 
     return all_reviews
 
