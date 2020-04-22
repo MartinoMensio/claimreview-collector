@@ -37,20 +37,20 @@ python -m claimreview_scraper.scrapers
 Update commands for each origin:
 
 ```bash
-python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 7089
+python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 8252
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 7993
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 8187
 python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623
 python -m claimreview_scraper.scrapers.implementations.factcheckni # useless, no ClaimReview here (85 vs 79 old)
-python -m claimreview_scraper.scrapers.implementations.fullfact # 660
-python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 50628
-python -m claimreview_scraper.scrapers.implementations.istinomer # 4133
-python -m claimreview_scraper.scrapers.implementations.leadstories # 2181
-python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 395
+python -m claimreview_scraper.scrapers.implementations.fullfact # 684
+python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 52645
+python -m claimreview_scraper.scrapers.implementations.istinomer # 4141
+python -m claimreview_scraper.scrapers.implementations.leadstories # 4426
+python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 400
 python -m claimreview_scraper.scrapers.implementations.politifact # 1277
-python -m claimreview_scraper.scrapers.implementations.snopes # 638
-python -m claimreview_scraper.scrapers.implementations.teyit_org # 1415
+python -m claimreview_scraper.scrapers.implementations.snopes # 733
+python -m claimreview_scraper.scrapers.implementations.teyit_org # 1473
 python -m claimreview_scraper.scrapers.implementations.weeklystandard # 129
 
 # SIZE indicated by db.getCollection('claim_reviews').distinct('url', {retrieved_by: 'COLLECTION_NAME'})

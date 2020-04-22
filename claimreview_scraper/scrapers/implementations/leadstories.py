@@ -61,8 +61,9 @@ def retrieve_factchecking_urls(self_id):
             break
 
         soup = BeautifulSoup(response.text, 'lxml')
-        current_page = soup.select('a.is_current')
+        current_page = soup.select('nav.pagination span')
         if not current_page:
+            print('finished pages')
             break
 
         for s in soup.select('li article'):
@@ -72,7 +73,8 @@ def retrieve_factchecking_urls(self_id):
                 go_on = False
                 break
 
-            url = s.select('h1 a')[0]['href']
+            url = s.select_one('a')['href']
+            print(url)
 
             if url in already_saved:
                 found_consecutively += 1
@@ -80,17 +82,21 @@ def retrieve_factchecking_urls(self_id):
             else:
                 found_consecutively = 0
 
-                title = s.select('h1 a')[0].text.strip()
-                subtitle = s.select('div.e_descr')[0].text.strip()
-                date = s.select('ul.e_data_list li ')[0].text.strip()
-                date = re.sub(r'.*"([^]]+)".*', r'\1', date)
+                title = s.select_one('h1')
+                if title:
+                    title = title.text.strip()
+                    subtitle = s.select_one('p.mod-default-article-description').text.strip()
+                    date = s.select_one('time')['datetime'].strip()
 
-                label = None
-                for l in labels_in_title:
-                    if title.startswith(l):
-                        label = l[:-2]
+                    label = s.select_one('span.caption-overlay')
+                    if label:
+                        label = label.text.strip()
                         label = claimreview.simplify_label(label)
-                        break
+                else:
+                    # someties the page does not have anything on the article, just keep the URL
+                    subtitle = None
+                    label = None
+                    date = None
 
                 new_item = {
                     'url': url,

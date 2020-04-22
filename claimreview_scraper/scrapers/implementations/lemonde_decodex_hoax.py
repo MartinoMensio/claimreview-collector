@@ -35,6 +35,7 @@ def get_rating_value(label):
         'contestable': 1,
         'trompeur': 0, # misleading
         'c’est plus compliqué': 1, # more complicated
+        'détourné': 0,
         'prudence': 1
     }[label]
 
