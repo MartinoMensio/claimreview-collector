@@ -61,7 +61,7 @@ def extract_row(r):
     #print(response.text)
     soup = BeautifulSoup(response.text, 'lxml')
 
-    explanation = soup.select_one('p.entry-content__text--explanation').text.replace('Explanation: ', '').strip()
+    explanation = soup.select_one('p.entry-content__text--explanation').text.replace('Explanation: ', '').strip().replace('\n', '')
     originated_from = soup.select_one('p.entry-content__text--smaller').text.split(':')[-1].strip()
     factchecker_url = soup.select_one('a.entry-content__button--smaller')['href']
 
