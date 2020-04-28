@@ -1,5 +1,6 @@
 import csv
 import tqdm
+import time
 import requests
 from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
@@ -36,7 +37,7 @@ def scrape():
         writer.writeheader()
         writer.writerows(results)
 
-def extract_row(r):
+def extract_row(r, retries=5):
     checked_by = r.select_one('header.entry-header p.entry-content__text').text.strip().replace('Fact-Checked by: ', '')
     date, location = [el.strip() for el in r.select_one('header.entry-header p.entry-content__text strong').text.split('|')]
 
@@ -55,9 +56,17 @@ def extract_row(r):
         'poynter_url': poynter_url
     }
 
-    # Explanation, fact-checker_url and origin are on the detail page
-    response = requests.get(poynter_url, headers=headers)
-    response.raise_for_status()
+    try:
+        # Explanation, fact-checker_url and origin are on the detail page
+        response = requests.get(poynter_url, headers=headers)
+        response.raise_for_status()
+    except Exception as e:
+        if retries:
+            # try again
+            print(f'Going to retry for {poynter_url}...')
+            time.sleep(2)
+            return extract_row(r, retries=retries - 1)
+        raise e
     #print(response.text)
     soup = BeautifulSoup(response.text, 'lxml')
 
