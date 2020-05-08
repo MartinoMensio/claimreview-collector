@@ -17,7 +17,7 @@ class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'fullfact'
         self.homepage = 'https://fullfact.org/'
-        self.name = ' Full Fact'
+        self.name = 'Full Fact'
         self.description = 'Full Fact is a registered charity. They actively seek a diverse range of funding and are transparent about all our sources of income.'
         ScraperBase.__init__(self)
 
