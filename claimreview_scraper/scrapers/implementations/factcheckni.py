@@ -11,8 +11,6 @@ from ...processing import utils
 from ...processing import database_builder
 from ...processing import claimreview
 
-# FactcheckNI does not embed ClaimReview!!! (everything here is useless)
-
 LIST_URL = 'https://factcheckni.org/page/{}/'
 
 class Scraper(ScraperBase):

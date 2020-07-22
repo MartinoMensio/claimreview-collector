@@ -37,20 +37,20 @@ python -m claimreview_scraper.scrapers
 Update commands for each origin:
 
 ```bash
-python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 8902
+python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 11946
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 8314
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 8989
 python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623
-python -m claimreview_scraper.scrapers.implementations.factcheckni # useless, no ClaimReview here (85 vs 79 old)
-python -m claimreview_scraper.scrapers.implementations.fullfact # 708
-python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 56323
-python -m claimreview_scraper.scrapers.implementations.istinomer # 4148
-python -m claimreview_scraper.scrapers.implementations.leadstories # 4473
-python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 407
+python -m claimreview_scraper.scrapers.implementations.factcheckni # 10
+python -m claimreview_scraper.scrapers.implementations.fullfact # 793
+python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 67221
+python -m claimreview_scraper.scrapers.implementations.istinomer # 4166
+python -m claimreview_scraper.scrapers.implementations.leadstories # 4739
+python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 449
 python -m claimreview_scraper.scrapers.implementations.politifact # 1276
-python -m claimreview_scraper.scrapers.implementations.snopes # 790
-python -m claimreview_scraper.scrapers.implementations.teyit_org # 1499
+python -m claimreview_scraper.scrapers.implementations.snopes # 1118
+python -m claimreview_scraper.scrapers.implementations.teyit_org # 1635
 python -m claimreview_scraper.scrapers.implementations.weeklystandard # 129
 python -m claimreview_scraper.scrapers.implementations.poynter_covid ### the COVID-related collection (errors, not unified)
 

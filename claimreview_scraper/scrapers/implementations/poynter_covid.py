@@ -11,6 +11,9 @@ from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
 
+# TODO https://www.poynter.org/coronavirusfactsalliance/ exposes csv file
+# wget https://pudding.cool/misc/covid-fact-checker/data.csv  
+
 headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'
 }

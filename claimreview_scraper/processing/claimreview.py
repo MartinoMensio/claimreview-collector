@@ -312,10 +312,10 @@ _domain_parser_map = {
     'www.indiatoday.in': _jsonld_parser,
     'observador.pt': _jsonld_parser,
     'nieuwscheckers.nl': _jsonld_parser,
+    'factcheckni.org': _jsonld_parser,
     # without claimReview
     'newtral.es': _fake_parser,
     'www.newtral.es': _fake_parser,
-    'factcheckni.org': _fake_parser,
     'www.lemonde.fr': _fake_parser,
     'verafiles.org': _fake_parser,
     'www.rappler.com': _fake_parser,

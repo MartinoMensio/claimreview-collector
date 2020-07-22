@@ -30,13 +30,21 @@ hoaxes_location = 'https://s1.lemde.fr/mmpub/data/decodex/hoax/hoax_debunks.json
 def get_rating_value(label):
     label = label.lower()
     return {
-        'faux': 0,
-        'douteux': 0,
-        'contestable': 1,
+        'faux': 0, # false
+        'douteux': 0, # doubt
         'trompeur': 0, # misleading
-        'c’est plus compliqué': 1, # more complicated
         'détourné': 0,
-        'prudence': 1
+        'infondé': 0, # without support
+        'contestable': 1, # contestable
+        'c’est plus compliqué': 1, # more complicated
+        'c’est plus complique': 1, # more complicated
+        'exagéré': 1,
+        'très exagéré': 1, # very exxagerated
+        'a nuancer': 1, # with caution, 
+        'prudence': 1,
+        'c’est possible': 1, # it's possible
+        'imprécis': 1, # imprecise
+        'vrai': 2, # true
     }[label]
 
 
