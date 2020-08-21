@@ -74,7 +74,7 @@ def retrieve_factchecking_urls(self_id):
                 break
 
             url = s.select_one('a')['href']
-            print(url)
+            # print(url)
 
             if url in already_saved:
                 found_consecutively += 1

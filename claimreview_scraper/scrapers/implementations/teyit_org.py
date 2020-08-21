@@ -9,6 +9,14 @@ from .. import ScraperBase
 
 HOMEPAGE = 'https://teyit.org'
 
+# https://teyit.org/konu/analiz/{claim_label}/page/{page_no}
+# yanlis
+# # teyit.org
+# 'yanliş': 'fake', https://beta.teyit.org/detayli-arama?post_type=Analiz
+# 'doğru': 'true', 
+# 'karma': 'mixed',
+# 'belirsiz': None, #'uncertain'
+
 
 class Scraper(ScraperBase):
     def __init__(self):
@@ -69,8 +77,34 @@ def get_all_articles_url(self_id):
     if response.status_code != 200:
         raise ValueError(response.status_code)
 
+    full_homepage = response.url
+    print('full homepage', full_homepage)
+
     soup = BeautifulSoup(response.text, 'lxml')
     categories = soup.select('div.sayac_widget a')
+
+    if not categories:
+        # the new beta.teyit.org
+        page = 0
+        data = {}
+        while True:
+            res = requests.get(f'https://tyt.vklab.net/posts?post_type=Analiz&page={page}')
+            res.raise_for_status()
+
+            res_data = res.json()
+
+            if not res_data['raw']:
+                break
+
+            for el in res_data['raw']:
+                el['url'] = f'{full_homepage}{el["slug"]}'
+                data[el['id']] = el
+            
+            print(len(data), page)
+            page += 1
+        
+        return data.values()
+
 
     all_urls = []
     for c in categories:

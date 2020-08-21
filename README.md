@@ -37,21 +37,21 @@ python -m claimreview_scraper.scrapers
 Update commands for each origin:
 
 ```bash
-python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 11946
+python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 13567 ~ 10s
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 8989
-python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623
-python -m claimreview_scraper.scrapers.implementations.factcheckni # 10
-python -m claimreview_scraper.scrapers.implementations.fullfact # 793
-python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 67221
-python -m claimreview_scraper.scrapers.implementations.istinomer # 4166
-python -m claimreview_scraper.scrapers.implementations.leadstories # 4739
-python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 449
-python -m claimreview_scraper.scrapers.implementations.politifact # 1276
-python -m claimreview_scraper.scrapers.implementations.snopes # 1118
-python -m claimreview_scraper.scrapers.implementations.teyit_org # 1635
-python -m claimreview_scraper.scrapers.implementations.weeklystandard # 129
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 9099 ~ 2m 5s
+python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623 ~ 11m 33s
+python -m claimreview_scraper.scrapers.implementations.factcheckni # 10 ~ 3m 29s
+python -m claimreview_scraper.scrapers.implementations.fullfact # 826   ~1m 36s
+python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 79490 ~3m 18s
+python -m claimreview_scraper.scrapers.implementations.istinomer # 4179 ~ 14m 23s
+python -m claimreview_scraper.scrapers.implementations.leadstories # 4876 ~ 9m 43s
+python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 459 ~ 4s
+python -m claimreview_scraper.scrapers.implementations.politifact # 1277 ~ 28m 22s
+python -m claimreview_scraper.scrapers.implementations.snopes # 1252 ~ 36m 35s
+python -m claimreview_scraper.scrapers.implementations.teyit_org # 1807
+python -m claimreview_scraper.scrapers.implementations.weeklystandard # 102 ~ 43s
 python -m claimreview_scraper.scrapers.implementations.poynter_covid ### the COVID-related collection (errors, not unified)
 
 # SIZE indicated by db.getCollection('claim_reviews').distinct('url', {retrieved_by: 'COLLECTION_NAME'})
