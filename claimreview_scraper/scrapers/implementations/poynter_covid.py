@@ -1,3 +1,4 @@
+import io
 import csv
 import tqdm
 import time
@@ -12,7 +13,7 @@ from ...processing import claimreview
 from ...processing import database_builder
 
 # TODO https://www.poynter.org/coronavirusfactsalliance/ exposes csv file
-# wget https://pudding.cool/misc/covid-fact-checker/data.csv  
+# wget https://pudding.cool/misc/covid-fact-checker/data.csv
 
 headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'
@@ -31,60 +32,71 @@ class Scraper(ScraperBase):
             all_reviews = scrape_all(self.id)
         else:
             all_reviews = database_builder.get_original_data(self.id)
-            all_reviews = [el for el in all_reviews]
+            all_reviews = list(all_reviews)
         claim_reviews = []
         for r in tqdm.tqdm(all_reviews):
             try:
-                url_fixed, cr = claimreview.retrieve_claimreview(r['factchecker_url'])
+                url_fixed, cr = claimreview.retrieve_claimreview(r['URL to fact-checked article (in your language)'])
+                claim_reviews.extend(cr)
             except Exception:
                 pass
-            claim_reviews.extend(cr)
-        # TODO pymongo.errors.BulkWriteError: batch op errors occurred
         database_builder.add_ClaimReviews(self.id, claim_reviews)
 
-# TODO uniform to the other scrapers
+
 def scrape_all(self_id):
-    page_n = 1
     results = []
+    # res = requests.get('https://pudding.cool/misc/covid-fact-checker/data.json')
+    res = requests.get('https://pudding.cool/misc/covid-fact-checker/data.csv')
+    # json 2514
+    # csv 8325
+    res.raise_for_status()
+    data = res.text
+    reader = csv.DictReader(io.StringIO(data))
+    field_names = reader.fieldnames
+    print(field_names)
+    results = list(reader)
+    
+    
+    # page_n = 1
 
-    # already = database_builder.get_original_data(self_id)
-    # already_by_url = {el['poynter_url']: el for el in already}
+    # # already = database_builder.get_original_data(self_id)
+    # # already_by_url = {el['poynter_url']: el for el in already}
 
-    max_same = 10
+    # max_same = 10
 
-    currently_same = 0
-    while True:
-        if currently_same > max_same:
-            break
-        # url = f'https://www.poynter.org/ifcn-covid-19-misinformation/page/{page_n}/?orderby=views&order=DESC#038;order=DESC'
-        url = f'https://www.poynter.org/ifcn-covid-19-misinformation/page/{page_n}/?orderby=views&order=ASC#038;order=ASC'
+    # currently_same = 0
+    # while True:
+    #     if currently_same > max_same:
+    #         break
+    #     # url = f'https://www.poynter.org/ifcn-covid-19-misinformation/page/{page_n}/?orderby=views&order=DESC#038;order=DESC'
+    #     url = f'https://www.poynter.org/ifcn-covid-19-misinformation/page/{page_n}/?orderby=views&order=ASC#038;order=ASC'
 
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'lxml')
+    #     response = requests.get(url, headers=headers)
+    #     response.raise_for_status()
+    #     soup = BeautifulSoup(response.text, 'lxml')
 
-        rows = soup.select('article')
-        print(f'Found {len(rows)} articles at page {page_n}')
-        if not len(rows):
-            break
+    #     rows = soup.select('article')
+    #     print(f'Found {len(rows)} articles at page {page_n}')
+    #     if not len(rows):
+    #         break
 
-        with ThreadPool(8) as pool:
+    #     with ThreadPool(8) as pool:
         
-            for el in tqdm.tqdm(pool.imap(extract_row, rows), total=len(rows)):
-                # if el['poynter_url'] in already_by_url:
-                #     print('same', currently_same)
-                #     currently_same += 1
-                # else:
-                #     currently_same = 0
-                #     already_by_url[el['poynter_url']] = el
-                results.append(el)
+    #         for el in tqdm.tqdm(pool.imap(extract_row, rows), total=len(rows)):
+    #             # if el['poynter_url'] in already_by_url:
+    #             #     print('same', currently_same)
+    #             #     currently_same += 1
+    #             # else:
+    #             #     currently_same = 0
+    #             #     already_by_url[el['poynter_url']] = el
+    #             results.append(el)
         
-        page_n += 1
+    #     page_n += 1
 
-    # results = list(already_by_url.values())
+    # # results = list(already_by_url.values())
 
     with open('poynter_covid.tsv', 'w') as f:
-        writer = csv.DictWriter(f, el.keys(), delimiter='\t', extrasaction='ignore')
+        writer = csv.DictWriter(f, field_names, delimiter='\t', extrasaction='ignore')
         writer.writeheader()
         writer.writerows(results)
 

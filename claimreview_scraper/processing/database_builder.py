@@ -75,3 +75,8 @@ def create_indexes():
     # db['fact_checking_urls'].create_index('claim_url', name='claim_url')
     pass
 
+
+def get_all_factchecking_urls():
+    return claimReviews_collection.distinct('url')
+
+

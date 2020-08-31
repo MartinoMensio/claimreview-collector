@@ -5,6 +5,7 @@ import sys
 import itertools
 import hashlib
 import re
+import tldextract
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -39,13 +40,19 @@ def write_file_with_path(content, path, filename):
     with open(path / filename, 'w') as f:
         f.write(content)
 
-def get_url_domain(url):
-    url = url.lower()
-    if not re.match(r'[a-z]+://.*', url):
-        # default protocol
-        url = 'https://' + url
-    parsed_uri = urlparse(url)
-    return parsed_uri.netloc
+def get_url_domain(url, only_tld=True):
+    """Returns the domain of the URL"""
+    if not url:
+        return ''
+    ext = tldextract.extract(url)
+    if not only_tld:
+        result = '.'.join(part for part in ext if part)
+    else:
+        result = '.'.join([ext.domain, ext.suffix])
+    if result.startswith('www.'):
+            # sometimes the www is there, sometimes not
+            result = result[4:]
+    return result.lower()
 
 def print_stats(data):
     by_label_fn = lambda el: el[1]['label']

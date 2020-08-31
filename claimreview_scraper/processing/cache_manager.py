@@ -26,7 +26,7 @@ def get(url, unshorten=True, force_refresh=False, verify=True, headers={}):
         return cache_hit['html']
     else:
         # new
-        response = requests.get(url, headers=headers, verify=verify)
+        response = requests.get(url, headers=headers, verify=verify, timeout=20)
         if response.status_code != 200:
             print('WARN', response.status_code, 'for', url)
         html = response.text
