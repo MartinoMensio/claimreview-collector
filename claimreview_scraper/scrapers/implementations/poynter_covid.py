@@ -11,9 +11,12 @@ from .. import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
+from ...processing import unshortener
 
-# TODO https://www.poynter.org/coronavirusfactsalliance/ exposes csv file
+# https://www.poynter.org/coronavirusfactsalliance/ exposes csv file
 # wget https://pudding.cool/misc/covid-fact-checker/data.csv
+
+# TODO See the official file given us here https://drive.google.com/drive/folders/1LzPMpAvpcIQMWgnReXtP15MfiSIYeWjb
 
 headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'
@@ -35,8 +38,12 @@ class Scraper(ScraperBase):
             all_reviews = list(all_reviews)
         claim_reviews = []
         for r in tqdm.tqdm(all_reviews):
+            url = r['URL to fact-checked article (in your language)']
             try:
-                url_fixed, cr = claimreview.retrieve_claimreview(r['URL to fact-checked article (in your language)'])
+                url = unshortener.unshorten(url)
+                built_cr = create_claimreview(r, url)
+                claim_reviews.append(built_cr)
+                url_fixed, cr = claimreview.retrieve_claimreview(url)
                 claim_reviews.extend(cr)
             except Exception:
                 pass
@@ -103,6 +110,56 @@ def scrape_all(self_id):
     database_builder.save_original_data(self_id, results)
 
     return results
+
+def create_claimreview(row, unshortened_url):
+    # - When did you see the claim?                         datePublished
+    # - Countries                                           
+    # - Organization                                        author.name
+    # - What did you fact-check?                            claimReviewed
+    # - Who said/posted it?                                 itemReviewed.author
+    # - Link to the original piece                          itemReviewed.appearance
+    # - URL to fact-checked article (in your language)      url
+    # - Language of your fact-check                         
+    # - Final rating                                        reviewRating.alternateName
+    # - Explanation                                         reviewRating.explanation
+    # - Category                                            
+    appearance = row['Link to the original piece']
+    url = unshortened_url
+    if appearance:
+        try:
+            appearance = unshortener.unshorten(appearance)
+        except:
+            appearances = []
+        appearances = [appearance]
+    else:
+        appearances = []
+
+    claim_review = {
+        "@context": "http://schema.org",
+        "@type": "ClaimReview",
+        "url": url,
+        "author": {
+            "@type": "Organization",
+            "name":row['Organization']
+        },
+        "claimReviewed": row['What did you fact-check?'],
+        "reviewRating": {
+            "@type": "Rating",
+            "explanation": row['Explanation'],
+            "alternateName": row['Final rating']
+        },
+        "itemReviewed": {
+            "@type": "Claim",
+            "author": {
+                "@type": 'Person',
+                'name': row['Who said/posted it?']
+            },
+            "appearance": [{'@type': 'CreativeWork', 'url': u} for u in appearances]
+        },
+        'datePublished': row['When did you see the claim?'],
+        'origin': 'poynter_covid'
+    }
+    return claim_review
 
 
 

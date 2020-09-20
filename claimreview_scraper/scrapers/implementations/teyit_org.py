@@ -100,8 +100,9 @@ def get_all_articles_url(self_id):
                 el['url'] = f'{full_homepage}{el["slug"]}'
                 data[el['id']] = el
             
-            print(len(data), page)
+            # print(len(data), page)
             page += 1
+        print(len(data), 'items')
         
         return data.values()
 

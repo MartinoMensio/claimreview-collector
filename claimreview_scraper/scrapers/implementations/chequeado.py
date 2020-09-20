@@ -11,6 +11,36 @@ from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
 
+# TODO use the original fields too
+# "País donde se chequeó la desinformación"
+# "Desinformación o afirmación chequeada (o título del explicador)"
+# "Calificación (salvo en explicadores)"
+# "Descripción del chequeo en una línea"
+# "Fecha de publicación del chequeo (formato preestablecido)"
+# "Organización que lo chequeó"
+# "Link al chequeo"
+# "Tipo de información a la que refiere (Prevención, Síntomas, Curas, Medidas, Situación de un país, Contagios, origen del virus, características del virus, Predicción, Otros)"
+# "Formato de la desinformación (video, imagen, texto, otro) [separar los valores con comas]"
+# "Tipo de nota (chequeo a figuras públicas o medio, desinformación viral, explicador)"
+# "Link a la desinformación (imagen)"
+# "Fecha en la que se detectó la desinformación"
+# "Origen de la desinformación (si se conoce): Facebook, Whatsapp, Twitter, Instagram, otros [separar los valores con comas]"
+# "Persona, entidad o grupo que originó la desinformación (si se conoce) [separar los valores con comas]"
+# "Otros países en los que circuló [separar los valores con comas]"
+
+# "País donde se chequeó la desinformación"
+# "Desinformación o afirmación chequeada (o título del explicador)"
+# "Calificación (salvo en explicadores)"
+# "Descripción del chequeo en una línea"
+# "Fecha de publicación del chequeo (formato preestablecido)"
+# "Organización que lo chequeó"
+# "Link al chequeo"
+# "Tipo de información a la que refiere (Prevención, Síntomas, Curas, Medidas, Situación de un país, Contagios, origen del virus, características del virus, Predicción, Otros)"
+# "Formato de la desinformación (video, imagen, texto, otro) [separar los valores con comas]"
+# "Tipo de nota (chequeo a figuras públicas o medio, desinformación viral, explicador)"
+# "Origen de la desinformación (si se conoce): Facebook, Whatsapp, Twitter, Instagram, otros [separar los valores con comas]"
+# "Persona, entidad o grupo que originó la desinformación (si se conoce) [separar los valores con comas]"
+
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'chequeado'

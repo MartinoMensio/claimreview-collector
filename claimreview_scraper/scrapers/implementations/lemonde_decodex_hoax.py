@@ -36,6 +36,7 @@ def get_rating_value(label):
         'détourné': 0,
         'infondé': 0, # without support
         'contestable': 1, # contestable
+        'partiellement faux': 1, # partially false
         'c’est plus compliqué': 1, # more complicated
         'c’est plus complique': 1, # more complicated
         'exagéré': 1,

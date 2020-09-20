@@ -201,7 +201,7 @@ def retrieve_claimreview(url):
         sharethefacts_ids = [el.split('/')[-1] for el in a_hrefs if 'sharethefacts.co/share/' in el] + sharethefacts_microdata_embed_ids
         print(domain, 'sharethefacts_ids', sharethefacts_ids, url)
         if sharethefacts_ids:
-            if domain == 'www.politifact.com' or domain == 'www.factcheck.org' or domain == 'www.washingtonpost.com':
+            if domain == 'politifact.com' or domain == 'factcheck.org' or domain == 'washingtonpost.com':
                 for el in sharethefacts_ids:
                     embed_url = f"https://dhpikd1t89arn.cloudfront.net/html-{el}.html"
                     response_text = cache_manager.get(embed_url)

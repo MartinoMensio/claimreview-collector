@@ -6,8 +6,14 @@ import requests
 endpoint = 'http://localhost:5000/misinfo/api/utils/unshorten'
 
 def unshorten(url):
-    result = requests.get(endpoint, params={'url': url}).json()
-    return result['url_full']
+    try:
+        res = requests.get(endpoint, params={'url': url})
+        res.raise_for_status()
+        result = res.json()
+        return result['url_full']
+    except Exception as e:
+        print(e, url)
+        raise ValueError(url)
 
 
 
