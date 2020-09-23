@@ -41,7 +41,9 @@ def write_file_with_path(content, path, filename):
         f.write(content)
 
 def get_url_domain(url, only_tld=True):
-    """Returns the domain of the URL"""
+    """Returns the domain of the URL
+    
+    The parameter `only_tld` allows to retrieve only the top domain (e.g. `foo.bbc.co.uk` becomes `bbc.co.uk`)"""
     if not url:
         return ''
     ext = tldextract.extract(url)

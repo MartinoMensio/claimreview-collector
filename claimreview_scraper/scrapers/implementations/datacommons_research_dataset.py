@@ -88,6 +88,8 @@ def load_jsonld(content):
 
 def enrich_claimReviews(claim_reviews):
 
+    # TODO add unshortener to the claimreviews
+
     # retrieve the claimReviews with more properties
     # claimReviews_full = get_claimreviews_from_factcheckers(claimReviews)
     result = list(claim_reviews)
