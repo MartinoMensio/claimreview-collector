@@ -45,7 +45,9 @@ class Scraper(ScraperBase):
                 claim_reviews.append(built_cr)
                 url_fixed, cr = claimreview.retrieve_claimreview(url)
                 claim_reviews.extend(cr)
-            except Exception:
+            except Exception as e:
+                print(e)
+                print(url)
                 pass
         database_builder.add_ClaimReviews(self.id, claim_reviews)
 
@@ -126,11 +128,18 @@ def create_claimreview(row, unshortened_url):
     appearance = row['Link to the original piece']
     url = unshortened_url
     if appearance:
+        # TODO split by space? remove "not available" "Taken down" ...
+        # TODO work with wayback machine urls and perma.cc to get the original URL
         try:
-            appearance = unshortener.unshorten(appearance)
-        except:
+            appearances = appearance.split()
+            appearances = [el.strip() for el in appearances]
+            appearances = [el for el in appearances if el.startswith('http')]
+            appearances = [unshortener.unshorten(el) for el in appearances]
+            # print(appearances)
+        except Exception as e:
+            print(appearance)
             appearances = []
-        appearances = [appearance]
+        
     else:
         appearances = []
 

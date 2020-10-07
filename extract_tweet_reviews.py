@@ -331,6 +331,8 @@ def get_coinform_label_from_score(score):
 def claimreview_get_claim_appearances(claimreview):
     """from a `ClaimReview`, get all the URLs mentioned as appearances"""
     try:
+        factchecker_url = claimreview['url']
+        factchecker_domain = utils.get_url_domain(factchecker_url)
         result = []
         itemReviewed = claimreview.get('itemReviewed', None)
         if not itemReviewed:
@@ -385,6 +387,9 @@ def claimreview_get_claim_appearances(claimreview):
             if ',' in el:
                 els = el.split(',')
                 cleaned_result.extend(els)
+            if ' ' in el:
+                els = el.split(' ')
+                cleaned_result.extend(els)
             elif ' and ' in el:
                 els = el.split(' and ')
                 cleaned_result.extend(els)
@@ -394,6 +399,8 @@ def claimreview_get_claim_appearances(claimreview):
         cleaned_result = [el.strip() for el in cleaned_result if el]
         # just keep http(s) links
         cleaned_result = [el for el in cleaned_result if re.match('^https?:\/\/.*$', el)]
+        # remove loops to evaluation of itself
+        cleaned_result = [el for el in cleaned_result if utils.get_url_domain(el) != factchecker_domain]
         return cleaned_result
     except Exception as e:
         print(claimreview)

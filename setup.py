@@ -27,5 +27,7 @@ setup(name='claimreview_scraper',
           'pycountry',
           'dirtyjson',
           'rdflib-jsonld',
-          'pyld'
+          'pyld',
+          'scipy',
+          'jellyfish'
       ])
