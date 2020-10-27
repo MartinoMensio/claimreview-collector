@@ -78,7 +78,7 @@ def retrieve(self_id):
 
         soup = BeautifulSoup(response.text, 'lxml')
 
-        articles = soup.select('div.disinfo-db-post ')
+        articles = soup.select('tr.disinfo-db-post ')
         if not articles:
             go_on = False
             break
@@ -89,10 +89,10 @@ def retrieve(self_id):
                 go_on = False
                 break
             url = s.select('a')[0]['href']
-            title = s.select('div.cell-title')[0].text.strip()
-            date = s.select('div.disinfo-db-date')[0].text.strip()
+            title = s.select('td.cell-title')[0].text.strip()
+            date = s.select('td.disinfo-db-date')[0].text.strip()
             #outlets = s.select('data-column="Outlets"')[0].text.strip()
-            country = s.select('div.cell-country')[0].text.strip()
+            country = s.select('td.cell-country')[0].text.strip()
             if url in all_reviews:
                 found_consecutively += 1
                 continue
