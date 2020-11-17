@@ -239,7 +239,6 @@ def cluster_sentences(sentences, max_distance=3):
 def main():
     # claims_nationality_distribution()
     extract_ifcn_claimreviews()
-    pass
 
 
 ifcn_domains = get_ifcn_domains()
