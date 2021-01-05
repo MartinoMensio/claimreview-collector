@@ -29,5 +29,6 @@ setup(name='claimreview_scraper',
           'rdflib-jsonld',
           'pyld',
           'scipy',
-          'jellyfish'
+          'jellyfish',
+          'pandas'
       ])

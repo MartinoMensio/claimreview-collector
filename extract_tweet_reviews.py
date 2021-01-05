@@ -65,6 +65,7 @@ label_maps = {
     'Mostly False': 'not_credible',
     'Pants on Fire!': 'not_credible',
     'pants on fire': 'not_credible',
+    'cherry picks': 'uncertain',
     # from golbeck_fakenews
     'Fake': 'not_credible',
     # from liar (politifact-dashed)
@@ -353,25 +354,24 @@ def claimreview_get_claim_appearances(claimreview):
             if appearances:
                 # new field appearance in https://pending.schema.org/Claim
                 #print(appearances)
-                result = [el['url'] for el in appearances if el]
+                result.extend([el['url'] for el in appearances if el])
+            # sometimes instead the appearances are listed in itemReviewed
+            sameAs = itemReviewed.get('sameAs', None)
+            if sameAs:
+                result.append(sameAs)
             else:
-                # sometimes instead the appearances are listed in itemReviewed
-                sameAs = itemReviewed.get('sameAs', None)
+                author = itemReviewed.get('author', None)
+                if not author:
+                    author = itemReviewed.get('properties', {}).get('author', None)
+                if author:
+                    sameAs = author.get('sameAs', None)
+                    if not sameAs:
+                        sameAs = author.get('properties', {}).get('sameAs', None)
                 if sameAs:
-                    result = [sameAs]
-                else:
-                    author = itemReviewed.get('author', None)
-                    if not author:
-                        author = itemReviewed.get('properties', {}).get('author', None)
-                    if author:
-                        sameAs = author.get('sameAs', None)
-                        if not sameAs:
-                            sameAs = author.get('properties', {}).get('sameAs', None)
-                    if sameAs:
-                        if isinstance(sameAs, list):
-                            result = sameAs
-                        else:
-                            result = [sameAs]
+                    if isinstance(sameAs, list):
+                        result.extend(sameAs)
+                    else:
+                        result.append(sameAs)
             # sometimes in itemReviewed.url
             itemReviewed_url = itemReviewed.get('url', None)
             if itemReviewed_url:

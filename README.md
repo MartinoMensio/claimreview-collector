@@ -37,14 +37,14 @@ python -m claimreview_scraper.scrapers
 Update commands for each origin:
 
 ```bash
-python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 17824 ~ 10s
+python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 18882 ~ 10s
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674 (not available outside OU) --> REMOVED, too wrong!
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 9980 ~ 2m 5s
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 10270 ~ 2m 5s
 python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623 ~ 11m 33s
 python -m claimreview_scraper.scrapers.implementations.factcheckni # 21 ~ 3m 29s
 python -m claimreview_scraper.scrapers.implementations.fullfact # 855   ~1m 36s
-python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 88041 ~3m 18s
+python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 98011 ~3m 18s
 python -m claimreview_scraper.scrapers.implementations.istinomer # 4179 ~ 14m 23s (ERROR: microdata does not contain anymore full ClaimReview)
 python -m claimreview_scraper.scrapers.implementations.leadstories # 5219 ~ 9m 43s
 python -m claimreview_scraper.scrapers.implementations.lemonde_decodex_hoax # 479 ~ 4s
