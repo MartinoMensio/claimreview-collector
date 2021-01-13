@@ -13,9 +13,9 @@ import gzip
 from multiprocessing.pool import ThreadPool
 
 
+from . import ScraperBase
 from ...processing import utils, unshortener
 from ...processing import claimreview, database_builder
-from .. import ScraperBase
 
 class Scraper(ScraperBase):
     

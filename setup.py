@@ -7,7 +7,7 @@ setup(name='claimreview_scraper',
       description='ClaimReview Scraper for MisinfoMe',
       author='Martino Mensio',
       author_email='martino.mensio@open.ac.uk',
-      url='https://a.a.a',
+      url='https://misinfo.me/',
       packages=['claimreview_scraper'],
       python_requires='>=3',
       install_requires=[
@@ -30,5 +30,9 @@ setup(name='claimreview_scraper',
           'pyld',
           'scipy',
           'jellyfish',
-          'pandas'
+          'pandas',
+          'fastapi',
+          'uvicorn',
+          'aiofiles',
+          'schedule'
       ])

@@ -8,15 +8,16 @@ import tqdm
 import json
 import tldextract
 import requests
-from pymongo import MongoClient
 from collections import defaultdict
 from pathlib import Path
 
-from claimreview_scraper.processing import utils
+from . import utils, database_builder
 
+TWITTER_CONNECTOR = os.environ.get('TWITTER_CONNECTOR', 'localhost:20200')
+print('TWITTER_CONNECTOR', TWITTER_CONNECTOR)
 
-client = MongoClient()
-data_path = Path('data')
+client = database_builder.client
+data_path = Path('data/latest')
 
 
 # The following dicts are used to map the labels and the scores coming from the claimReviews
@@ -407,10 +408,12 @@ def claimreview_get_claim_appearances(claimreview):
         raise(e)
 
 
-def get_tweet_reviews_from_ifcn(ifcn_domains):
-    """Filtering function that analyses ClaimReviews and extracts tweet ratings.
-    
-    `ifcn_domains` is a list which contains allowed sources."""
+def extract():
+    """Filtering function that analyses ClaimReviews and extracts tweet ratings."""
+
+    ifcn_domains = get_ifcn_domains()
+
+
     filtered_cr = []
     tweet_reviews = defaultdict(list) # id: {label (mapped), original_label, id, fulltext}
     not_ifcn_cnt = 0
@@ -485,7 +488,7 @@ def get_tweet_reviews_from_ifcn(ifcn_domains):
             label = labels.pop()
 
         try:
-            res = requests.get(f'http://localhost:20200/tweets/{tweet_id}')
+            res = requests.get(f'http://{TWITTER_CONNECTOR}/tweets/{tweet_id}')
             res.raise_for_status()
             t = res.json()
             text = t['text']
@@ -520,13 +523,26 @@ def get_tweet_reviews_from_ifcn(ifcn_domains):
     print('multiple reviews', multiple_reviews_cnt)
     print('multiple reviews disagreeing', disagreeing_cnt)
 
-    return results
+    print('there are', len(results), 'tweet reviews')
+
+    write_json_with_path(tweet_reviews, data_path, 'tweet_reviews.json')
+    # analyse_mapping()
+
+    return {
+        'tweet_reviews_count': len(results),
+        'not_twitter_count': not_twitter_cnt,
+        'error_tweet_id_count': errror_tweet_id_cnt,
+        'error_twitter_api_count': errror_twitter_api_cnt,
+        'tweets_with_multiple_reviews_count': multiple_reviews_cnt,
+        'tweets_with_disagreeing_reviews_count': disagreeing_cnt
+    }
 
 def analyse_mapping():
     """see what got mapped to what"""
     reviews = read_json(data_path / 'tweet_reviews.json')
     m = defaultdict(set)
     for r in reviews:
+        # TODO error here TypeError: string indices must be integers
         for el in r['reviews']:
             m[el['label']].add(el['original_label'])
     
@@ -535,13 +551,6 @@ def analyse_mapping():
     write_json_with_path(m, data_path, 'mapping.json')
 
 
-def extract():
-    ifcn_domains = get_ifcn_domains()
-    tweet_reviews = get_tweet_reviews_from_ifcn(ifcn_domains)
-    print('there are', len(tweet_reviews), 'tweet reviews')
-    # for el in tweet_reviews:
-    #     del el['_id']
-    write_json_with_path(tweet_reviews, data_path, 'tweet_reviews.json')
 
 
 def filter_data():
@@ -575,4 +584,3 @@ def filter_data():
 
 if __name__ == "__main__":
     extract()
-    analyse_mapping()

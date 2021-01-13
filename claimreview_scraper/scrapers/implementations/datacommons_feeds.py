@@ -3,7 +3,7 @@ import requests
 import re
 from xml.etree import ElementTree
 
-from .. import ScraperBase
+from . import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder

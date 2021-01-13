@@ -11,7 +11,7 @@ from collections import defaultdict
 from pprint import pprint
 from itertools import groupby
 
-from .. import ScraperBase
+from . import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder

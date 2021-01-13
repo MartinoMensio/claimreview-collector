@@ -80,3 +80,5 @@ def get_all_factchecking_urls():
     return claimReviews_collection.distinct('url')
 
 
+def get_count_unique_from_scraper(scraper_name):
+    return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))

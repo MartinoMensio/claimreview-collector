@@ -7,7 +7,7 @@ from pyld import jsonld
 import json
 import traceback
 
-from .. import ScraperBase
+from . import ScraperBase
 from ...processing import database_builder
 from ...processing import utils
 

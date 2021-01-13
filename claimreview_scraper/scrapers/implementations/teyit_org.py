@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 import tqdm
 from multiprocessing.pool import ThreadPool
 
+from . import ScraperBase
 from ...processing import claimreview, utils, database_builder
 from ... import logger
-from .. import ScraperBase
 
 HOMEPAGE = 'https://teyit.org'
 

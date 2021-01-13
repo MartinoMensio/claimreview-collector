@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import dateparser
 from tqdm import tqdm
 
-from .. import ScraperBase
+from . import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder

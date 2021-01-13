@@ -2,10 +2,10 @@ import os
 import time
 import requests
 import itertools
-
-from ...processing import utils, claimreview, database_builder
-from .. import ScraperBase
 import tqdm
+
+from . import ScraperBase
+from ...processing import utils, claimreview, database_builder
 
 class Scraper(ScraperBase):
     def __init__(self):

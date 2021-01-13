@@ -7,9 +7,9 @@ import dateparser
 import tqdm
 from multiprocessing.pool import ThreadPool
 
+from . import ScraperBase
 from ...processing import utils
 from ...processing import claimreview, database_builder
-from .. import ScraperBase
 
 LIST_URL = 'https://www.politifact.com/factchecks/list/?page={}&category=truth-o-meter'
 STATEMENT_SELECTOR = 'article.m-statement'

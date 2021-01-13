@@ -7,8 +7,8 @@ import dateparser
 from multiprocessing.pool import ThreadPool
 import tqdm
 
+from . import ScraperBase
 from ...processing import utils, claimreview, database_builder
-from .. import ScraperBase
 
 class Scraper(ScraperBase):
     def __init__(self):

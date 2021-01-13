@@ -7,8 +7,8 @@ import dateparser
 import tqdm
 from multiprocessing.pool import ThreadPool
 
+from . import ScraperBase
 from ...processing import utils, database_builder, claimreview
-from .. import ScraperBase
 
 LIST_URL = 'https://www.snopes.com/fact-check/page/{}/'
 

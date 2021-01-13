@@ -6,7 +6,7 @@ import tqdm
 # (portuguese) wget https://spreadsheets.google.com/feeds/list/1BIgVzAcMhWXR5oW9c1UB2vnW5RY6vni_FRXvBaAG_4Q/od6/public/values?alt=json
 # (other data??) wget https://docs.google.com/spreadsheets/d/1Uj78PbPqcskXrjk3d3nGUvfq_6tN1vWbRraq4je7AyQ/edit#gid=0 
 
-from .. import ScraperBase
+from . import ScraperBase
 from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder

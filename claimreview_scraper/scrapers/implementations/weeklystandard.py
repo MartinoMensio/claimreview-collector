@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 from multiprocessing.pool import ThreadPool
 import tqdm
 
+from . import ScraperBase
 from ...processing import utils, claimreview, database_builder
-from .. import ScraperBase
 
 # WeeklyStandard fact-check is https://www.washingtonexaminer.com/
 

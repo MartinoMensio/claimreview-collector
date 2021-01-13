@@ -1,18 +1,9 @@
 import pkgutil
+import tqdm
 
 from . import implementations
-
-class ScraperBase(object):
-    id: str
-    homepage: str
-    name: str
-    description: str
-
-    def __init__(self, configuration=None):
-        self.configuration = configuration
-
-    def scrape(self):
-        raise NotImplementedError('override this method')
+from .implementations import datacommons_feeds, google_factcheck_explorer, euvsdisinfo, factcheckni, fullfact, teyit_org
+from ..processing import database_builder
 
 def scrape_all():
     scrapers = {}
@@ -20,7 +11,7 @@ def scrape_all():
     for importer, modname, ispkg in pkgutil.iter_modules(implementations.__path__, implementations.__name__ + "."):
         module = __import__(modname, fromlist="dummy")
         if hasattr(module, 'Scraper'):
-            s: ScraperBase = module.Scraper()
+            s = module.Scraper()
             scrapers[s.id] = s
             print(s.id)
         else:
@@ -32,3 +23,27 @@ def scrape_all():
             v.scrape()
         except Exception as e:
             print(e)
+
+def scrape_daily():
+    # TODO manage scheduling
+    scrapers = [
+        datacommons_feeds.Scraper(),
+        google_factcheck_explorer.Scraper(),
+        euvsdisinfo.Scraper(),
+        factcheckni.Scraper(),
+        fullfact.Scraper(),
+        teyit_org.Scraper(),
+        ]
+    stats = {}
+    for s in tqdm.tqdm(scrapers, desc='scraping'):
+        s.scrape()
+        stat = database_builder.get_count_unique_from_scraper(s.id)
+        stats[s.id] = stat
+
+    # stats = database_builder.get_count_unique_from_scraper('datacommons_feeds')
+    
+    print(stats)
+    return stats
+
+def scrape_single_scraper(scraper_name: str):
+    pass

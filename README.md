@@ -11,6 +11,10 @@ This library can be used to deal with `claimReview` items:
 Install this library with `pip` (that uses `setup.py`).
 It is highly recommended (FOR NOW REQUIRED) that you have a MongoDB instance locally, so that the caching mechanism will make everything faster.
 
+## Docker installation and running
+docker build . -t claimreview-scraper
+docker run -it --name claimreview-scraper -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND=misinfo_server:5000 --link=mm34834_misinfo_server:misinfo_server --link=mm34834_twitter_connector:twitter_connector -e TWITTER_CONNECTOR=twitter_connector:8000 -p 20400:8000 claimreview-scraper
+
 ## How it works
 
 `claimReview`s are published in different places:
@@ -41,7 +45,7 @@ python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 19161
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674 (not available outside OU) --> REMOVED, too wrong!
 python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 10270 ~ 2m 5s
-python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623 ~ 11m 33s
+python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623 ~ 11m 33s (not using sharethefacts anymore)
 python -m claimreview_scraper.scrapers.implementations.factcheckni # 21 ~ 3m 29s
 python -m claimreview_scraper.scrapers.implementations.fullfact # 855   ~1m 36s
 python -m claimreview_scraper.scrapers.implementations.google_factcheck_explorer # 99828 ~3m 18s
@@ -56,6 +60,11 @@ python -m claimreview_scraper.scrapers.implementations.poynter_covid # 9992 ~ 18
 python -m claimreview_scraper.scrapers.implementations.chequeado # 1179 ~ 49m 0s
 
 # SIZE indicated by db.getCollection('claim_reviews').distinct('url', {retrieved_by: 'COLLECTION_NAME'})
+```
+
+Run server: 
+```bash
+uvicorn claimreview_scraper.main:app --reload
 ```
 
 By fact-checker see table https://docs.google.com/spreadsheets/d/1etGJjS_l9iyWyWzBmqKYoGwz9_QKQKia4mUyfJWag9o/edit#gid=0

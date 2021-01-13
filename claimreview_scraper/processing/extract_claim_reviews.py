@@ -6,14 +6,13 @@ import jellyfish
 import numpy as np
 from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
-from pymongo import MongoClient
 from pathlib import Path
 
-from claimreview_scraper.processing import utils
-import extract_tweet_reviews
+from . import utils
+from . import extract_tweet_reviews, database_builder
 
-client = MongoClient()
-data_path = Path('data')
+client = database_builder.client
+data_path = Path('data/latest')
 
 ### UTILITIES
 def write_json_with_path(content, path, filename, indent=2):
@@ -182,6 +181,21 @@ def extract_ifcn_claimreviews():
     write_json_with_path(results, data_path, 'claim_reviews.json')
     # 10190
     write_json_with_path({k: list(v) for k, v in different_texts.items()}, data_path, 'different_texts.json')
+
+    appearances = set()
+    for cr in results:
+        appearances.update(cr['appearances'])
+    check_me_count = len([cr for cr in results if cr['label'] == 'check_me'])
+
+    return {
+        'claimreviews_merged_count': len(results),
+        'raw_claimreviews_count': len(raw_crs),
+        'ifcn_domains_count': len(ifcn_domains),
+        'claimreviews_not_from_ifcn_count': len(not_ifcn_urls),
+        'claimreviews_unique_review_urls_count': len(cr_by_url),
+        'claimreviews_unique_appearances_count': len(appearances),
+        'not_matching_reviews_labels_count': check_me_count
+    }
 
 
 
