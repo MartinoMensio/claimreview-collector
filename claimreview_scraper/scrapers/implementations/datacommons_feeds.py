@@ -45,7 +45,7 @@ def extract_claimreviews(data_list):
 
     for item in data_list:
         if not item['item']:
-            break
+            continue
         for cr in item['item']:
             if cr:
                 # some have "item": null
