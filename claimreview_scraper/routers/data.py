@@ -59,13 +59,14 @@ def get_data(date: str = 'latest', file: Optional[str] = None):
     data = data_entries[date]
     if not file:
         return data
-    if file not in data:
+    files = data['files']
+    if file not in files:
         # TODO manage errors
         return "no such file, remove this parameter to see the available files"
     # extension = 'zip' if file == 'zip' else 'json'
     # file_name = file if file != 'zip' else date
-    file_name = data[file]
-    file_path = f'{folder}/{date}/{file_name}'
+    file_path = files[file]
+    file_name = file_path.split('/')[-1]
     print(file_path)
     if not os.path.isfile(file_path):
         # TODO manage errors
@@ -96,6 +97,9 @@ def download_data(stats: StatsBody):
     with open(stats['files']['claim_reviews_raw']) as f:
         claimreviews_raw = json.load(f)
     database_builder.add_claimreviews_raw(claimreviews_raw)
+
+    # trigger credibility update!!!
+    TODO
 
 
 @router.post('/update')
