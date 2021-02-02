@@ -11,9 +11,67 @@ This library can be used to deal with `claimReview` items:
 Install this library with `pip` (that uses `setup.py`).
 It is highly recommended (FOR NOW REQUIRED) that you have a MongoDB instance locally, so that the caching mechanism will make everything faster.
 
+## Dump management
+
+Extract dump:
+```bash
+mongodump -d claimreview_scraper -o dumps/latest
+pushd dumps
+tar -zcvf latest.tar.gz latest
+popd
+```
+
+Transfer dump:
+```bash
+scp ./dumps/latest.tar.gz kmi-web03:/data/user-data/mm35626/MisinfoMe/claimreview-scraper/dumps/latest.tar.gz
+```
+
+Import db
+```bash
+pushd dumps
+tar -xvzf latest.tar.gz
+popd
+docker run --rm --name mm34834_mongoimporter -v `pwd`/dumps:/dumps --link=mm34834_mongo:mongo -it mongo bash
+mongorestore --host mongo --db claimreview_scraper dumps/claimreview_scraper
+
 ## Docker installation and running
 docker build . -t claimreview-scraper
-docker run -it --name claimreview-scraper -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND=misinfo_server:5000 --link=mm34834_misinfo_server:misinfo_server --link=mm34834_twitter_connector:twitter_connector -e TWITTER_CONNECTOR=twitter_connector:8000 -p 20400:8000 claimreview-scraper
+# local light (no link, using local misinfome). Start before misinfo_server
+docker run --restart always -it --name claimreview-scraper-light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light claimreview-scraper
+# local full
+docker run --restart always -it --name claimreview-scraper-full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="http://misinfo_server:5000/misinfo/api/twitter" -p 20500:8000 -e ROLE=full claimreview-scraper
+# server web (ROLE=light) no need of twitter or misinfo backend. But need of credibility backend
+docker run --restart always -it --name claimreview-scraper-light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=full claimreview-scraper
+# server (ROLE=full) without link to twitter_connector, using the public misinfome API. Credibility need for IFCN only (through misinfomeAPI)
+docker run --restart always -it --name claimreview-scraper-full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -p 20500:8000 -e ROLE=full claimreview-scraper
+
+
+# Auto-update
+Huge:
+Claimreview-scraper_huge (ROLE=full) creates release and publishes to GitHub
+Claimreview-scraper_huge sends POST to cr2_light with:
+       - date
+       - stats
+
+Light (ROLE=light):
+- receive POST from huge (misinfo/api/data --> claimreview_scraper)
+- download from GitHub, extract
+- make files available from API (fix the files entries)
+- clean from API data old (delete others from more than a week? Or only keep zips?)
+Then import inside mongo:
+mongoimport --db claimreview_scraper --collection claim_reviews_test --file data/latest/claim_reviews_raw.json --jsonArray
+Then trigger credibility endpoints
+
+ROLE=light has:
+- scheduler disabled
+- POST data/update (collect) disabled
+- POST data/download enabled
+- all the zips and files stored
+ROLE=full has:
+- scheduler enabled
+- POST data/update enabled
+- POST data/download enabled (for recovery???)
+- only the latest zip and files stored
 
 ## How it works
 

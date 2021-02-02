@@ -29,10 +29,10 @@ def scrape_daily():
     scrapers = [
         datacommons_feeds.Scraper(),
         google_factcheck_explorer.Scraper(),
-        euvsdisinfo.Scraper(),
-        factcheckni.Scraper(),
-        fullfact.Scraper(),
-        teyit_org.Scraper(),
+        # euvsdisinfo.Scraper(),
+        # factcheckni.Scraper(),
+        # fullfact.Scraper(),
+        # teyit_org.Scraper(),
         ]
     stats = {}
     for s in tqdm.tqdm(scrapers, desc='scraping'):

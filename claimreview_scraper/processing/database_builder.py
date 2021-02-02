@@ -2,13 +2,16 @@
 This module is responsible to interface with MongoDB
 """
 
+import os
 import tldextract
 import datetime
 from pymongo import MongoClient
 
 from . import utils
 
-client = MongoClient()
+MONGO_HOST = os.environ.get('MONGO_HOST', 'localhost')
+
+client = MongoClient(host=MONGO_HOST)
 
 db = client['claimreview_scraper']
 
@@ -18,6 +21,14 @@ cache_collection = db['cache']
 
 def clean_db():
     claimReviews_collection.drop()
+
+def add_claimreviews_raw(claimreviews, clean=True):
+    if len(claimreviews) < 1:
+        raise ValueError('nothing')
+    if clean:
+        clean_db()
+    claimReviews_collection.insert_many(claimreviews)
+    print('added', len(claimreviews), 'ClaimReviews')
 
 def add_ClaimReviews(scraper_name, claimreviews, clean=True):
     if len(claimreviews) < 1:

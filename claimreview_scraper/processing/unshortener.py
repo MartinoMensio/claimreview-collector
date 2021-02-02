@@ -3,10 +3,10 @@
 import requests
 import os
 
-MISINFO_BACKEND = os.environ.get('MISINFO_BACKEND', 'localhost:5000')
+MISINFO_BACKEND = os.environ.get('MISINFO_BACKEND', 'http://localhost:5000')
 
 # endpoint = 'https://misinfo.me/misinfo/api/utils/unshorten'
-endpoint = f'http://{MISINFO_BACKEND}/misinfo/api/utils/unshorten'
+endpoint = f'{MISINFO_BACKEND}/misinfo/api/utils/unshorten'
 
 def unshorten(url):
     try:

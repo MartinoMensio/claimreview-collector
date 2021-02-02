@@ -1,7 +1,9 @@
 data**/**
+data/**
 poynter_covid_dataset/**
 dump.tar.gz
 dump/**
+dumps/**
 cache/**
 .DS_Store
 .vscode/**

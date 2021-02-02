@@ -13,8 +13,10 @@ from pathlib import Path
 
 from . import utils, database_builder
 
-TWITTER_CONNECTOR = os.environ.get('TWITTER_CONNECTOR', 'localhost:20200')
+TWITTER_CONNECTOR = os.environ.get('TWITTER_CONNECTOR', 'http://localhost:20200')
 print('TWITTER_CONNECTOR', TWITTER_CONNECTOR)
+MISINFO_BACKEND = os.environ.get('MISINFO_BACKEND', 'http://localhost:5000')
+print('MISINFO_BACKEND', MISINFO_BACKEND)
 
 client = database_builder.client
 data_path = Path('data/latest')
@@ -221,8 +223,9 @@ def read_json(input_path):
 
 def get_ifcn_domains():
     """get the list of domains of fact-checkers belonging to IFCN"""
-    signatories = client['credibility']['ifcn'].find({'granularity': 'source'})
-    signatories = list(signatories)
+    res = requests.get(f'{MISINFO_BACKEND}/misinfo/api/credibility/factcheckers')
+    res.raise_for_status()
+    signatories = res.json()
     
     for el in signatories:
         del el['_id']
@@ -488,7 +491,7 @@ def extract():
             label = labels.pop()
 
         try:
-            res = requests.get(f'http://{TWITTER_CONNECTOR}/tweets/{tweet_id}')
+            res = requests.get(f'{TWITTER_CONNECTOR}/tweets/{tweet_id}')
             res.raise_for_status()
             t = res.json()
             text = t['text']

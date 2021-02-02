@@ -2,6 +2,7 @@ import os
 import json
 import tqdm
 import scipy
+import requests
 import jellyfish
 import numpy as np
 from scipy.cluster.hierarchy import linkage
@@ -10,6 +11,7 @@ from pathlib import Path
 
 from . import utils
 from . import extract_tweet_reviews, database_builder
+
 
 client = database_builder.client
 data_path = Path('data/latest')
@@ -29,22 +31,10 @@ def read_json(input_path):
 
 
 
-def get_ifcn_domains():
-    """get the list of domains of fact-checkers belonging to IFCN"""
-    signatories = client['credibility']['ifcn'].find({'granularity': 'source'})
-    signatories = list(signatories)
-    
-    for el in signatories:
-        del el['_id']
-    write_json_with_path(signatories, data_path, 'ifcn_sources.json')
-    ass = [el['domain'] for el in signatories]
-    # print(ass)
-    print('there are', len(ass), 'ifcn trusted domains')
-    return ass
-
 
 
 def claims_nationality_distribution():
+    ifcn_domains = extract_tweet_reviews.get_ifcn_domains()
     urls = set(client['claimreview_scraper']['claim_reviews'].distinct('url'))
     print(len(urls), 'unique fact-checking URLs')
     urls_by_domain = defaultdict(list)
@@ -80,6 +70,7 @@ def claims_nationality_distribution():
 
 
 def extract_ifcn_claimreviews():
+    ifcn_domains = extract_tweet_reviews.get_ifcn_domains()
     not_ifcn_urls = set()
     not_ifcn_cnt = 0
     not_ifcn_review_domains = set()
@@ -187,6 +178,14 @@ def extract_ifcn_claimreviews():
         appearances.update(cr['appearances'])
     check_me_count = len([cr for cr in results if cr['label'] == 'check_me'])
 
+    # bad links only
+    bad_links = set()
+    for cr in results:
+        if cr['label'] == 'not_credible':
+            bad_links.update(cr['appearances'])
+    bad_links = list(bad_links)
+    write_json_with_path(bad_links, data_path, 'links_not_credible.json')
+
     return {
         'claimreviews_merged_count': len(results),
         'raw_claimreviews_count': len(raw_crs),
@@ -194,7 +193,8 @@ def extract_ifcn_claimreviews():
         'claimreviews_not_from_ifcn_count': len(not_ifcn_urls),
         'claimreviews_unique_review_urls_count': len(cr_by_url),
         'claimreviews_unique_appearances_count': len(appearances),
-        'not_matching_reviews_labels_count': check_me_count
+        'not_matching_reviews_labels_count': check_me_count,
+        'links_not_credible_count': len(bad_links)
     }
 
 
@@ -254,8 +254,6 @@ def main():
     # claims_nationality_distribution()
     extract_ifcn_claimreviews()
 
-
-ifcn_domains = get_ifcn_domains()
 
 if __name__ == "__main__":
     main()
