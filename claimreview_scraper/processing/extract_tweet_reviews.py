@@ -227,8 +227,6 @@ def get_ifcn_domains():
     res.raise_for_status()
     signatories = res.json()
     
-    for el in signatories:
-        del el['_id']
     write_json_with_path(signatories, data_path, 'ifcn_sources.json')
     ass = [el['domain'] for el in signatories]
     # print(ass)

@@ -99,7 +99,7 @@ def download_data(stats: StatsBody):
     database_builder.add_claimreviews_raw(claimreviews_raw)
 
     # trigger credibility update!!!
-    TODO
+    pass # TODO
 
 
 @router.post('/update')
