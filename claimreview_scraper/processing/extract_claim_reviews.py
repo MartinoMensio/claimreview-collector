@@ -4,6 +4,7 @@ import tqdm
 import scipy
 import requests
 import jellyfish
+import dateparser
 import numpy as np
 from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
@@ -138,6 +139,12 @@ def extract_ifcn_claimreviews():
                 mapped_label = extract_tweet_reviews.claimreview_get_coinform_label(cr)
                 labels.add(mapped_label)
                 appearances.update(extract_tweet_reviews.claimreview_get_claim_appearances(cr))
+                date_published = cr.get('datePublished', None)
+                if date_published:
+                    date_published = dateparser.parse(date_published)
+                if date_published:
+                    date_published = date_published.strftime("%Y-%m-%d")
+                cr['date_published'] = date_published
             # claimreviews have the same text claim checked, they must have same verdict
             if len(labels) > 1:
                 # print(claims_reviewed)
@@ -156,7 +163,8 @@ def extract_ifcn_claimreviews():
                     'label': extract_tweet_reviews.claimreview_get_coinform_label(cr),
                     'original_label': cr.get('reviewRating', {}).get('alternateName', ''),
                     'review_rating': cr.get('reviewRating', {}),
-                    'retrieved_by': cr['retrieved_by']
+                    'retrieved_by': cr['retrieved_by'],
+                    'date_published': cr['date_published']
                 } for cr in crs_cluster]
             })
 
@@ -178,13 +186,45 @@ def extract_ifcn_claimreviews():
         appearances.update(cr['appearances'])
     check_me_count = len([cr for cr in results if cr['label'] == 'check_me'])
 
-    # bad links only
+    # not credible links only
     bad_links = set()
     for cr in results:
         if cr['label'] == 'not_credible':
             bad_links.update(cr['appearances'])
     bad_links = list(bad_links)
     write_json_with_path(bad_links, data_path, 'links_not_credible.json')
+
+    # not credible links table
+    by_bad_link = defaultdict(list)
+    for cr in results:
+        if cr['label'] == 'not_credible':
+            for app in cr['appearances']:
+                by_bad_link[app].append(cr)
+    
+    # multiple reviews but agreeing
+    multiple = 0
+    for k, v in by_bad_link.items():
+        if len(v) > 1:
+            # print(k, v)
+            multiple += 1
+    print('urls with multiple', multiple)
+
+    # linked information result
+    bad_table = []
+    for k, v in by_bad_link.items():
+        bad_table.append({
+            'misinforming_url': k,
+            'reviews': [{
+                'label': r['label'],
+                'review_url': r['review_url'],
+                'claim_text': r['claim_text'],
+                # using element [0] because they already have the same fact-check URL, same claim reviewed, same mapped label
+                'original_label': r['reviews'][0]['original_label'],
+                'date_published': r['reviews'][0]['date_published'],
+            } for r in v]
+        })
+    utils.write_json_with_path(bad_table, data_path, 'links_not_credible_full.json')
+
 
     return {
         'claimreviews_merged_count': len(results),
