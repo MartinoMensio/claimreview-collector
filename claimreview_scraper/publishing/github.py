@@ -80,7 +80,7 @@ def get_release_asset_from_tag(tag, asset_name):
     GITHUB_API_URL = f'https://api.github.com/repos/{REPO_FULL_NAME}/releases'
     res = requests.get(f'{GITHUB_API_URL}/tags/{tag}', headers=auth_header)
     res.raise_for_status()
-
+    #
     data = res.json()
     match = None
     for asset in data['assets']:
@@ -88,15 +88,15 @@ def get_release_asset_from_tag(tag, asset_name):
             match = asset['id']
     if not match:
         raise ValueError(f'asset {asset_name} not found')
-    
+    #
     # download asset
     headers = {**auth_header, 'Accept': 'application/octet-stream'}
     res = requests.get(f'{GITHUB_API_URL}/assets/{match}', headers=headers)
     res.raise_for_status()
-
+    #
     content = res.content
     print(len(content))
-
+    #
     return content
 
 def add_stats_to_all_releases():

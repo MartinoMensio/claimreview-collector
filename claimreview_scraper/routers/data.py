@@ -26,10 +26,10 @@ latest_data_path = f'{folder}/latest'
 
 class StatsBody(BaseModel):
     date: str
-    scrapers_stats: Dict[str, int]
-    claim_reviews: Dict[str, int]
-    tweet_reviews: Dict[str, int]
-    files: Dict[str, str]
+    # scrapers_stats: Dict[str, int]
+    # claim_reviews: Dict[str, int]
+    # tweet_reviews: Dict[str, int]
+    # files: Dict[str, str]
 
 @router.get('/')
 def list_data(since: Optional[str] = None, until: Optional[str] = None):
@@ -75,11 +75,12 @@ def get_data(date: str = 'latest', file: Optional[str] = None):
     return file_response
 
 @router.post('/download')
-def download_data(stats: StatsBody):
+def download_data(stats: StatsBody, clear=True):
     # download asset
     date = stats.date
     asset_name =f'{date}.zip'
     asset_path = f'{folder}/{asset_name}'
+    bytes_stats = github.get_release_asset_from_tag(date, 'stats.json')
     bytes_assets = github.get_release_asset_from_tag(date, asset_name)
     with open(asset_path, 'wb') as f:
         f.write(bytes_assets)
@@ -87,7 +88,7 @@ def download_data(stats: StatsBody):
 
     # update index
     index = list_data()
-    stats = stats.dict()
+    stats = json.loads(bytes_stats.decode())
     index[date] = stats
     index['latest'] = stats
     utils.write_json_with_path(index, Path(folder), 'index.json')
@@ -98,8 +99,10 @@ def download_data(stats: StatsBody):
         claimreviews_raw = json.load(f)
     database_builder.add_claimreviews_raw(claimreviews_raw)
 
-    # trigger credibility update!!!
-    pass # TODO
+    # remove old files
+    dates_to_remove = index.keys() - ['latest', date]
+    for d in dates_to_remove:
+        shutil.rmtree(f'{folder}/{date}')
 
 
 @router.post('/update')
