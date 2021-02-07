@@ -148,8 +148,8 @@ def update_data():
     utils.write_json_with_path(index, Path(folder), 'index.json')
 
     try:
-        github.create_release(date=today)
         result_stats['date'] = today
+        github.create_release(date=today, result_stats=result_stats)
         notify_light_instance(result_stats)
     except Exception as e:
         print(e)
