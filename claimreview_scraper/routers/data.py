@@ -102,7 +102,7 @@ def download_data(stats: StatsBody, clear=True):
     # remove old files
     dates_to_remove = index.keys() - ['latest', date]
     for d in dates_to_remove:
-        shutil.rmtree(f'{folder}/{date}')
+        shutil.rmtree(f'{folder}/{d}')
 
 
 @router.post('/update')
