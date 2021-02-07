@@ -496,8 +496,8 @@ def extract():
             created_at = t['created_at']
             lang = t['lang']
             screen_name = t['user_screen_name']
-        except Exception:
-            print('API error', tweet_id)
+        except Exception as e:
+            print('API error', e, tweet_id)
             errror_twitter_api_cnt += 1
             text = None
             created_at = None
