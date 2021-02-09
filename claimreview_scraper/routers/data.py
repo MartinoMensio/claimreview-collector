@@ -1,12 +1,13 @@
 import os
 import json
 import glob
+import random
 import requests
 from pathlib import Path
 import shutil
 import datetime
 from typing import Dict, Optional
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from starlette.responses import FileResponse
 from pydantic import BaseModel
 
@@ -22,7 +23,24 @@ base_path = os.getcwd()
 folder = 'data'
 index_path = f'{folder}/index.json'
 latest_data_path = f'{folder}/latest'
+PUBLISH_GITHUB = os.environ.get('PUBLISH_GITHUB', False)
 
+random_misinforming_samples = {
+    'misinforming_items': None,
+    'length': 0,
+    'random_indices': None,
+    'ready': False
+}
+
+def load_random_samples():
+    misinfo_items = utils.read_json(f'{folder}/latest/links_not_credible_full.json')
+    length = len(misinfo_items)
+    random_indices = list(range(length))
+    random.shuffle(random_indices)
+    random_misinforming_samples['misinforming_items'] = misinfo_items
+    random_misinforming_samples['length'] = length
+    random_misinforming_samples['random_indices'] = random_indices
+    random_misinforming_samples['ready'] = True
 
 class StatsBody(BaseModel):
     date: str
@@ -31,7 +49,7 @@ class StatsBody(BaseModel):
     # tweet_reviews: Dict[str, int]
     # files: Dict[str, str]
 
-@router.get('/')
+@router.get('/daily')
 def list_data(since: Optional[str] = None, until: Optional[str] = None):
     if os.path.isfile(index_path):
         items = utils.read_json(index_path)
@@ -48,7 +66,7 @@ def list_data(since: Optional[str] = None, until: Optional[str] = None):
 # def get_latest_data():
 #     pass
 
-@router.get('/{date}')
+@router.get('/daily/{date}')
 def get_data(date: str = 'latest', file: Optional[str] = None):
     # if date == 'latest':
     # convert latest ?
@@ -104,6 +122,65 @@ def download_data(stats: StatsBody, clear=True):
     for d in dates_to_remove:
         shutil.rmtree(f'{folder}/{d}')
 
+# TODO openapi parameters
+@router.get('/sample')
+def random_sample(
+        since: Optional[str] = None,
+        until: Optional[str] = None,
+        misinforming_domain: Optional[str] = None,
+        fact_checker_domain: Optional[str] = None,
+        cursor: Optional[int] = None):
+    
+    # first of all make sure that random stuff is loaded
+    if not random_misinforming_samples['ready']:
+        load_random_samples()
+    # if no cursor, create a random starting point
+    if cursor == None:
+        # random cursor between 0 (included) and length (excluded)
+        cursor = random.randrange(random_misinforming_samples['length'])
+    try:
+        # align to resume search
+        cursor_index = random_misinforming_samples['random_indices'].index(cursor)
+    except:
+        # if out of range, give a random one
+        print('cursor', cursor, 'out of range', random_misinforming_samples['length'])
+        cursor = random.randrange(random_misinforming_samples['length'])
+        cursor_index = random_misinforming_samples['random_indices'].index(cursor)
+    # create cursored array by splitting after cursor and merging swapped: indices[cursor:length] + indices[0:cursor1]
+    cursored_array = random_misinforming_samples['random_indices'][cursor_index:] + random_misinforming_samples['random_indices'][:cursor_index]
+    # now start the search with the filters
+    match = None
+    match_index = None
+    current_cursor = cursor
+    for cursor in cursored_array:
+        el = random_misinforming_samples['misinforming_items'][cursor]
+        dates = [r['date_published'] for r in el['reviews']]
+        fc_domains = [r['fact_checker']['domain'] for r in el['reviews']]
+        if since and not any([d >= since for d in dates if d]):
+            continue
+        if until and not any([d <= until for d in dates if d]):
+            continue
+        if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
+            continue
+        if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
+            continue
+        if match:
+            # for the next round, updating 
+            break
+        else:
+            match = el
+            match_index = cursor
+
+    if not match:
+        raise HTTPException(404, 'no items with the used filters')
+    return {
+        'sample': match,
+        'index': match_index,
+        'next_cursor': cursor,
+        'current_cursor': current_cursor
+    }
+
+
 
 @router.post('/update')
 def update_data():
@@ -143,6 +220,7 @@ def update_data():
     files['zip'] = zip_path
 
     result_stats['files'] = files
+    result_stats['date'] = today
 
     # save index
     index = list_data()
@@ -151,9 +229,9 @@ def update_data():
     utils.write_json_with_path(index, Path(folder), 'index.json')
 
     try:
-        result_stats['date'] = today
-        github.create_release(date=today, result_stats=result_stats)
-        notify_light_instance(result_stats)
+        if PUBLISH_GITHUB:
+            github.create_release(date=today, result_stats=result_stats)
+            notify_light_instance(result_stats)
     except Exception as e:
         print(e)
 
