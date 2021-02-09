@@ -33,7 +33,9 @@ random_misinforming_samples = {
 }
 
 def load_random_samples():
-    misinfo_items = utils.read_json(f'{folder}/latest/links_not_credible_full.json')
+    meta = get_data()
+    file_path = meta['files']['links_not_credible_full']
+    misinfo_items = utils.read_json(file_path)
     length = len(misinfo_items)
     random_indices = list(range(length))
     random.shuffle(random_indices)
