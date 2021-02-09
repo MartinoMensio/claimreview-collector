@@ -87,6 +87,7 @@ def extract_ifcn_claimreviews():
             not_ifcn_cnt += 1
             not_ifcn_review_domains.add(domain)
         else:
+            cr['ifcn_info'] = ifcn_domains[domain]
             cr_by_url[url].append(cr)
 
     write_json_with_path(raw_crs, data_path, 'claim_reviews_raw.json')
@@ -153,11 +154,22 @@ def extract_ifcn_claimreviews():
                 final_label = 'check_me'
             else:
                 final_label = labels.pop()
+
+            # the same in the same cluster, because same URL gives same domain
+            factchecker_info = crs_cluster[0]['ifcn_info']
             
             results.append({
                 'claim_text': cluster_claims_reviewed,
                 'label': final_label,
                 'review_url': url,
+                'fact_checker': {
+                    'name': factchecker_info['original']['name'],
+                    'country': factchecker_info['original']['country'],
+                    'language': factchecker_info['original']['language'],
+                    'website': factchecker_info['original']['website'],
+                    'ifcn_url': factchecker_info['original']['assessment_url'],
+                    'domain': factchecker_info['domain']
+                },
                 'appearances': list(appearances),
                 'reviews': [{
                     'label': extract_tweet_reviews.claimreview_get_coinform_label(cr),
@@ -214,10 +226,12 @@ def extract_ifcn_claimreviews():
     for k, v in by_bad_link.items():
         bad_table.append({
             'misinforming_url': k,
+            'misinforming_domain': utils.get_url_domain(k),
             'reviews': [{
                 'label': r['label'],
                 'review_url': r['review_url'],
                 'claim_text': r['claim_text'],
+                'fact_checker': r['fact_checker'],
                 # using element [0] because they already have the same fact-check URL, same claim reviewed, same mapped label
                 'original_label': r['reviews'][0]['original_label'],
                 'date_published': r['reviews'][0]['date_published'],

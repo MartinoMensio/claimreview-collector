@@ -228,7 +228,7 @@ def get_ifcn_domains():
     signatories = res.json()
     
     write_json_with_path(signatories, data_path, 'ifcn_sources.json')
-    ass = [el['domain'] for el in signatories]
+    ass = {el['domain']: el for el in signatories}
     # print(ass)
     print('there are', len(ass), 'ifcn trusted domains')
     return ass
