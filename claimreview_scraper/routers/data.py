@@ -127,6 +127,9 @@ def download_data(stats: StatsBody, clear=True):
             shutil.rmtree(f'{folder}/{d}')
         except Exception as e:
             print(e)
+    
+    # reload random samples
+    load_random_samples()
 
 # TODO openapi parameters
 @router.get('/sample')
