@@ -138,6 +138,7 @@ def random_sample(
         until: Optional[str] = None,
         misinforming_domain: Optional[str] = None,
         fact_checker_domain: Optional[str] = None,
+        exclude_twitter_misinfo: Optional[bool] = True,
         cursor: Optional[int] = None):
     
     # first of all make sure that random stuff is loaded
@@ -168,6 +169,8 @@ def random_sample(
         if since and not any([d >= since for d in dates if d]):
             continue
         if until and not any([d <= until for d in dates if d]):
+            continue
+        if exclude_twitter_misinfo and el['misinforming_domain'] == 'twitter.com' and misinforming_domain != 'twitter.com':
             continue
         if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
             continue
