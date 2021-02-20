@@ -10,6 +10,7 @@ from typing import Dict, Optional
 from fastapi import APIRouter, HTTPException
 from starlette.responses import FileResponse
 from pydantic import BaseModel
+from urllib.parse import urlparse
 
 from ..processing import utils, extract_claim_reviews, extract_tweet_reviews, database_builder
 from .. import scrapers
@@ -139,6 +140,7 @@ def random_sample(
         misinforming_domain: Optional[str] = None,
         fact_checker_domain: Optional[str] = None,
         exclude_twitter_misinfo: Optional[bool] = True,
+        exclude_homepage_url_misinfo: Optional[bool] = True,
         cursor: Optional[int] = None):
     
     # first of all make sure that random stuff is loaded
@@ -166,6 +168,7 @@ def random_sample(
         el = random_misinforming_samples['misinforming_items'][cursor]
         dates = [r['date_published'] for r in el['reviews']]
         fc_domains = [r['fact_checker']['domain'] for r in el['reviews']]
+        url = el['misinforming_url']
         if since and not any([d >= since for d in dates if d]):
             continue
         if until and not any([d <= until for d in dates if d]):
@@ -175,6 +178,8 @@ def random_sample(
         if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
             continue
         if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
+            continue
+        if exclude_homepage_url_misinfo and urlparse(url).path == '/':
             continue
         if match:
             # for the next round, updating 
