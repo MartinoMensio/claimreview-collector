@@ -6,8 +6,8 @@ import requests
 from pathlib import Path
 import shutil
 import datetime
-from typing import Dict, Optional
-from fastapi import APIRouter, HTTPException
+from typing import Dict, Optional, List
+from fastapi import APIRouter, HTTPException, Query
 from starlette.responses import FileResponse
 from pydantic import BaseModel
 from urllib.parse import urlparse
@@ -139,7 +139,7 @@ def random_sample(
         until: Optional[str] = None,
         misinforming_domain: Optional[str] = None,
         fact_checker_domain: Optional[str] = None,
-        exclude_twitter_misinfo: Optional[bool] = True,
+        exclude_misinfo_domain: Optional[List[str]] = Query(['twitter.com', 'wikipedia.org']),
         exclude_homepage_url_misinfo: Optional[bool] = True,
         cursor: Optional[int] = None):
     
@@ -173,8 +173,9 @@ def random_sample(
             continue
         if until and not any([d <= until for d in dates if d]):
             continue
-        if exclude_twitter_misinfo and el['misinforming_domain'] == 'twitter.com' and misinforming_domain != 'twitter.com':
-            continue
+        if not misinforming_domain and exclude_misinfo_domain:
+            if el['misinforming_domain'] in exclude_misinfo_domain:
+                continue
         if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
             continue
         if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
