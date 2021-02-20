@@ -180,8 +180,10 @@ def random_sample(
             continue
         if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
             continue
-        if exclude_homepage_url_misinfo and urlparse(url).path == '/':
-            continue
+        if exclude_homepage_url_misinfo:
+            path = urlparse(url).path
+            if not path or path == '/':
+                continue
         if match:
             # for the next round, updating 
             break
