@@ -357,28 +357,31 @@ def claimreview_get_claim_appearances(claimreview):
                 # new field appearance in https://pending.schema.org/Claim
                 #print(appearances)
                 result.extend([el['url'] for el in appearances if el])
-            # sometimes instead the appearances are listed in itemReviewed
-            sameAs = itemReviewed.get('sameAs', None)
-            if sameAs:
-                result.append(sameAs)
-            else:
-                author = itemReviewed.get('author', None)
-                if not author:
-                    author = itemReviewed.get('properties', {}).get('author', None)
-                if author:
-                    sameAs = author.get('sameAs', None)
-                    if not sameAs:
-                        sameAs = author.get('properties', {}).get('sameAs', None)
-                if sameAs:
-                    if isinstance(sameAs, list):
-                        result.extend(sameAs)
-                    else:
-                        result.append(sameAs)
             # sometimes in itemReviewed.url
             itemReviewed_url = itemReviewed.get('url', None)
             if itemReviewed_url:
                 #raise ValueError(claimreview['url'])
                 result.append(itemReviewed_url)
+            # sometimes instead the appearances are listed in itemReviewed
+            # NEVER HAPPENING
+            # sameAs = itemReviewed.get('sameAs', None)
+            # if sameAs:
+            #     result.append(sameAs)
+            # DIRTY DATA IN AUTHOR
+            # else:
+            #     author = itemReviewed.get('author', None)
+            #     if not author:
+            #         author = itemReviewed.get('properties', {}).get('author', None)
+            #     if author:
+            #         sameAs = author.get('sameAs', None)
+            #         if not sameAs:
+            #             sameAs = author.get('properties', {}).get('sameAs', None)
+            #     if sameAs:
+            #         if isinstance(sameAs, list):
+            #             result.extend(sameAs)
+            #         else:
+            #             result.append(sameAs)
+            
         # TODO also return sameAs if present on the claim directly, other links there!!
 
         # split appearances that are a single field with comma or ` and `
