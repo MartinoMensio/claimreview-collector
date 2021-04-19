@@ -14,6 +14,7 @@ csv.field_size_limit(sys.maxsize)
 # default value
 
 def read_json(input_path):
+    """read json from file"""
     with open(input_path) as f:
         return json.load(f)
 
@@ -29,6 +30,7 @@ def read_tsv(input_path, with_header=True, delimiter='\t'):
     return results
 
 def write_json_with_path(content, path, filename, indent=2):
+    """dump to json file, creating folder if necessary"""
     if not os.path.isdir(path):
         os.makedirs(path)
     with open(path / filename, 'w') as f:

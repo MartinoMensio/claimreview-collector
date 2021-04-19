@@ -128,9 +128,11 @@ def fix_page(page):
     return page
 
 def retrieve_claimreview(url):
+    result = []
     # url_fixed = get_corrected_url(url)
     url_fixed = url
     domain = utils.get_url_domain(url_fixed)
+    # TODO: some websites use the @graph e.g.: https://factuel.afp.com/non-91-des-marocains-ne-sont-pas-prets-quitter-le-pays
     verify = True
     # these domain has SSL certificate that does not cover its own subdomain
     # ['live-video.leadstories.com', 'trending-gifs.leadstories.com', 'trending-videos.leadstories.com']
@@ -143,9 +145,12 @@ def retrieve_claimreview(url):
         print(domain, url, url_fixed)
         raise e
     # download the page
-    page_text = cache_manager.get(url_fixed, verify=verify, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
+    try:
+        page_text = cache_manager.get(url_fixed, verify=verify, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
     # page_text = fix_page(page_text)
-    result = []
+    except:
+        print('unhandled exception downloading', url_fixed)
+        return url, result
     try:
         result = parser(page_text)
     except json.decoder.JSONDecodeError:
@@ -172,7 +177,8 @@ def retrieve_claimreview(url):
         print('superpowers worked!')
     except Exception as e:
         print("Unhandled error at", url)
-        raise e
+        # raise e
+        return url, result
 
     if not result:
         # try with sharethefacts widget scraping:
@@ -201,7 +207,7 @@ def retrieve_claimreview(url):
         sharethefacts_ids = [el.split('/')[-1] for el in a_hrefs if 'sharethefacts.co/share/' in el] + sharethefacts_microdata_embed_ids
         print(domain, 'sharethefacts_ids', sharethefacts_ids, url)
         if sharethefacts_ids:
-            if domain == 'politifact.com' or domain == 'factcheck.org' or domain == 'washingtonpost.com':
+            if domain in ['politifact.com','factcheck.org','washingtonpost.com','afp.com','tempo.co','pagellapolitica.it', 'demagog.org.pl', 'poynter.org']:
                 for el in sharethefacts_ids:
                     embed_url = f"https://dhpikd1t89arn.cloudfront.net/html-{el}.html"
                     response_text = cache_manager.get(embed_url)
@@ -225,8 +231,10 @@ def retrieve_claimreview(url):
 def _jsonld_parser(page):
     data = extruct.extract(page, syntaxes=['json-ld'])
     json_lds = data['json-ld']
+    if not json_lds:
+        return []
     # print(json_lds)
-    claimReviews = [el for el in json_lds if 'ClaimReview' in el.get('@type', '')]
+    claimReviews = [el for el in json_lds if el.get('@type', '') and 'ClaimReview' in el.get('@type', '')]
     # print(claimReviews)
     return claimReviews
 
@@ -252,8 +260,11 @@ _domain_parser_map = {
     'snopes.com': _jsonld_parser,
     'www.snopes.com': _jsonld_parser,
     'www.factcheck.org': _jsonld_parser,
+    'factcheck.org': _jsonld_parser,
     "www.politifact.com": _microdata_parser,
+    "politifact.com": _microdata_parser,
     'www.washingtonpost.com': _microdata_parser,
+    'washingtonpost.com': _microdata_parser,
     'www.weeklystandard.com': _jsonld_parser,
     'www.washingtonexaminer.com': _jsonld_parser,
     'leadstories.com': _jsonld_parser,
@@ -290,6 +301,7 @@ _domain_parser_map = {
     'www.animalpolitico.com': _microdata_parser,
     'www.istinomer.rs': _microdata_parser,
     'kallxo.com': _jsonld_parser,
+    'afp.com': _jsonld_parser,
     'u.afp.com': _jsonld_parser,
     'factcheck.afp.com': _jsonld_parser,
     'factuel.afp.com': _jsonld_parser,
@@ -313,6 +325,10 @@ _domain_parser_map = {
     'observador.pt': _jsonld_parser,
     'nieuwscheckers.nl': _jsonld_parser,
     'factcheckni.org': _jsonld_parser,
+    'pagellapolitica.it': _jsonld_parser,
+    'demagog.org.pl': _jsonld_parser,
+    'factly.in': _jsonld_parser,
+    'poynter.org': _jsonld_parser,
     # without claimReview
     'newtral.es': _fake_parser,
     'www.newtral.es': _fake_parser,
@@ -320,7 +336,6 @@ _domain_parser_map = {
     'verafiles.org': _fake_parser,
     'www.rappler.com': _fake_parser,
     'misbar.com': _fake_parser,
-    'pagellapolitica.it': _fake_parser,
     'raskrinkavanje.ba': _fake_parser,
     'ici.radio-canada.ca': _fake_parser,
     'efectococuyo.com': _fake_parser,
@@ -340,11 +355,9 @@ _domain_parser_map = {
     'factcheck.aap.com.au': _fake_parser,
     'www.aap.com.au': _fake_parser,
     'www.ecuadorchequea.com': _fake_parser,
-    'demagog.org.pl': _fake_parser,
     'spondeomedia.com': _fake_parser,
     'cekfakta.tempo.co': _fake_parser,
     'www.facebook.com': _fake_parser,
-    'factly.in': _fake_parser,
     'observers.france24.com': _fake_parser,
     'mythdetector.ge': _fake_parser,
     'newsmobile.in': _fake_parser,

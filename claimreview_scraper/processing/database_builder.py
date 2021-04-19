@@ -88,7 +88,8 @@ def create_indexes():
 
 
 def get_all_factchecking_urls():
-    return claimReviews_collection.distinct('url')
+    return list(claimReviews_collection.aggregate([{"$group":{"_id":"$url"}}]))
+    # return claimReviews_collection.distinct('url')
 
 
 def get_count_unique_from_scraper(scraper_name):

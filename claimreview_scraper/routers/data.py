@@ -132,6 +132,27 @@ def download_data(stats: StatsBody, clear=True):
     # reload random samples
     load_random_samples()
 
+def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_misinfo_domain=['twitter.com', 'wikipedia.org'], fact_checker_domain=None, exclude_homepage_url_misinfo=True):
+    dates = [r['date_published'] for r in el['reviews']]
+    fc_domains = [r['fact_checker']['domain'] for r in el['reviews']]
+    url = el['misinforming_url']
+    if since and not any([d >= since for d in dates if d]):
+        return False
+    if until and not any([d <= until for d in dates if d]):
+        return False
+    if not misinforming_domain and exclude_misinfo_domain:
+        if el['misinforming_domain'] in exclude_misinfo_domain:
+            return False
+    if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
+        return False
+    if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
+        return False
+    if exclude_homepage_url_misinfo:
+        path = urlparse(url).path
+        if not path or path == '/':
+            return False
+    return True
+
 # TODO openapi parameters
 @router.get('/sample')
 def random_sample(
@@ -166,24 +187,9 @@ def random_sample(
     current_cursor = cursor
     for cursor in cursored_array:
         el = random_misinforming_samples['misinforming_items'][cursor]
-        dates = [r['date_published'] for r in el['reviews']]
-        fc_domains = [r['fact_checker']['domain'] for r in el['reviews']]
-        url = el['misinforming_url']
-        if since and not any([d >= since for d in dates if d]):
+        satisfies = check_satisfy(el, since, until, misinforming_domain, exclude_misinfo_domain, fact_checker_domain, exclude_homepage_url_misinfo)
+        if not satisfies:
             continue
-        if until and not any([d <= until for d in dates if d]):
-            continue
-        if not misinforming_domain and exclude_misinfo_domain:
-            if el['misinforming_domain'] in exclude_misinfo_domain:
-                continue
-        if misinforming_domain and misinforming_domain !=  el['misinforming_domain']:
-            continue
-        if fact_checker_domain and not any([d == fact_checker_domain for d in fc_domains]):
-            continue
-        if exclude_homepage_url_misinfo:
-            path = urlparse(url).path
-            if not path or path == '/':
-                continue
         if match:
             # for the next round, updating 
             break

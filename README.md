@@ -13,7 +13,7 @@ It is highly recommended (FOR NOW REQUIRED) that you have a MongoDB instance loc
 
 ## Dump management
 
-Extract dump:
+Create dump:
 ```bash
 mongodump -d claimreview_scraper -o dumps/latest
 pushd dumps
@@ -23,7 +23,7 @@ popd
 
 Transfer dump:
 ```bash
-scp ./dumps/latest.tar.gz kmi-web03:/data/user-data/mm35626/MisinfoMe/claimreview-scraper/dumps/latest.tar.gz
+scp ./dumps/latest.tar.gz kmi-appsvr04:/data/user-data/mm35626/claimreview-scraper/dumps/latest.tar.gz
 ```
 
 Import db
@@ -31,19 +31,19 @@ Import db
 pushd dumps
 tar -xvzf latest.tar.gz
 popd
-docker run --rm --name mm34834_mongoimporter -v `pwd`/dumps:/dumps --link=mm34834_mongo:mongo -it mongo bash
-mongorestore --host mongo --db claimreview_scraper dumps/claimreview_scraper
+docker run --rm --name mm35626_mongoimporter -v `pwd`/dumps:/dumps --link=mm35626_mongo:mongo -it mongo bash
+mongorestore --host mongo --db claimreview_scraper dumps/latest/claimreview_scraper
 
 ## Docker installation and running
 docker build . -t mm34834/claimreview_scraper
 # local light (no link, using local misinfome). Start before misinfo_server
-docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm34834/claimreview_scraper
-# local full
-docker run --restart always -it --name mm34834_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="http://misinfo_server:5000/misinfo/api/twitter" -p 20500:8000 -e ROLE=full mm34834/claimreview_scraper
+docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm34834/claimreview_scraper
+# local full (no auto-restart)
+docker run -it --name mm34834_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="http://misinfo_server:5000/misinfo/api/twitter" -p 20500:8000 -e ROLE=full mm34834/claimreview_scraper
 # server web (ROLE=light) no need of twitter or misinfo backend. But need of credibility backend
-docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=full mm34834/claimreview_scraper
+docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm34834/claimreview_scraper
 # server (ROLE=full) without link to twitter_connector, using the public misinfome API. Credibility need for IFCN only (through misinfomeAPI)
-docker run --restart always -it --name mm34834_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -p 20500:8000 -e ROLE=full mm34834/claimreview_scraper
+docker run --restart always -it --name mm34834_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="https://misinfo.me" -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -p 20500:8000 -e ROLE=full -e PUBLISH_GITHUB=true mm34834/claimreview_scraper
 
 
 # Auto-update
@@ -145,19 +145,6 @@ If you want to get from mongodb the ClaimReviews that match a certain query:
 ```bash
 mongoexport -d claimreview_scraper -c claim_reviews -q '{url: /sciencefeedback|climatefeedback|healthfeedback/}' | sed '$!s/$/,/' > sciencefeedback.json
 echo -e "[$(cat sciencefeedback.json)]" > sciencefeedback.json
-```
-
-## Dumps
-
-```bash
-mongodump -d claimreview_scraper -o dump
-tar -zcvf dump.tar.gz dump
-```
-
-Import
-```bash
-tar -xvzf dump.tar.gz
-mongorestore --db claimreview_scraper dump/claimreview_scraper
 ```
 
 ## TODOs

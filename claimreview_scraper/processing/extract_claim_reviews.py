@@ -9,29 +9,15 @@ import numpy as np
 from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
 from pathlib import Path
+from multiprocessing.pool import ThreadPool
 
 from . import utils
 from . import extract_tweet_reviews, database_builder
+from . import claimreview
 
 
 client = database_builder.client
 data_path = Path('data/latest')
-
-### UTILITIES
-def write_json_with_path(content, path, filename, indent=2):
-    """dump to json file, creating folder if necessary"""
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    with open(path / filename, 'w') as f:
-        json.dump(content, f, indent=indent)
-
-def read_json(input_path):
-    """read json from file"""
-    with open(input_path) as f:
-        return json.load(f)
-
-
-
 
 
 def claims_nationality_distribution():
@@ -48,14 +34,14 @@ def claims_nationality_distribution():
             domain_ifcn_cnt += 1
     print(domain_ifcn_cnt, 'published by IFCN signatories')
 
-    ifcn_signatories = read_json(data_path /'ifcn_sources.json')
+    ifcn_signatories = utils.read_json(data_path /'ifcn_sources.json')
 
     countries_cnt = defaultdict(int)
     for sig in ifcn_signatories:
         domain = sig['domain']
         country = sig['original']['country']
         countries_cnt[country] += len(urls_by_domain[domain])
-    write_json_with_path(countries_cnt, data_path, 'fact_checks_by_country.json')
+    utils.write_json_with_path(countries_cnt, data_path, 'fact_checks_by_country.json')
 
     
     # create nice plot (requires plotly installed)
@@ -72,12 +58,15 @@ def claims_nationality_distribution():
 
 def extract_ifcn_claimreviews():
     ifcn_domains = extract_tweet_reviews.get_ifcn_domains()
-    not_ifcn_urls = set()
     not_ifcn_cnt = 0
+    not_ifcn_urls = set()
     not_ifcn_review_domains = set()
-    cr_by_url = defaultdict(list)
+
+    urls_to_recollect = set()
+    urls_to_recollect_by_factchecker = defaultdict(set)
     raw_crs = []
-    for cr in client['claimreview_scraper']['claim_reviews'].find():#.limit(100000):
+    # step 1: determine which claim reviews to recollect from fact-checker
+    for cr in client['claimreview_scraper']['claim_reviews'].find():
         del cr['_id']
         raw_crs.append(cr)
         url = cr.get('url', '')
@@ -87,15 +76,55 @@ def extract_ifcn_claimreviews():
             not_ifcn_cnt += 1
             not_ifcn_review_domains.add(domain)
         else:
-            cr['ifcn_info'] = ifcn_domains[domain]
-            cr_by_url[url].append(cr)
+            urls_to_recollect.add(url)
+            urls_to_recollect_by_factchecker[domain].add(url)
+    
+    utils.write_json_with_path(raw_crs, data_path, 'claim_reviews_raw.json')
 
-    write_json_with_path(raw_crs, data_path, 'claim_reviews_raw.json')
+    print('raw_crs', len(raw_crs))
+    print('urls_to_recollect', len(urls_to_recollect))
+
+    # step 2: recollect from fact-checker
+    # recollected_crs = utils.read_json(data_path / 'claim_reviews_raw_recollected.json')
+    recollected_crs = []
+    with ThreadPool(8) as pool:
+        for url, crs in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls_to_recollect), total=len(urls_to_recollect), desc='recollecting'):
+            recollected_crs.extend(crs)
+    utils.write_json_with_path(recollected_crs, data_path, 'claim_reviews_raw_recollected.json')
+
+    # step 3: observe what has been lost
+    print('recollected_crs', len(recollected_crs))
+    recollected_crs_urls = set(el.get('url', '') for el in recollected_crs)
+    # observe by fact-checker
+    recollected_crs_urls_by_factchecker = defaultdict(set)
+    for url in recollected_crs_urls:
+        domain = utils.get_url_domain(url)
+        recollected_crs_urls_by_factchecker[domain].add(url)
+    comparison_recollection = []
+    for domain in ifcn_domains:
+        before_len = len(urls_to_recollect_by_factchecker[domain])
+        if before_len:
+            comparison_recollection.append({
+                'domain': domain,
+                'before': before_len,
+                'after': len(recollected_crs_urls_by_factchecker[domain])
+            })
+    
+
+    cr_by_url = defaultdict(list)
+
+    for cr in recollected_crs:
+        # del cr['_id']
+        raw_crs.append(cr)
+        url = cr.get('url', '')
+        domain = utils.get_url_domain(url)
+        cr['ifcn_info'] = ifcn_domains[domain]
+        cr_by_url[url].append(cr)
 
     results = []
     different_texts = {}
     # check which ones are duplicated
-    for url, crs in tqdm.tqdm(cr_by_url.items()):
+    for url, crs in tqdm.tqdm(cr_by_url.items(), desc='extracting reviews'):
         try:
             # one text for each ClaimReview
             claims_reviewed = []
@@ -175,7 +204,7 @@ def extract_ifcn_claimreviews():
                     'label': extract_tweet_reviews.claimreview_get_coinform_label(cr),
                     'original_label': cr.get('reviewRating', {}).get('alternateName', ''),
                     'review_rating': cr.get('reviewRating', {}),
-                    'retrieved_by': cr['retrieved_by'],
+                    'retrieved_by': cr.get('retrieved_by', None),
                     'date_published': cr['date_published']
                 } for cr in crs_cluster]
             })
@@ -187,11 +216,11 @@ def extract_ifcn_claimreviews():
     print('len cr_by_url', len(cr_by_url))
     print('len results', len(results))
 
-    write_json_with_path(list(not_ifcn_review_domains), data_path, 'not_ifcn_sources.json')
+    utils.write_json_with_path(list(not_ifcn_review_domains), data_path, 'not_ifcn_sources.json')
 
-    write_json_with_path(results, data_path, 'claim_reviews.json')
+    utils.write_json_with_path(results, data_path, 'claim_reviews.json')
     # 10190
-    write_json_with_path({k: list(v) for k, v in different_texts.items()}, data_path, 'different_texts.json')
+    utils.write_json_with_path({k: list(v) for k, v in different_texts.items()}, data_path, 'different_texts.json')
 
     appearances = set()
     for cr in results:
@@ -204,7 +233,7 @@ def extract_ifcn_claimreviews():
         if cr['label'] == 'not_credible':
             bad_links.update(cr['appearances'])
     bad_links = list(bad_links)
-    write_json_with_path(bad_links, data_path, 'links_not_credible.json')
+    utils.write_json_with_path(bad_links, data_path, 'links_not_credible.json')
 
     # not credible links table
     by_bad_link = defaultdict(list)
@@ -241,8 +270,10 @@ def extract_ifcn_claimreviews():
 
 
     return {
-        'claimreviews_merged_count': len(results),
         'raw_claimreviews_count': len(raw_crs),
+        'raw_claimreviews_recollected_count': len(recollected_crs),
+        'recollection_stats': comparison_recollection,
+        'claimreviews_merged_count': len(results),
         'ifcn_domains_count': len(ifcn_domains),
         'claimreviews_not_from_ifcn_count': len(not_ifcn_urls),
         'claimreviews_unique_review_urls_count': len(cr_by_url),
