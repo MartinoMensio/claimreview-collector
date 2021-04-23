@@ -235,6 +235,10 @@ def _jsonld_parser(page):
         return []
     # print(json_lds)
     claimReviews = [el for el in json_lds if el.get('@type', '') and 'ClaimReview' in el.get('@type', '')]
+    if not claimReviews:
+        # look in graph objects
+        for graph in [el for el in json_lds if '@graph' in el]:
+            claimReviews.extend([el for el in graph['@graph'] if el.get('@type', '') and 'ClaimReview' in el.get('@type', '')])
     # print(claimReviews)
     return claimReviews
 
