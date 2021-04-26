@@ -350,6 +350,8 @@ def claimreview_get_claim_appearances(claimreview):
                 appearance = [appearance]
             # get also the firstAppearance
             firstAppearance = itemReviewed.get('firstAppearance', None)
+            if isinstance(firstAppearance, str):
+                firstAppearance  = [{'url': firstAppearance}]
             if not isinstance(firstAppearance, list):
                 firstAppearance = [firstAppearance]
             appearances = firstAppearance + appearance
