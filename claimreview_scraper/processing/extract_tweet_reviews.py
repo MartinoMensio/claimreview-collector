@@ -356,7 +356,7 @@ def claimreview_get_claim_appearances(claimreview):
             if appearances:
                 # new field appearance in https://pending.schema.org/Claim
                 #print(appearances)
-                result.extend([el['url'] for el in appearances if el])
+                result.extend([el.get('url', None) for el in appearances if el])
             # sometimes in itemReviewed.url
             itemReviewed_url = itemReviewed.get('url', None)
             if itemReviewed_url:
@@ -387,6 +387,8 @@ def claimreview_get_claim_appearances(claimreview):
         # split appearances that are a single field with comma or ` and `
         cleaned_result = []
         for el in result:
+            if not el:
+                continue
             if not isinstance(el, str):
                 cleaned_result.extend(el)
             if ',' in el:
