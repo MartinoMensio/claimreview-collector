@@ -361,9 +361,12 @@ def claimreview_get_claim_appearances(claimreview):
                 result.extend([el.get('url', None) for el in appearances if el])
             # sometimes in itemReviewed.url
             itemReviewed_url = itemReviewed.get('url', None)
+            if not isinstance(itemReviewed_url, list):
+                # has list inside https://factcheck.afp.com/hoax-circulates-online-indian-prime-minister-modi-was-appointed-chairman-world-health-organization
+                itemReviewed_url = [itemReviewed_url]
             if itemReviewed_url:
                 #raise ValueError(claimreview['url'])
-                result.append(itemReviewed_url)
+                result.extend(itemReviewed_url)
             # sometimes instead the appearances are listed in itemReviewed
             # NEVER HAPPENING
             # sameAs = itemReviewed.get('sameAs', None)
