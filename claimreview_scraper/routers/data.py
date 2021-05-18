@@ -50,6 +50,7 @@ def load_random_samples():
     random_misinforming_samples['length'] = length
     random_misinforming_samples['random_indices'] = random_indices
     random_misinforming_samples['ready'] = True
+    print('loaded random samples')
 
 def load_latest_factchecks():
     meta = get_data()
@@ -71,6 +72,7 @@ def load_latest_factchecks():
     # - language filtering: what is the lanugage of our public? Does it make sense to show weird characters? 
     latest_factchecks['items'] = latest
     latest_factchecks['ready'] = True
+    print('loaded latest factchecks')
 
 class StatsBody(BaseModel):
     date: str
@@ -158,6 +160,8 @@ def download_data(stats: StatsBody, clear=True):
     
     # reload random samples
     load_random_samples()
+    # and provide newest factchecks
+    load_latest_factchecks()
 
 def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_misinfo_domain=['twitter.com', 'wikipedia.org'], fact_checker_domain=None, exclude_homepage_url_misinfo=True):
     dates = [r['date_published'] for r in el['reviews']]
