@@ -34,5 +34,6 @@ setup(name='claimreview_scraper',
           'fastapi',
           'uvicorn',
           'aiofiles',
-          'schedule'
+          'schedule',
+          'goose3'
       ])

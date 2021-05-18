@@ -6,13 +6,14 @@ import requests
 from pathlib import Path
 import shutil
 import datetime
+from goose3 import Goose
 from typing import Dict, Optional, List
 from fastapi import APIRouter, HTTPException, Query
 from starlette.responses import FileResponse
 from pydantic import BaseModel
 from urllib.parse import urlparse
 
-from ..processing import utils, extract_claim_reviews, extract_tweet_reviews, database_builder
+from ..processing import utils, extract_claim_reviews, extract_tweet_reviews, database_builder, cache_manager
 from .. import scrapers
 from ..publishing import github
 
@@ -33,6 +34,11 @@ random_misinforming_samples = {
     'ready': False
 }
 
+latest_factchecks = {
+    'items': None,
+    'ready': False
+}
+
 def load_random_samples():
     meta = get_data()
     file_path = meta['files']['links_not_credible_full']
@@ -44,6 +50,27 @@ def load_random_samples():
     random_misinforming_samples['length'] = length
     random_misinforming_samples['random_indices'] = random_indices
     random_misinforming_samples['ready'] = True
+
+def load_latest_factchecks():
+    meta = get_data()
+    file_path = meta['files']['claim_reviews']
+    claim_reviews = utils.read_json(file_path)
+    # TODO define policy e.g. max 2 for each fact-checker
+    for el in claim_reviews:
+        el['date_published'] = max(r['date_published'] for r in el['reviews'])
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    filtered_claim_reviews = [el for el in claim_reviews if el['date_published'] and el['date_published'] <= today]
+    latest = sorted(filtered_claim_reviews, key=lambda el: el['date_published'], reverse=True)[:10]
+    goose = Goose()
+    for el in latest:
+        page_text = cache_manager.get(el['review_url'], unshorten=False, verify=False, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36', 'Cookie': 'wp_gdpr=1|1;'})
+        article = goose.extract(raw_html=page_text)
+        el['goose'] = article.infos
+    # TODO filter by fact-checkers:
+    # - double-check what the different fact-checkers show here, e.g. ellinikahoaxes contains title and description of CloudFlare DDoS protection
+    # - language filtering: what is the lanugage of our public? Does it make sense to show weird characters? 
+    latest_factchecks['items'] = latest
+    latest_factchecks['ready'] = True
 
 class StatsBody(BaseModel):
     date: str
@@ -152,6 +179,12 @@ def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_
         if not path or path == '/':
             return False
     return True
+
+@router.get('/latest_factchecks')
+def get_latest_factchecks():
+    if not latest_factchecks['ready']:
+        load_latest_factchecks()
+    return latest_factchecks['items']
 
 # TODO openapi parameters
 @router.get('/sample')
