@@ -167,6 +167,11 @@ def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_
     dates = [r['date_published'] for r in el['reviews']]
     fc_domains = [r['fact_checker']['domain'] for r in el['reviews']]
     url = el['misinforming_url']
+    # blacklist
+    if url in [
+        'http://www.aps.sn/actualites/economie/agriculture/',
+    ]:
+        return False
     if since and not any([d >= since for d in dates if d]):
         return False
     if until and not any([d <= until for d in dates if d]):
