@@ -209,17 +209,7 @@ label_maps = {
 
 
 ### UTILITIES
-def write_json_with_path(content, path, filename, indent=2):
-    """dump to json file, creating folder if necessary"""
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    with open(path / filename, 'w') as f:
-        json.dump(content, f, indent=indent)
 
-def read_json(input_path):
-    """read json from file"""
-    with open(input_path) as f:
-        return json.load(f)
 
 def get_ifcn_domains():
     """get the list of domains of fact-checkers belonging to IFCN"""
@@ -227,7 +217,7 @@ def get_ifcn_domains():
     res.raise_for_status()
     signatories = res.json()
     
-    write_json_with_path(signatories, data_path, 'ifcn_sources.json')
+    utils.write_json_with_path(signatories, data_path, 'ifcn_sources.json')
     ass = {el['domain']: el for el in signatories}
     # print(ass)
     print('there are', len(ass), 'ifcn trusted domains')
@@ -482,7 +472,7 @@ def extract():
             raise ValueError(cr)
 
 
-    write_json_with_path(list(not_ifcn_review_domains), data_path, 'not_ifcn_sources.json')
+    utils.write_json_with_path(list(not_ifcn_review_domains), data_path, 'not_ifcn_sources.json')
 
     results = []
     for tweet_id, reviews in tqdm.tqdm(tweet_reviews.items(), desc='second loop'):
@@ -525,7 +515,7 @@ def extract():
         })
         
 
-    write_json_with_path(disagreeing_reviews, data_path, 'tweet_disagreeing_reviews.json')
+    utils.write_json_with_path(disagreeing_reviews, data_path, 'tweet_disagreeing_reviews.json')
     
     print('not ifcn', not_ifcn_cnt)
     print('not twitter', not_twitter_cnt)
@@ -536,7 +526,7 @@ def extract():
 
     print('there are', len(results), 'tweet reviews')
 
-    write_json_with_path(tweet_reviews, data_path, 'tweet_reviews.json')
+    utils.write_json_with_path(tweet_reviews, data_path, 'tweet_reviews.json')
     # analyse_mapping()
 
     return {
@@ -550,16 +540,14 @@ def extract():
 
 def analyse_mapping():
     """see what got mapped to what"""
-    reviews = read_json(data_path / 'tweet_reviews.json')
+    reviews = utils.read_json(data_path / 'tweet_reviews.json')
     m = defaultdict(set)
-    for r in reviews:
-        # TODO error here TypeError: string indices must be integers
-        for el in r['reviews']:
+    for t_id, r in reviews.items():
+        for el in r:
             m[el['label']].add(el['original_label'])
-    
     for k, v in m.items():
         m[k] = list(v)
-    write_json_with_path(m, data_path, 'mapping.json')
+    utils.write_json_with_path(m, data_path, 'tweet_labels_mapping.json')
 
 
 

@@ -5,6 +5,7 @@ import scipy
 import requests
 import jellyfish
 import dateparser
+import pandas as pd
 import numpy as np
 from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
@@ -328,6 +329,33 @@ def cluster_sentences(sentences, max_distance=3):
 
     return filtered_clusters
 
+
+def analyse_mapping():
+    """see what got mapped to what"""
+    reviews = utils.read_json(data_path / 'claim_reviews.json')
+    m = defaultdict(lambda: defaultdict(int))
+    domains_by_label = defaultdict(set)
+    for r in reviews:
+        for el in r['reviews']:
+            m[el['label']][el['original_label']] += 1
+            domains_by_label[el['original_label']].add(r['fact_checker']['domain'])
+    # for k, v in m.items():
+    #     m[k] = list(v)
+    stats = []
+    for coinform_label, values in m.items():
+        for original_label, counts in values.items():
+            stats.append({
+                'original_label': original_label,
+                'coinform_label': coinform_label,
+                'domains': ','.join(domains_by_label[original_label]),
+                'count': counts,
+            })
+    utils.write_json_with_path(stats, data_path, 'claim_labels_mapping.json')
+
+    rows = sorted(stats, key=lambda el: el['count'], reverse=True)
+    df = pd.DataFrame(rows)
+    df.to_csv(data_path/'labels.tsv', index=False, sep='\t')
+    print(df.groupby('coinform_label').sum())
 
 
 

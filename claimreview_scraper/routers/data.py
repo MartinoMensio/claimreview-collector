@@ -135,6 +135,10 @@ def download_data(stats: StatsBody, clear=True):
     with open(asset_path, 'wb') as f:
         f.write(bytes_assets)
     shutil.unpack_archive(asset_path, folder)
+    # also overwrite 'latest' folder
+    if os.path.isdir(latest_data_path):
+        shutil.rmtree(latest_data_path)
+    shutil.copytree(f'{folder}/{date}',latest_data_path)
 
     # update index
     index = list_data()
@@ -145,7 +149,7 @@ def download_data(stats: StatsBody, clear=True):
 
     # load into DB
     # get_data(date, 'claimreviews')
-    with open(stats['files']['claim_reviews_raw']) as f:
+    with open(stats['files']['claim_reviews_raw_recollected']) as f:
         claimreviews_raw = json.load(f)
     database_builder.add_claimreviews_raw(claimreviews_raw)
 
