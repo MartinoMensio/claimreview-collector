@@ -174,6 +174,7 @@ def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_
     # blacklist
     if url in [
         'http://www.aps.sn/actualites/economie/agriculture/',
+        'https://www.instagram.com/instablog9ja/', # whole account, https://dubawa.org/a-blog-claims-man-died-from-suffocation-after-wearing-mask-experts-wade-in/
     ]:
         return False
     if since and not any([d >= since for d in dates if d]):
