@@ -203,7 +203,7 @@ def get_latest_factchecks():
 # TODO openapi parameters
 @router.get('/sample')
 def random_sample(
-        since: Optional[str] = None,
+        since: Optional[str] = '2019-01-01',
         until: Optional[str] = None,
         misinforming_domain: Optional[str] = None,
         fact_checker_domain: Optional[str] = None,
