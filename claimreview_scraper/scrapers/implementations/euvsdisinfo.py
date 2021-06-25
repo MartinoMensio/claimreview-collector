@@ -5,10 +5,13 @@ from bs4 import BeautifulSoup
 
 from . import ScraperBase
 from ...processing import database_builder
-from ...processing import utils
+from ...processing import utils, claimreview
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 
+# This scraper uses FlareSolverr to scrape from CloudFlare https://github.com/FlareSolverr/FlareSolverr
+
+cloudflare_stuff = None
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'euvsdisinfo'
@@ -18,49 +21,36 @@ class Scraper(ScraperBase):
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
-        all_reviews = retrieve(self.id)
-        claim_reviews = create_claim_reviews(all_reviews)
+        claim_reviews = retrieve(self.id)
+        claim_reviews = list(claim_reviews.values())
         database_builder.add_ClaimReviews(self.id, claim_reviews)
 
 
 def get_credibility_measures(original_review):
     return {'credibility': -1.0, 'confidence': 1.0}
 
-def create_claim_reviews(all_reviews):
-    claim_reviews = []
-
-    for review_url, review in all_reviews.items():
-        claim_urls = review['claim_urls'] + review['archived_claim_urls']
-
-        claim_review = {
-            "@context": "http://schema.org",
-            "@type": "ClaimReview",
-            "url": review_url,
-            "author": {
-                "@type": "Organization",
-                "name":"EU vs DISINFORMATION",
-                "url":"https://euvsdisinfo.eu/",
-                "sameAs": ["https://twitter.com/EUvsDisinfo", "https://www.facebook.com/EUvsDisinfo/"]
-            },
-            "claimReviewed": review['title'],
-            "reviewRating": {
-                "@type": "Rating",
-                "ratingValue": 1,
-                "bestRating": 5,
-                "worstRating": 1,
-                "alternateName": 'disinfo'
-            },
-            "itemReviewed": {
-                "@type": "Claim",
-                "appearance": [{'@type': 'CreativeWork', 'url': u} for u in claim_urls]
-            },
-            'origin': 'euvsdisinfo'
-        }
-
-        claim_reviews.append(claim_review)
-
-    return claim_reviews
-
+def get_cloudflare(url):
+    global cloudflare_stuff
+    # https://github.com/FlareSolverr/FlareSolverr
+    if not cloudflare_stuff:
+        res = requests.post('http://localhost:8191/v1', json={
+            'cmd': 'sessions.create',
+            'session': 'test'
+        })
+        res.raise_for_status()
+        cloudflare_stuff = 'test'
+    res = requests.post('http://localhost:8191/v1', json={
+        'cmd': 'request.get',
+        'session': 'test',
+        'url': url,
+        'maxTimeout': 60000
+    })
+    res.raise_for_status()
+    content = res.json()
+    if content['solution']['status'] not in [200, 404]:
+        raise ValueError(content['solution']['status'])
+    page = content['solution']['response']
+    return page
 
 def retrieve(self_id):
     offset = 0
@@ -71,12 +61,9 @@ def retrieve(self_id):
     while go_on:
         facts_url = LIST_URL.format(offset)
         print(facts_url)
-        response = requests.get(facts_url)
-        if response.status_code != 200:
-            print('status code', response.status_code)
-            break
+        text = get_cloudflare(facts_url)
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(text, 'lxml')
 
         articles = soup.select('tr.disinfo-db-post ')
         if not articles:
@@ -88,7 +75,8 @@ def retrieve(self_id):
                 print(f'Interrupting after finding {found_consecutively} elements already stored')
                 go_on = False
                 break
-            url = s.select('a')[0]['href']
+            relative_url = s.select('a')[0]['href']
+            url = f'https://euvsdisinfo.eu{relative_url}'
             title = s.select('td.cell-title')[0].text.strip()
             date = s.select('td.disinfo-db-date')[0].text.strip()
             #outlets = s.select('data-column="Outlets"')[0].text.strip()
@@ -98,67 +86,28 @@ def retrieve(self_id):
                 continue
             else:
                 found_consecutively = 0
-                response = requests.get(url)
-                if response.status_code != 200:
-                    raise ValueError(response.status_code)
-                article = response.text
-                soup = BeautifulSoup(article, 'lxml')
-
-                shortlink = soup.select_one('link[rel="shortlink"]')['href']
-
-                details = soup.select('ul.b-catalog__repwidget-list li')
-                for d in details:
-                    if 'Reported in:' in d.text:
-                        issue_id = d.text.replace('Reported in:', '').replace('Issue', '').strip()
-                    elif 'Language/target audience:' in d.text:
-                        language = d.text.replace('Language/target audience:', '').strip()
-                    elif 'Keywords:' in d.text:
-                        keywords = d.text.replace('Keywords:', '').strip()
-
-                report_summary = soup.select_one('div.b-report__summary-text').text.strip()
-
-                claim_urls_all = soup.select('div.b-catalog__repwidget-source')
-                if claim_urls_all:
-                    # old way of presenting (view original, view archived)
-                    claim_urls = claim_urls_all[0].select('a')
-                    claim_urls = [el['href'] for el in claim_urls]
-                    if len(claim_urls_all) > 1:
-                        archived_claim_urls = claim_urls_all[1].select('a')
-                        archived_claim_urls = [el['href'] for el in archived_claim_urls]
-                    else:
-                        archived_claim_urls = []
+                article = get_cloudflare(url)
+                # now euvsdisinfo uses ClaimReview
+                # insert manually in Cache because cloudflare does not enable this
+                # print(type(article))
+                database_builder.cache_put(url, article)
+                url_fixed, cr = claimreview.retrieve_claimreview(url)
+                # print(cr, type(cr))
+                if not cr:
+                    # 404 https://euvsdisinfo.eu/report/the-malm%c3%b6-police-is-flooded-with-dozens-of-unresolved-murders
+                    # 404 https://euvsdisinfo.eu/report/vilnius-summit-of-eastern-partnership-as-a-formal-impulse-of-the-%d1%81oup-detat-in-ukraine
+                    # 404 https://euvsdisinfo.eu/report/%d1%82here-are-many-ways-to-destroy-weak-statehood-without-military-action-the-example-of-ukraine-is-significant
+                    # 404 https://euvsdisinfo.eu/report/satanists-and-transvestites-impose-their-own-life-rules-and-false-values-%e2%80%8b%e2%80%8bon-us
+                    # 404 https://euvsdisinfo.eu/report/zelensky%d1%83-introduces-tax-on-war-and-coronavirus-in-ukraine
+                    # 404 https://euvsdisinfo.eu/report/coe-and-eu-has-never-bear-christian-moral-values-but-the-values-%e2%80%8b%e2%80%8bof-satan
+                    # 404 https://euvsdisinfo.eu/report/navalnys-allegations-on-putin-palace-are-false-and-russia-never-tried-t%ce%bf-target-him
+                    # 404 https://euvsdisinfo.eu/report/%d0%b0s-long-as-the-west-exists-as-much-as-it-will-covet-the-material-resources-of-russia
+                    print('ERROR: no ClaimReview at', url)
+                    # raise ValueError(cr)
                 else:
-                    # new way of presenting (original (archived))
-                    claim_urls_all = soup.select('div.b-catalog__link')
-                    claim_urls = []
-                    archived_claim_urls = []
-                    for u in claim_urls_all:
-                        links = u.select('a')
-                        claim_urls.append(links[0]['href'])
-                        if len(links) > 1:
-                            archived_claim_urls.extend([el['href'] for el in links[1:]])
-
-                disproof = soup.select_one('div.b-report__disproof-text').text.strip()
-
-
-                new_report = {
-                    'url': url,
-                    'title': title,
-                    'date': date,
-                    'country': country,
-                    'shortlink': shortlink,
-                    'issue_id': issue_id,
-                    'language': language,
-                    'keywords': keywords,
-                    'summary': report_summary,
-                    'claim_urls': claim_urls,
-                    'archived_claim_urls': archived_claim_urls,
-                    'disproof': disproof,
-                    'source': self_id
-                }
-                all_reviews[url] = new_report
-                # clean always false, the check on duplicate is already done by the dict all_reviews
-                database_builder.save_original_data(self_id, [new_report], clean=False)
+                    all_reviews[url] = cr
+                    # clean always false, the check on duplicate is already done by the dict all_reviews
+                    database_builder.save_original_data(self_id, cr, clean=False)
                 first = False
 
         print(len(all_reviews))
