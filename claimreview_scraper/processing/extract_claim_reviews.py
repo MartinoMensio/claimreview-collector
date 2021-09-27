@@ -198,6 +198,7 @@ def extract_ifcn_claimreviews():
                     'language': factchecker_info['original']['language'],
                     'website': factchecker_info['original']['website'],
                     'ifcn_url': factchecker_info['original']['assessment_url'],
+                    'avatar': factchecker_info['original']['avatar'],
                     'domain': factchecker_info['domain']
                 },
                 'appearances': list(appearances),
