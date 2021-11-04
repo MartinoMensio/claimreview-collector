@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.7
 
 ADD claimreview_scraper /app/claimreview_scraper
 ADD setup.py /app/setup.py
