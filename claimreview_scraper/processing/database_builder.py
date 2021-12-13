@@ -93,4 +93,6 @@ def get_all_factchecking_urls():
 
 
 def get_count_unique_from_scraper(scraper_name):
-    return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))
+    results = claimReviews_collection.aggregate([{"$match": {"retrieved_by": scraper_name}}, {"$group": {"_id": "$url"}}])
+    return len(list(results))
+    # return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))
