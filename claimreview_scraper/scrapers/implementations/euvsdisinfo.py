@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import os
 import requests
+import pathlib
 from bs4 import BeautifulSoup
 
 from . import ScraperBase
 from ...processing import database_builder
-from ...processing import utils, claimreview
+from ...processing import utils, claimreview, extract_claim_reviews
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 
@@ -21,9 +22,16 @@ class Scraper(ScraperBase):
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
-        claim_reviews = retrieve(self.id)
-        claim_reviews = list(claim_reviews.values())
-        database_builder.add_ClaimReviews(self.id, claim_reviews)
+        try:
+            claim_reviews = retrieve(self.id)
+            claim_reviews = list(claim_reviews.values())
+            database_builder.add_ClaimReviews(self.id, claim_reviews)
+        finally:
+            extract_claim_reviews.extract_ifcn_claimreviews(domains=['euvsdisinfo.eu'], recollect=False)
+            pass
+        # for cr in claim_reviews:
+        #     del cr['_id']
+        # utils.write_json_with_path(claim_reviews, pathlib.Path('data/latest'), 'euvsdisinfo.json')
 
 
 def get_credibility_measures(original_review):
