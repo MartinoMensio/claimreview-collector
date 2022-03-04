@@ -26,6 +26,10 @@ def get(url, unshorten=True, force_refresh=False, verify=True, headers={}):
         return cache_hit['html']
     else:
         # new
+        response = requests.head(url, headers=headers, verify=verify, timeout=20)
+        if int(response.headers.get('content-length', 0)) > 10000000:
+            # too large
+            return 'TOO LARGE'
         response = requests.get(url, headers=headers, verify=verify, timeout=20)
         if response.status_code != 200:
             print('WARN', response.status_code, 'for', url)
