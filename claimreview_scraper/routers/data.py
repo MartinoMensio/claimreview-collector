@@ -190,7 +190,8 @@ def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_
         return False
     if exclude_homepage_url_misinfo:
         path = urlparse(url).path
-        if not path or path == '/':
+        # non-meaningful path: homepage or facebook.com/permalink.php or any other messed-up things
+        if not path or path == '/' or path == '/permalink.php':
             return False
     return True
 
