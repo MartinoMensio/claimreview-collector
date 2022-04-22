@@ -15,6 +15,10 @@ def permacc_resolve_url(url):
 
 def archiveorg_resolve_url(url):
     match = re.match(r'^https?:\/\/web\.archive\.org.*\/(?P<original>https?:\/(?P<second_slash>\/)?.*)', url)
+    if not match:
+        # e.g. https://archive.org/details/FOXNEWSW_20220315_230000_Jesse_Watters_Primetime/start/672/end/732?q=happening
+        print(url)
+        return url
     original_url = match.group('original')
     second_slash = match.group('second_slash')
     if not second_slash:
