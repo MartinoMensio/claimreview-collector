@@ -5,7 +5,7 @@ This module is responsible to interface with MongoDB
 import os
 import tldextract
 import datetime
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 from . import utils
 
@@ -18,9 +18,21 @@ db = client['claimreview_scraper']
 claimReviews_collection = db['claim_reviews']
 lastupdated_collection = db['last_updated']
 cache_collection = db['cache']
+url_redirects_collection = client['utilities']['url_redirects']
 
 def clean_db():
     claimReviews_collection.drop()
+
+def replace_safe(collection, document, key_property='_id'):
+    document['updated'] = datetime.datetime.now()
+    # the upsert sometimes fails, mongo does not perform it atomically
+    # https://jira.mongodb.org/browse/SERVER-14322
+    # https://stackoverflow.com/questions/29305405/mongodb-impossible-e11000-duplicate-key-error-dup-key-when-upserting
+    try:
+        collection.replace_one({'_id': document[key_property]}, document, upsert=True)
+    except errors.DuplicateKeyError:
+        collection.replace_one({'_id': document[key_property]}, document, upsert=True)
+    document['updated'] = document['updated'].isoformat()
 
 def add_claimreviews_raw(claimreviews, clean=True):
     if len(claimreviews) < 1:
@@ -96,3 +108,11 @@ def get_count_unique_from_scraper(scraper_name):
     results = claimReviews_collection.aggregate([{"$match": {"retrieved_by": scraper_name}}, {"$group": {"_id": "$url"}}])
     return len(list(results))
     # return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))
+
+def get_url_redirect(url):
+    return url_redirects_collection.find_one({'_id': url})
+
+def save_url_redirect(from_url, to_url):
+    # just be sure not to go beyond the MongoDB limit of 1024
+    url_mapping = {'_id': from_url[:1000], 'to': to_url}
+    return replace_safe(url_redirects_collection, url_mapping)

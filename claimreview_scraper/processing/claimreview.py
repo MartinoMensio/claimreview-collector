@@ -388,7 +388,7 @@ _domain_parser_map = {
     'crithink.mk': _fake_parser,
 }
 
-def clean_claim_url(url):
+def clean_claim_url(url, unshorten=True):
     result = url
     # remove the "mm:ss mark of URL" that is used for some videos
     if result:
@@ -400,9 +400,11 @@ def clean_claim_url(url):
         # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
         elif re.match(r'https?://(www.)?twitter\.com/[^/]*/?$', result):
             result = None
+        if unshorten:
+            result = unshortener.unshorten(result)
     return result
 
-def get_claim_urls(claimReview):
+def get_claim_urls(claimReview, unshorten=True):
     result = None
     itemReviewed = claimReview.get('itemReviewed', None)
     if not itemReviewed:
@@ -431,9 +433,9 @@ def get_claim_urls(claimReview):
     # TODO also return sameAs if present on the claim directly, other links there!!
     if type(result) == list:
         # TODO consider multiple values
-        result = [clean_claim_url(el) for el in result]
+        result = [clean_claim_url(el, unshorten=unshorten) for el in result]
     else:
-        result = clean_claim_url(result)
+        result = clean_claim_url(result, unshorten=unshorten)
     return result
 
 def get_claim_rating(claimReview):
@@ -490,12 +492,12 @@ def get_label(claimReview):
 def simplify_label(label):
     return label_maps.get(label, None)
 
-def to_fact_checking_url(claimReview, source='claimReview'):
+def to_fact_checking_url(claimReview, source='claimReview', unshorten=True):
     if 'url' not in claimReview:
         print(claimReview)
         raise ValueError('missing URL')
     url = claimReview['url']
-    claim_url = get_claim_urls(claimReview)
+    claim_url = get_claim_urls(claimReview, unshorten=unshorten)
     if url == claim_url:
         print('same url and claim_url: {}'.format(url))
         claim_url = None

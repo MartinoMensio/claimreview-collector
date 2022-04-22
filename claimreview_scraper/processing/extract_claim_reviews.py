@@ -57,7 +57,7 @@ def claims_nationality_distribution():
         fig.write_image("countries_factchecks_counts.pdf")
 
 
-def extract_ifcn_claimreviews(domains=None, recollect=True):
+def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
     if domains:
         ifcn_domains = {k: {
             'original': {'name': k,
@@ -188,7 +188,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True):
             for cr in crs_cluster:
                 mapped_label = extract_tweet_reviews.claimreview_get_coinform_label(cr)
                 labels.add(mapped_label)
-                appearances.update(extract_tweet_reviews.claimreview_get_claim_appearances(cr))
+                appearances.update(extract_tweet_reviews.claimreview_get_claim_appearances(cr, unshorten=unshorten))
                 date_published = cr.get('datePublished', None)
                 if date_published:
                     date_published = dateparser.parse(date_published)

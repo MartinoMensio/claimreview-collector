@@ -27,7 +27,7 @@ class Scraper(ScraperBase):
             claim_reviews = list(claim_reviews.values())
             database_builder.add_ClaimReviews(self.id, claim_reviews)
         finally:
-            extract_claim_reviews.extract_ifcn_claimreviews(domains=['euvsdisinfo.eu'], recollect=False)
+            extract_claim_reviews.extract_ifcn_claimreviews(domains=['euvsdisinfo.eu'], recollect=False, unshorten=False)
             pass
         # for cr in claim_reviews:
         #     del cr['_id']

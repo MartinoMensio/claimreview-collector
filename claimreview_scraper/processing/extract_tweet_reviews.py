@@ -11,6 +11,8 @@ import requests
 from collections import defaultdict
 from pathlib import Path
 
+from . import unshortener
+
 from . import utils, database_builder
 
 TWITTER_CONNECTOR = os.environ.get('TWITTER_CONNECTOR', 'http://localhost:20200')
@@ -321,7 +323,7 @@ def get_coinform_label_from_score(score):
         return 'uncertain'
     return 'not_credible'
 
-def claimreview_get_claim_appearances(claimreview):
+def claimreview_get_claim_appearances(claimreview, unshorten=True):
     """from a `ClaimReview`, get all the URLs mentioned as appearances"""
     try:
         factchecker_url = claimreview['url']
@@ -403,6 +405,8 @@ def claimreview_get_claim_appearances(claimreview):
         cleaned_result = [el for el in cleaned_result if re.match('^https?:\/\/.*$', el)]
         # remove loops to evaluation of itself
         cleaned_result = [el for el in cleaned_result if utils.get_url_domain(el) != factchecker_domain]
+        if unshorten:
+            cleaned_result = [unshortener.unshorten(el) for el in cleaned_result]
         return cleaned_result
     except Exception as e:
         print(claimreview)
