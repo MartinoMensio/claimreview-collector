@@ -49,7 +49,7 @@ def archivetoday_resolve_url(url):
         # match = re.match(r'^https?:\/\/archive\.today.*\/(?P<original>https?:\/.*)', long_link)
         # original_url = match.group('original')
     except Exception as e:
-        print('impossible to resolve URL', url)
+        print('impossible to resolve URL', url, e)
         return url
     return original_url
 
