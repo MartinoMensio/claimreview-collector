@@ -273,9 +273,9 @@ def update_data():
     # extract
     # TODO keep stats
     cr_stats = extract_claim_reviews.extract_ifcn_claimreviews()
-    tw_stats = extract_tweet_reviews.extract() # TODO this is the slowest, keep the tweets cached in twitter_connector
+    # tw_stats = extract_tweet_reviews.extract() # TODO this is the slowest, keep the tweets cached in twitter_connector
     result_stats['claim_reviews'] = cr_stats
-    result_stats['tweet_reviews'] = tw_stats
+    # result_stats['tweet_reviews'] = tw_stats
 
     # copy latest to today folder
     if os.path.isdir(today_path):
