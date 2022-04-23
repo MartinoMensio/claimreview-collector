@@ -11,6 +11,18 @@ This library can be used to deal with `claimReview` items:
 Install this library with `pip` (that uses `setup.py`).
 It is highly recommended (FOR NOW REQUIRED) that you have a MongoDB instance locally, so that the caching mechanism will make everything faster.
 
+### FlareSolverrr
+
+https://github.com/FlareSolverr/FlareSolverr
+
+docker run -d \
+  --name=mm35626_flaresolverr \
+  -p 8191:8191 \
+  -e LOG_LEVEL=info \
+  --restart unless-stopped \
+  ghcr.io/flaresolverr/flaresolverr:latest
+
+
 ## Dump management
 
 Create dump:
@@ -102,7 +114,7 @@ Update commands for each origin:
 python -m claimreview_scraper.scrapers.implementations.datacommons_feeds # 19161 ~ 10s
 python -m claimreview_scraper.scrapers.implementations.datacommons_research_dataset # 5776
 python -m claimreview_scraper.scrapers.implementations.esi_api # 674 (not available outside OU) --> REMOVED, too wrong!
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 10270 ~ 2m 5s
+python -m claimreview_scraper.scrapers.implementations.euvsdisinfo # 13616 ~ 2m 5s
 python -m claimreview_scraper.scrapers.implementations.factcheck_org # 623 ~ 11m 33s (not using sharethefacts anymore)
 python -m claimreview_scraper.scrapers.implementations.factcheckni # 21 ~ 3m 29s
 python -m claimreview_scraper.scrapers.implementations.fullfact # 855   ~1m 36s

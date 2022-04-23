@@ -7,12 +7,11 @@ from bs4 import BeautifulSoup
 from . import ScraperBase
 from ...processing import database_builder
 from ...processing import utils, claimreview, extract_claim_reviews
+from ...processing import flaresolverr
 
 LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
 
-# This scraper uses FlareSolverr to scrape from CloudFlare https://github.com/FlareSolverr/FlareSolverr
 
-cloudflare_stuff = None
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = 'euvsdisinfo'
@@ -37,28 +36,6 @@ class Scraper(ScraperBase):
 def get_credibility_measures(original_review):
     return {'credibility': -1.0, 'confidence': 1.0}
 
-def get_cloudflare(url):
-    global cloudflare_stuff
-    # https://github.com/FlareSolverr/FlareSolverr
-    if not cloudflare_stuff:
-        res = requests.post('http://localhost:8191/v1', json={
-            'cmd': 'sessions.create',
-            'session': 'test'
-        })
-        res.raise_for_status()
-        cloudflare_stuff = 'test'
-    res = requests.post('http://localhost:8191/v1', json={
-        'cmd': 'request.get',
-        'session': 'test',
-        'url': url,
-        'maxTimeout': 60000
-    })
-    res.raise_for_status()
-    content = res.json()
-    if content['solution']['status'] not in [200, 404]:
-        raise ValueError(content['solution']['status'])
-    page = content['solution']['response']
-    return page
 
 def retrieve(self_id):
     offset = 0
@@ -69,7 +46,7 @@ def retrieve(self_id):
     while go_on:
         facts_url = LIST_URL.format(offset)
         print(facts_url)
-        text = get_cloudflare(facts_url)
+        text = flaresolverr.get_cloudflare(facts_url)
 
         soup = BeautifulSoup(text, 'lxml')
 
@@ -94,7 +71,7 @@ def retrieve(self_id):
                 continue
             else:
                 found_consecutively = 0
-                article = get_cloudflare(url)
+                article = flaresolverr.get_cloudflare(url)
                 # now euvsdisinfo uses ClaimReview
                 # insert manually in Cache because cloudflare does not enable this
                 # print(type(article))
