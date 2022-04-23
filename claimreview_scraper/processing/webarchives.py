@@ -71,4 +71,8 @@ def resolve_url(url):
     domain = utils.get_url_domain(url)
     if domain not in domains:
         raise ValueError(f'Domain {domain} not supported by webarchives')
-    return domains[domain](url)
+    try:
+        return domains[domain](url)
+    except Exception as e:
+        print('resolve_url', e)
+        return url
