@@ -1,6 +1,11 @@
+import os
+import json
+import requests
 import pandas as pd
 from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
+import plotly.express as px
+from pathlib import Path
 
 
 import claimreview_scraper
@@ -38,7 +43,7 @@ from claimreview_scraper.routers import data
 #         original.extend(crs)
 
 # TODO only from links not credible table
-links = utils.read_json('data/latest/links_not_credible_full.json')
+links = utils.read_json('data/latest/links_all_full.json')
 
 # check satisfy condition
 links = [el for el in links if data.check_satisfy(el)]
@@ -50,6 +55,30 @@ for el in links:
 # sort by most recent
 sorted_links = sorted(links, key=lambda row: row['date_published'], reverse=True)
 
+languages_map = {}
+languages_cache_path = 'languages_cache.json'
+if os.path.exists(languages_cache_path):
+    languages_map = utils.read_json(languages_cache_path)
+def get_language(text):
+    if text in languages_map:
+        return languages_map[text]
+    else:
+        res = requests.post('https://api.textrazor.com/', headers={'X-TextRazor-Key': '113a014b5a98b3eab42fb073646cdac079d232fe2f28eef001190ce1'}, data={
+            'text': text,
+        })
+        if res.status_code != 200:
+            print(res.text)
+            error = res.json()['error']
+            if 'TextRazor cannot analyze documents of language: ':
+                language = error.split('TextRazor cannot analyze documents of language: ')[1][:3]
+            else:
+                raise ValueError(error)
+        else:
+            language = res.json()['response']['language']
+        languages_map[text] = language
+        return language
+
+
 table = [{
     'misinforming_url': row['misinforming_url'],
     'misinforming_domain': row['misinforming_domain'],
@@ -59,18 +88,45 @@ table = [{
     'label': row['reviews'][0]['label'],
     'original_label': row['reviews'][0]['original_label'],
     'fact_checker': row['reviews'][0]['fact_checker']['name'],
-    'claim_text': row['reviews'][0]['claim_text'][0],
+    'country': row['reviews'][0]['fact_checker']['country'],
+    'claim_text': row['reviews'][0]['claim_text'][0].replace('\n', '\\n'),
 } for row in sorted_links]
 
 urls = list(set(el['review_url'] for el in table))
 
 
+# ukraine filter
+keyword_list = ['ukraine', 'ucraina', 'ucrania']
+with_ukraine = [el for el in table if any(keyword in ' '.join([el['claim_text'],el['review_url']]).lower() for keyword in keyword_list)]
+
+date_start = '2021-11-01'
+with_ukraine_recent = [el for el in with_ukraine if el['date_published'] > date_start]
+
+for el in tqdm(with_ukraine_recent, desc='getting language'):
+    el['factcheck_language'] = get_language(el['claim_text'])
+
+utils.write_json_with_path(languages_map, Path(''), 'languages_cache.json')
+
+df = pd.DataFrame(with_ukraine_recent)
+# date filter
+df = df[df['date_published'] > date_start]
 
 
 
-df = pd.DataFrame(table)
+fig = px.histogram(df, x="date_published")
+fig.show()
+fig = px.histogram(df, x="label")
+fig.show()
+fig = px.histogram(df, x="fact_checker")
+fig.show()
+fig = px.histogram(df, x="factcheck_language")
+fig.show()
+fig = px.histogram(df, x="misinforming_domain")
+fig.show()
 
-df.to_csv('cleaned_table_recollected.csv', sep='\t', index=False)
+df.to_csv('ukraine.tsv', sep='\t', index=False)
+# df.to_csv('cleaned_table_recollected.csv', sep='\t', index=False)
+raise ValueError(1234)
 
 by_factchecker_100 = df.groupby('fact_checker').head(100).reset_index(drop=True).sort_values(['fact_checker', 'date_published'], ascending=[True, False])
 by_factchecker_100.to_csv('by_factchecker_100.csv', sep='\t', index=False)
