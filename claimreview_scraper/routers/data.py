@@ -193,6 +193,10 @@ def check_satisfy(el, since=None, until=None, misinforming_domain=None, exclude_
         # non-meaningful path: homepage or facebook.com/permalink.php or any other messed-up things
         if not path or path == '/' or path == '/permalink.php':
             return False
+        # if only one path part in these domains, it means it is an account
+        if misinforming_domain in ['instagram.com', 'facebook.com', 'twitter.com']:
+            if len([el for el in path.split('/') if el]) == 1:
+                return False
     return True
 
 @router.get('/latest_factchecks')
