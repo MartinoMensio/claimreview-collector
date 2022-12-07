@@ -26,6 +26,7 @@ def get_cloudflare(url):
     content = res.json()
     if content['solution']['status'] not in [200, 404]:
         cloudflare_stuff = None
+        # cloudflare catched us, try again
         raise ValueError(content['solution']['status'])
     page = content['solution']['response']
     return page

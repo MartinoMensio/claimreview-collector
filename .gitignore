@@ -4,6 +4,8 @@ dump.tar.gz
 dump/**
 dumps/**
 cache/**
+ukraine_archive/**
+
 .DS_Store
 .vscode/**
 
