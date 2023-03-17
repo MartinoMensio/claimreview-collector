@@ -20,6 +20,7 @@ import plotly.graph_objects as go
 from claimreview_scraper.processing import utils, cache_manager
 
 claims_path = 'data/latest/claim_reviews.json'
+# claims_path = 'data/latest/euvsdisinfo.json'
 
 
 # @st.cache
@@ -66,7 +67,7 @@ st.plotly_chart(fig)
 
 
 goose = Goose()
-for el in tqdm(appearances):
+for el in tqdm(appearances, desc='collecting appearances'):
     if el['domain'] in ['facebook.com', 'twitter.com', 'youtube.com', 'instagram.com', 'youtu.be']:
         continue
     try:
@@ -80,7 +81,7 @@ for el in tqdm(appearances):
 len([el for el in appearances if 'goose' in el])
 appearances = [el for el in appearances if 'goose' in el]
 
-write_json('data/latest/appearances_with_content.json', appearances)
+write_json('data/latest/euvsdisinfo_appearances_with_content.json', appearances)
 raise ValueError('stop')
 
 by_appearance_url_domains = defaultdict(set)
