@@ -13,6 +13,8 @@ from . import utils
 from . import unshortener
 from . import cache_manager
 
+dirtyjson_rest_endpoint = os.environ.get('DIRTYJSON_REST_ENDPOINT', 'http://localhost:12345')
+
 # subfolder_path = 'data'# utils.data_location / 'claimreviews'
 
 # the values of truthiness for the simplified labels
@@ -168,7 +170,7 @@ def retrieve_claimreview(url):
                     matchPatternUpdated = matchPattern.replace('"', '\'\'')
                     page_text = match.text.replace(matchPattern,  matchPatternUpdated)
                     # docker run -dit --restart always --name dirtyjson-rest -p 12345:12345 martinomensio/dirtyjson
-                    res = requests.post('http://localhost:12345', data=page_text.encode('utf-8'),
+                    res = requests.post(dirtyjson_rest_endpoint, data=page_text.encode('utf-8'),
                                   headers={'content-type': 'text/plain'})
                     if res.status_code != 200:
                         result = [] # TODO fix logging
@@ -221,6 +223,9 @@ def retrieve_claimreview(url):
             else:
                 raise NotImplementedError(url_fixed)
     for r in result:
+        if not isinstance(r, dict):
+            print('not a dict', r)
+            continue
         r_url = r.get('url')
         if r_url != url_fixed:
             print('different ClaimReview.url. asked for:', url_fixed, 'and received:', r_url)
