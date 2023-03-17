@@ -1,0 +1,4 @@
+# for analysis not on server
+-c requirements.txt
+plotly
+sklearn

@@ -10,11 +10,11 @@ def get_cloudflare(url):
     global cloudflare_stuff
     # https://github.com/FlareSolverr/FlareSolverr
     if not cloudflare_stuff:
-        res = requests.post(f'http://{flaresolverr_host}/v1', json={
-            'cmd': 'sessions.create',
-            'session': 'test'
-        })
-        res.raise_for_status()
+        # res = requests.post(f'http://{flaresolverr_host}/v1', json={
+        #     'cmd': 'sessions.create',
+        #     'session': 'test'
+        # })
+        # res.raise_for_status()
         cloudflare_stuff = 'test'
     res = requests.post(f'http://{flaresolverr_host}/v1', json={
         'cmd': 'request.get',

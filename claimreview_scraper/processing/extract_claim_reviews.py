@@ -1,8 +1,5 @@
-import os
-import json
 import tqdm
 import scipy
-import requests
 import jellyfish
 import dateparser
 import pandas as pd

@@ -1,0 +1,26 @@
+# create requirements.txt with pip-compile (https://github.com/jazzband/pip-tools)
+# pip install pip-tools
+# pip-compile
+requests
+tqdm
+extruct
+flatten-json
+python-dotenv
+pymongo
+tldextract
+beautifulsoup4
+lxml
+plac
+fastapi
+uvicorn
+dateparser
+unidecode
+pyld
+schedule
+goose3
+scipy
+jellyfish
+pandas
+tensorflow_text
+# for setup.py
+# -e .

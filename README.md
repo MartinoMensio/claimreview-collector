@@ -47,15 +47,15 @@ docker run --rm --name mm35626_mongoimporter -v `pwd`/dumps:/dumps --link=mm3562
 mongorestore --host mongo --db claimreview_scraper dumps/latest/claimreview_scraper
 
 ## Docker installation and running
-docker build . -t mm34834/claimreview_scraper
+docker build . -t mm35626/claimreview_scraper
 # local light (no link, using local misinfome). Start before misinfo_server
-docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm34834/claimreview_scraper
+docker run --restart always -it --name mm35626_claimreview_scraper_light -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm35626/claimreview_scraper
 # local full (no auto-restart)
-docker run -it --name mm34834_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/.env:/app/.env -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm34834_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="http://misinfo_server:5000/misinfo/api/twitter" -p 20500:8000 -e ROLE=full mm34834/claimreview_scraper
+docker run -it --name mm35626_claimreview_scraper_full -v `pwd`/data:/app/data -v `pwd`/.env:/app/.env -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="http://misinfo_server:5000" --link=mm35626_misinfo_server:misinfo_server -e TWITTER_CONNECTOR="http://misinfo_server:5000/misinfo/api/twitter" -p 20500:8000 -e ROLE=full mm35626/claimreview_scraper
 # server web (ROLE=light) no need of twitter or misinfo backend. But need of credibility backend
-docker run --restart always -it --name mm34834_claimreview_scraper_light -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm34834_mongo:mongo -e MONGO_HOST=mongo:27017 -p 20400:8000 -e ROLE=light mm34834/claimreview_scraper
+docker run --restart always -it --name mm35626_claimreview_scraper_light -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 127.0.0.1:20400:8000 -e ROLE=light mm35626/claimreview_scraper
 # server (ROLE=full) without link to twitter_connector, using the public misinfome API. Credibility need for IFCN only (through misinfomeAPI)
-docker run --restart always -it --name mm34834_claimreview_scraper_full -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr:8191 --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="https://misinfo.me" -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -p 20500:8000 -e ROLE=full -e PUBLISH_GITHUB=true mm34834/claimreview_scraper
+docker run --restart always -it --name mm35626_claimreview_scraper_full -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data -v `pwd`/claimreview_scraper:/app/claimreview_scraper --link=mm35626_flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr:8191 --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="https://misinfo.me" -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -p 20500:8000 -e ROLE=full -e PUBLISH_GITHUB=true mm35626/claimreview_scraper
 
 
 # Auto-update
