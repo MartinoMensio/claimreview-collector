@@ -104,7 +104,11 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
         recollected_crs = []
         with ThreadPool(8) as pool:
             for url, crs in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls_to_recollect), total=len(urls_to_recollect), desc='recollecting'):
-                recollected_crs.extend(crs)
+                for cr in crs:
+                    if isinstance(cr, dict):
+                        recollected_crs.append(cr)
+                    else:
+                        print('error not dict', cr)
         utils.write_json_with_path(recollected_crs, data_path, 'claim_reviews_raw_recollected.json')
 
         # step 3: observe what has been lost
