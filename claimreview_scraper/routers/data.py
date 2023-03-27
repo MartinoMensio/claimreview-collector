@@ -17,6 +17,8 @@ from ..processing import utils, extract_claim_reviews, extract_tweet_reviews, da
 from .. import scrapers
 from ..publishing import github
 
+from ..main import ROLE
+
 router = APIRouter()
 
 MISINFO_BACKEND = os.environ.get('MISINFO_BACKEND', None)
@@ -125,7 +127,7 @@ def get_data(date: str = 'latest', file: Optional[str] = None):
     return file_response
 
 @router.post('/download')
-def download_data(stats: StatsBody, clear=True):
+def download_data(stats: StatsBody):
     # download asset
     date = stats.date
     asset_name =f'{date}.zip'
@@ -263,8 +265,8 @@ def random_sample(
 @router.post('/update')
 def update_data():
     # already checked up that this is ROLE==full
-    # if main.ROLE == 'light':
-    #     raise ValueError('light instance cannot update')
+    if ROLE == 'light':
+        raise HTTPException(status_code=400, detail='light instance cannot update')
     result_stats = {}
     today = datetime.datetime.today().strftime('%Y_%m_%d')  # TODO yyyy_mm_dd
     print('today', today)
