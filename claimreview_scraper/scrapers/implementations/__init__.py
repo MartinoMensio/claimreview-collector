@@ -1,5 +1,6 @@
 # from . import *
 
+
 class ScraperBase(object):
     id: str
     homepage: str
@@ -10,4 +11,4 @@ class ScraperBase(object):
         self.configuration = configuration
 
     def scrape(self):
-        raise NotImplementedError('override this method')
+        raise NotImplementedError("override this method")

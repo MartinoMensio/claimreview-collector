@@ -2,9 +2,10 @@
 import os
 import requests
 
-flaresolverr_host = os.environ.get('FLARESOLVERR_HOST', 'localhost:8191')
+flaresolverr_host = os.environ.get("FLARESOLVERR_HOST", "localhost:8191")
 
 cloudflare_stuff = None
+
 
 def get_cloudflare(url):
     global cloudflare_stuff
@@ -15,18 +16,16 @@ def get_cloudflare(url):
         #     'session': 'test'
         # })
         # res.raise_for_status()
-        cloudflare_stuff = 'test'
-    res = requests.post(f'http://{flaresolverr_host}/v1', json={
-        'cmd': 'request.get',
-        'session': 'test',
-        'url': url,
-        'maxTimeout': 60000
-    })
+        cloudflare_stuff = "test"
+    res = requests.post(
+        f"http://{flaresolverr_host}/v1",
+        json={"cmd": "request.get", "session": "test", "url": url, "maxTimeout": 60000},
+    )
     res.raise_for_status()
     content = res.json()
-    if content['solution']['status'] not in [200, 404]:
+    if content["solution"]["status"] not in [200, 404]:
         cloudflare_stuff = None
         # cloudflare catched us, try again
-        raise ValueError(content['solution']['status'])
-    page = content['solution']['response']
+        raise ValueError(content["solution"]["status"])
+    page = content["solution"]["response"]
     return page

@@ -10,14 +10,15 @@ from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
 
-LIST_URL = 'https://www.factcheck.org/page/{}/'
+LIST_URL = "https://www.factcheck.org/page/{}/"
+
 
 class Scraper(ScraperBase):
     def __init__(self):
-        self.id = 'factcheck_org'
-        self.homepage = 'https://www.factcheck.org/'
-        self.name = 'FactCheck.org'
-        self.description = 'FactCheck.org is a project of the Annenberg Public Policy Center of the University of Pennsylvania. The APPC was established by publisher and philanthropist Walter Annenberg to create a community of scholars within the University of Pennsylvania that would address public policy issues at the local, state and federal levels.'
+        self.id = "factcheck_org"
+        self.homepage = "https://www.factcheck.org/"
+        self.name = "FactCheck.org"
+        self.description = "FactCheck.org is a project of the Annenberg Public Policy Center of the University of Pennsylvania. The APPC was established by publisher and philanthropist Walter Annenberg to create a community of scholars within the University of Pennsylvania that would address public policy issues at the local, state and federal levels."
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
@@ -28,14 +29,18 @@ class Scraper(ScraperBase):
             all_reviews = [el for el in all_reviews]
         claim_reviews = []
         with ThreadPool(8) as pool:
-            urls = [r['url'] for r in all_reviews]
-            for one_result in tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+            urls = [r["url"] for r in all_reviews]
+            for one_result in tqdm(
+                pool.imap_unordered(claimreview.retrieve_claimreview, urls),
+                total=len(urls),
+            ):
                 url_fixed, cr = one_result
                 claim_reviews.extend(cr)
         # for r in tqdm(all_reviews):
         #     url_fixed, cr = claimreview.retrieve_claimreview(r['url'])
         #     claim_reviews.extend(cr)
         database_builder.add_ClaimReviews(self.id, claim_reviews)
+
 
 def retrieve_factchecking_urls(self_id):
     page = 1
@@ -46,25 +51,21 @@ def retrieve_factchecking_urls(self_id):
         print(url)
         response = requests.get(url)
         if response.status_code != 200:
-            print('status code', response.status_code)
+            print("status code", response.status_code)
             break
 
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, "lxml")
 
         assessments = []
-        for s in soup.select('main#main article'):
-            link = s.select('h3.entry-title a')[0]['href']
-            title = s.select('h3.entry-title a')[0].text.strip()
-            subtitle = s.select('div.entry-content p')[0].text.strip()
-            date = s.select('header.entry-header div.entry-meta')[0].text.strip()
+        for s in soup.select("main#main article"):
+            link = s.select("h3.entry-title a")[0]["href"]
+            title = s.select("h3.entry-title a")[0].text.strip()
+            subtitle = s.select("div.entry-content p")[0].text.strip()
+            date = s.select("header.entry-header div.entry-meta")[0].text.strip()
 
-
-            assessments.append({
-                'url': link,
-                'title': title,
-                'subtitle': subtitle,
-                'date': date
-            })
+            assessments.append(
+                {"url": link, "title": title, "subtitle": subtitle, "date": date}
+            )
 
         all_statements.extend(assessments)
         print(len(all_statements))
@@ -73,9 +74,11 @@ def retrieve_factchecking_urls(self_id):
         page += 1
     return all_statements
 
+
 def main():
     scraper = Scraper()
     scraper.scrape()
+
 
 if __name__ == "__main__":
     main()

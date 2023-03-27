@@ -9,15 +9,15 @@ from ...processing import database_builder
 from ...processing import utils, claimreview, extract_claim_reviews
 from ...processing import flaresolverr
 
-LIST_URL = 'https://euvsdisinfo.eu/disinformation-cases/?offset={}'
+LIST_URL = "https://euvsdisinfo.eu/disinformation-cases/?offset={}"
 
 
 class Scraper(ScraperBase):
     def __init__(self):
-        self.id = 'euvsdisinfo'
-        self.homepage = 'https://euvsdisinfo.eu/disinformation-cases/'
-        self.name = 'EU vs Disinfo - Disinfo database'
-        self.description = 'EUvsDisinfo is the flagship project of the European External Action Service’s East StratCom Task Force. It was established in 2015 to better forecast, address, and respond to the Russian Federation’s ongoing disinformation campaigns affecting the European Union, its Member States, and countries in the shared neighbourhood.\n EUvsDisinfo’s core objective is to increase public awareness and understanding of the Kremlin’s disinformation operations, and to help citizens in Europe and beyond develop resistance to digital information and media manipulation.'
+        self.id = "euvsdisinfo"
+        self.homepage = "https://euvsdisinfo.eu/disinformation-cases/"
+        self.name = "EU vs Disinfo - Disinfo database"
+        self.description = "EUvsDisinfo is the flagship project of the European External Action Service’s East StratCom Task Force. It was established in 2015 to better forecast, address, and respond to the Russian Federation’s ongoing disinformation campaigns affecting the European Union, its Member States, and countries in the shared neighbourhood.\n EUvsDisinfo’s core objective is to increase public awareness and understanding of the Kremlin’s disinformation operations, and to help citizens in Europe and beyond develop resistance to digital information and media manipulation."
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
@@ -26,7 +26,10 @@ class Scraper(ScraperBase):
             claim_reviews = list(claim_reviews.values())
             database_builder.add_ClaimReviews(self.id, claim_reviews)
         finally:
-            extract_claim_reviews.extract_ifcn_claimreviews(domains=['euvsdisinfo.eu'], recollect=False, unshorten=False)
+            # This processes everything toghether and saves json files
+            extract_claim_reviews.extract_ifcn_claimreviews(
+                domains=["euvsdisinfo.eu"], recollect=False, unshorten=False
+            )
             pass
         # for cr in claim_reviews:
         #     del cr['_id']
@@ -34,38 +37,40 @@ class Scraper(ScraperBase):
 
 
 def get_credibility_measures(original_review):
-    return {'credibility': -1.0, 'confidence': 1.0}
+    return {"credibility": -1.0, "confidence": 1.0}
 
 
 def retrieve(self_id):
     offset = 0
-    all_reviews = {el['url']: el for el in database_builder.get_original_data(self_id)}
+    all_reviews = {el["url"]: el for el in database_builder.get_original_data(self_id)}
     go_on = True
     first = True
-    found_consecutively = 0 # we will stop after a number of matches without interruption (next iterations)
+    found_consecutively = 0  # we will stop after a number of matches without interruption (next iterations)
     while go_on:
         facts_url = LIST_URL.format(offset)
         print(facts_url)
         text = flaresolverr.get_cloudflare(facts_url)
 
-        soup = BeautifulSoup(text, 'lxml')
+        soup = BeautifulSoup(text, "lxml")
 
-        articles = soup.select('tr.disinfo-db-post ')
+        articles = soup.select("tr.disinfo-db-post ")
         if not articles:
             go_on = False
             break
         for s in articles:
             if found_consecutively >= 10:
                 # this is the moment to stop. We already retrieved from now on
-                print(f'Interrupting after finding {found_consecutively} elements already stored')
+                print(
+                    f"Interrupting after finding {found_consecutively} elements already stored"
+                )
                 go_on = False
                 break
-            relative_url = s.select('a')[0]['href']
-            url = f'https://euvsdisinfo.eu{relative_url}'
-            title = s.select('td.cell-title')[0].text.strip()
-            date = s.select('td.disinfo-db-date')[0].text.strip()
-            #outlets = s.select('data-column="Outlets"')[0].text.strip()
-            country = s.select('td.cell-country')[0].text.strip()
+            relative_url = s.select("a")[0]["href"]
+            url = f"https://euvsdisinfo.eu{relative_url}"
+            title = s.select("td.cell-title")[0].text.strip()
+            date = s.select("td.disinfo-db-date")[0].text.strip()
+            # outlets = s.select('data-column="Outlets"')[0].text.strip()
+            country = s.select("td.cell-country")[0].text.strip()
             if url in all_reviews:
                 found_consecutively += 1
                 continue
@@ -87,7 +92,7 @@ def retrieve(self_id):
                     # 404 https://euvsdisinfo.eu/report/coe-and-eu-has-never-bear-christian-moral-values-but-the-values-%e2%80%8b%e2%80%8bof-satan
                     # 404 https://euvsdisinfo.eu/report/navalnys-allegations-on-putin-palace-are-false-and-russia-never-tried-t%ce%bf-target-him
                     # 404 https://euvsdisinfo.eu/report/%d0%b0s-long-as-the-west-exists-as-much-as-it-will-covet-the-material-resources-of-russia
-                    print('ERROR: no ClaimReview at', url)
+                    print("ERROR: no ClaimReview at", url)
                     # raise ValueError(cr)
                 else:
                     all_reviews[url] = cr
@@ -96,7 +101,7 @@ def retrieve(self_id):
                 first = False
 
         print(len(all_reviews))
-        #print(all_statements)
+        # print(all_statements)
         offset += 10
 
         # if offset > 20:

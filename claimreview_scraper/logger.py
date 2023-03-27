@@ -1,6 +1,6 @@
 import logging
 
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
 
 
 def init(name, log_file, level=logging.INFO):
@@ -15,4 +15,5 @@ def init(name, log_file, level=logging.INFO):
 
     return logger
 
-APP_LOGGER = init('app','app.log')
+
+APP_LOGGER = init("app", "app.log")

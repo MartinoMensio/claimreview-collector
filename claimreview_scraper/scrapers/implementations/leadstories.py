@@ -12,20 +12,17 @@ from ...processing import utils
 from ...processing import claimreview
 from ...processing import database_builder
 
-LIST_URL = 'https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent'
+LIST_URL = "https://leadstories.com/cgi-bin/mt/mt-search.cgi?search=&IncludeBlogs=1&blog_id=1&archive_type=Index&limit=20&page={}#mostrecent"
 
 
-labels_in_title = [
-    'Old Fake News: ',
-    'Fake News: ',
-    'Hoax Alert: '
-]
+labels_in_title = ["Old Fake News: ", "Fake News: ", "Hoax Alert: "]
+
 
 class Scraper(ScraperBase):
     def __init__(self):
-        self.id = 'leadstories'
-        self.homepage = 'https://leadstories.com/'
-        self.name = 'Lead Stories'
+        self.id = "leadstories"
+        self.homepage = "https://leadstories.com/"
+        self.name = "Lead Stories"
         self.description = '''Lead Stories is an innovative fact checking and debunking website at the intersection of big data and journalism that launched in 2015. Our editorial team used the technology provided by Trendolizer™ (patent pending) to quickly find the most trending content on the internet to write about but our mantra has always been "Just Because It's Trending Doesn't Mean It's True."'''
         ScraperBase.__init__(self)
 
@@ -37,8 +34,11 @@ class Scraper(ScraperBase):
             all_reviews = [el for el in all_reviews]
         claim_reviews = []
         with ThreadPool(8) as pool:
-            urls = [r['url'] for r in all_reviews]
-            for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+            urls = [r["url"] for r in all_reviews]
+            for one_result in tqdm.tqdm(
+                pool.imap_unordered(claimreview.retrieve_claimreview, urls),
+                total=len(urls),
+            ):
                 url_fixed, cr = one_result
                 claim_reviews.extend(cr)
         # for r in tqdm(all_reviews):
@@ -46,10 +46,13 @@ class Scraper(ScraperBase):
         #     claim_reviews.extend(cr)
         database_builder.add_ClaimReviews(self.id, claim_reviews)
 
+
 def retrieve_factchecking_urls(self_id):
     page = 1
-    
-    already_saved = {el['url']: el for el in database_builder.get_original_data(self_id)}
+
+    already_saved = {
+        el["url"]: el for el in database_builder.get_original_data(self_id)
+    }
     found_consecutively = 0
     go_on = True
     while go_on:
@@ -57,23 +60,25 @@ def retrieve_factchecking_urls(self_id):
         print(facts_url)
         response = requests.get(facts_url)
         if response.status_code != 200:
-            print('status code', response.status_code)
+            print("status code", response.status_code)
             break
 
-        soup = BeautifulSoup(response.text, 'lxml')
-        current_page = soup.select('nav.pagination span')
+        soup = BeautifulSoup(response.text, "lxml")
+        current_page = soup.select("nav.pagination span")
         if not current_page:
-            print('finished pages')
+            print("finished pages")
             break
 
-        for s in soup.select('li article'):
+        for s in soup.select("li article"):
             if found_consecutively >= 10:
                 # this is the moment to stop. We already retrieved from now on
-                print(f'Interrupting after finding {found_consecutively} elements already stored')
+                print(
+                    f"Interrupting after finding {found_consecutively} elements already stored"
+                )
                 go_on = False
                 break
 
-            url = s.select_one('a')['href']
+            url = s.select_one("a")["href"]
             # print(url)
 
             if url in already_saved:
@@ -82,13 +87,15 @@ def retrieve_factchecking_urls(self_id):
             else:
                 found_consecutively = 0
 
-                title = s.select_one('h1')
+                title = s.select_one("h1")
                 if title:
                     title = title.text.strip()
-                    subtitle = s.select_one('p.mod-default-article-description').text.strip()
-                    date = s.select_one('time')['datetime'].strip()
+                    subtitle = s.select_one(
+                        "p.mod-default-article-description"
+                    ).text.strip()
+                    date = s.select_one("time")["datetime"].strip()
 
-                    label = s.select_one('span.caption-overlay')
+                    label = s.select_one("span.caption-overlay")
                     if label:
                         label = label.text.strip()
                         label = claimreview.simplify_label(label)
@@ -99,12 +106,12 @@ def retrieve_factchecking_urls(self_id):
                     date = None
 
                 new_item = {
-                    'url': url,
-                    'title': title,
-                    'subtitle': subtitle,
-                    'label': label,
-                    'date': date,
-                    'source': 'leadstories'
+                    "url": url,
+                    "title": title,
+                    "subtitle": subtitle,
+                    "label": label,
+                    "date": date,
+                    "source": "leadstories",
                 }
                 already_saved[url] = new_item
 
@@ -119,6 +126,7 @@ def retrieve_factchecking_urls(self_id):
 def main():
     scraper = Scraper()
     scraper.scrape()
+
 
 if __name__ == "__main__":
     main()

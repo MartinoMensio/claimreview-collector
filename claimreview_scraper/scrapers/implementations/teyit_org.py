@@ -7,23 +7,23 @@ from . import ScraperBase
 from ...processing import claimreview, utils, database_builder
 from ... import logger
 
-HOMEPAGE = 'https://teyit.org'
+HOMEPAGE = "https://teyit.org"
 
 # https://teyit.org/konu/analiz/{claim_label}/page/{page_no}
 # yanlis
 # # teyit.org
 # 'yanliş': 'fake', https://beta.teyit.org/detayli-arama?post_type=Analiz
-# 'doğru': 'true', 
+# 'doğru': 'true',
 # 'karma': 'mixed',
 # 'belirsiz': None, #'uncertain'
 
 
 class Scraper(ScraperBase):
     def __init__(self):
-        self.id = 'teyit_org'
-        self.homepage = 'https://teyit.org/'
-        self.name = 'teyit.org'
-        self.description = 'teyit.org is an independent fact-checking organization based in Turkey. At a time when the trust in media is at all-time low, our main aims are to prevent false information from spreading online, help media consumers develop their media literacy skills, and develop methods to promote critical thinking.'
+        self.id = "teyit_org"
+        self.homepage = "https://teyit.org/"
+        self.name = "teyit.org"
+        self.description = "teyit.org is an independent fact-checking organization based in Turkey. At a time when the trust in media is at all-time low, our main aims are to prevent false information from spreading online, help media consumers develop their media literacy skills, and develop methods to promote critical thinking."
         ScraperBase.__init__(self)
 
     def scrape(self, update=True):
@@ -34,11 +34,14 @@ class Scraper(ScraperBase):
             all_reviews = [el for el in all_reviews]
         claim_reviews = []
         with ThreadPool(8) as pool:
-            urls = [r['url'] for r in all_reviews]
-            for one_result in tqdm.tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls), total=len(urls)):
+            urls = [r["url"] for r in all_reviews]
+            for one_result in tqdm.tqdm(
+                pool.imap_unordered(claimreview.retrieve_claimreview, urls),
+                total=len(urls),
+            ):
                 url_fixed, cr = one_result
                 if not cr:
-                    print('no claimReview from', url_fixed)
+                    print("no claimReview from", url_fixed)
                 else:
                     claim_reviews.extend(cr)
         # for r in tqdm(all_reviews):
@@ -50,22 +53,23 @@ class Scraper(ScraperBase):
 def collect_article_urls(list_page_url):
     page_no = 1
 
-    page_url = f'{list_page_url}page/{page_no}'
+    page_url = f"{list_page_url}page/{page_no}"
     response = requests.get(page_url)
 
     urls = []
 
     while response.status_code != 404:
-        soup = BeautifulSoup(response.content,'lxml')
-        for article in soup.findAll('article'):
+        soup = BeautifulSoup(response.content, "lxml")
+        for article in soup.findAll("article"):
             # TODO check that we have one element with selection 'div a'
-            article_url = article.select('div a')[0]['href']
+            article_url = article.select("div a")[0]["href"]
             urls.append(article_url)
-            #print(cl_review)
+            # print(cl_review)
         page_no = page_no + 1
-        page_url = f'{list_page_url}page/{page_no}'
+        page_url = f"{list_page_url}page/{page_no}"
         response = requests.get(page_url)
     return urls
+
 
 def test():
     url = "https://teyit.org/a-haberin-chpnin-akil-almaz-nanoteknolojik-hilesi-alt-bandi-kullandigi-iddiasi/"
@@ -78,47 +82,49 @@ def get_all_articles_url(self_id):
         raise ValueError(response.status_code)
 
     full_homepage = response.url
-    print('full homepage', full_homepage)
+    print("full homepage", full_homepage)
 
-    soup = BeautifulSoup(response.text, 'lxml')
-    categories = soup.select('div.sayac_widget a')
+    soup = BeautifulSoup(response.text, "lxml")
+    categories = soup.select("div.sayac_widget a")
 
     if not categories:
         # the new beta.teyit.org
         page = 0
         data = {}
         while True:
-            res = requests.get(f'https://tyt.vklab.net/posts?post_type=Analiz&page={page}')
+            res = requests.get(
+                f"https://tyt.vklab.net/posts?post_type=Analiz&page={page}"
+            )
             res.raise_for_status()
 
             res_data = res.json()
 
-            if not res_data['raw']:
+            if not res_data["raw"]:
                 break
 
-            for el in res_data['raw']:
-                el['url'] = f'{full_homepage}{el["slug"]}'
-                data[el['id']] = el
-            
+            for el in res_data["raw"]:
+                el["url"] = f'{full_homepage}{el["slug"]}'
+                data[el["id"]] = el
+
             # print(len(data), page)
             page += 1
-        print(len(data), 'items')
-        
-        return data.values()
+        print(len(data), "items")
 
+        return data.values()
 
     all_urls = []
     for c in categories:
-        category_list_url = c['href']
+        category_list_url = c["href"]
         print(category_list_url)
         category_urls = collect_article_urls(category_list_url)
-        print(len(category_urls), 'found at', category_list_url)
+        print(len(category_urls), "found at", category_list_url)
         all_urls.extend(category_urls)
-    
-    all_statements = [{'url': el} for el in all_urls]
+
+    all_statements = [{"url": el} for el in all_urls]
 
     database_builder.save_original_data(self_id, all_statements)
     return all_statements
+
 
 # def get_claim_reviews(all_urls):
 #     """DEPRECATED"""
@@ -146,9 +152,11 @@ def get_all_articles_url(self_id):
 
 #     database_builder.add
 
+
 def main():
     scraper = Scraper()
     scraper.scrape()
+
 
 if __name__ == "__main__":
     main()

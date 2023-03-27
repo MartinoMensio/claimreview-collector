@@ -1,49 +1,5 @@
 {
-    "datacommons_factcheck": {
-        "name": "Fact Check Data from datacommons.org",
-        "url": "https://www.datacommons.org/factcheck/download",
-        "description": "The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field \"url\" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers' sites.",
-        "author": "https://www.datacommons.org/",
-        "type": "claimreview_aggregator",
-        "contains": {
-            "domain_classification": false,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": true,
-            "fact_checking_urls": true
-        }
-    },
-    "datacommons_feeds": {
-        "name": "Fact Check Markup Tool Data Feed",
-        "url": "https://storage.googleapis.com/datacommons-feeds/claimreview/latest/data.json",
-        "description": "This is a data feed of ClaimReview markups created via the Google Fact Check Markup Tool. The data in the feed also follows the schema.org ClaimReview standard, namely the same schema as the data in the historical research dataset. The feed itself is in DataFeed format. The compilation of the research dataset and the data feed from the Fact Check Markup Tool are licensed under CC BY. The license on the structured data of each ClaimReview markup is specified in the field sdLicense. Additionally, each publisher may have their own license terms for content on their website. Please refer to the website of the publisher.",
-        "author": "https://www.datacommons.org/",
-        "type": "claimreview_aggregator",
-        "contains": {
-            "domain_classification": false,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": true,
-            "fact_checking_urls": true
-        }
-    },
-    "esi_api": {
-        "name": "ESI API",
-        "url": "https://coinform.expertsystemcustomer.com/",
-        "description": "",
-        "author": "https://expertsystemcustomer.com/",
-        "type": "claimreview_aggregator",
-        "contains": {
-            "domain_classification": false,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": false,
-            "fact_checking_urls": false
-        }
-    },
+
     "mrisdal_fakenews": {
         "name": "Getting Real about Fake News",
         "url": "https://www.kaggle.com/mrisdal/fake-news",
@@ -116,20 +72,7 @@
             "claimReviews": false
         }
     },
-    "opensources": {
-        "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
-        "url": "http://www.opensources.co/",
-        "description": "OpenSources is a curated resource for assessing online information sources, available for public use. Websites in this resource range from credible news sources to misleading and outright fake websites. Headed by Melissa Zimdars of Merrimack College, our research team is dedicated to preserving the integrity and enhancing the transparency of information on the internet.",
-        "author": "http://www.opensources.co/",
-        "type": "domain_list",
-        "contains": {
-            "domain_classification": true,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": false
-        }
-    },
+
     "fakenewsnet": {
         "name": "FakeNewsNet",
         "url": "https://www.kaggle.com/mdepak/fakenewsnet",
@@ -145,7 +88,7 @@
         }
     },
     "rbutr": {
-        "name": "OpenSources: Professionally curated lists of online sources, available free for public use",
+        "name": "Rbutr",
         "url": "http://rbutr.com/rbutr/WebsiteServlet?requestType=browse",
         "description": "rbutr is a community-driven app which connects webpages together on the basis that one page argues against the other. Visit a rebutted page and you will be told \"There are rebuttals to this page.\" You can then open up the rebutting article(s). Found a great rebuttal? Connect it to the page(s) it rebuts so that people reading those articles can know about it. Want a rebuttal for a page you have found? Submit a request to the community.",
         "author": "http://rbutr.com/",
@@ -169,20 +112,6 @@
             "url_classification": false,
             "rebuttal_suggestion": false,
             "textual_claims": true,
-            "claimReviews": false
-        }
-    },
-    "wikipedia": {
-        "name": "Wikipedia List of fake news websites",
-        "url": "https://en.wikipedia.org/wiki/List_of_fake_news_websites",
-        "description": "This is a list of fake news sites. These sites intentionally, but not necessarily solely, publish hoaxes and disinformation for purposes other than news satire. Some of these sites use homograph spoofing attacks, typosquatting and other deceptive strategies similar to those used in phishing attacks to resemble genuine news outlets.",
-        "author": "https://www.wikipedia.org/",
-        "type": "domain_list",
-        "contains": {
-            "domain_classification": true,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
             "claimReviews": false
         }
     },
@@ -312,20 +241,6 @@
             "claimReviews": false
         }
     },
-    "melissa_zimdars": {
-        "name": "False, Misleading, Clickbait-y, and/or Satirical \"News\" Sources",
-        "url": "https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/edit",
-        "description": "The below list of websites is a combination of my original list in this google document, numerous other lists on the internet, and suggestions from readers/internet users. All tagged websites have been analyzed by myself or one of the librarians I’m working with on OpenSources. All websites tagged as “unknown”  still need to be analyzed, and some of them may be removed entirely from the resource for various reasons (i.e. it doesn’t circulate “news” or the website no longer exists). Finally, please remember that all tags may be subject to revision based on feedback, discussion, continued analysis, or website changes etc. https://docs.google.com/document/d/10eA5-mCZLSS4MQY5QGb5ewC3VAL6pLkT53V_81ZyitM/preview",
-        "author": "https://www.merrimack.edu/live/profiles/586-melissa-mish-zimdars/_p/f",
-        "type": "domain_list",
-        "contains": {
-            "domain_classification": true,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": false
-        }
-    },
     "jruvika_fakenews": {
         "name": "Kaggle Fake News detection",
         "url": "https://www.kaggle.com/jruvika/fake-news-detection",
@@ -340,37 +255,7 @@
             "claimReviews": false
         }
     },
-    "factcheckni_list": {
-        "name": "FactCheckNI Articles",
-        "url": "https://factcheckni.org/",
-        "description": "FactCheckNI Articles",
-        "author": "https://factcheckni.org/",
-        "type": "dataset",
-        "contains": {
-            "domain_classification": false,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": false,
-            "fact_checking_urls": true
-        }
-    },
-    "google_factcheck_explorer": {
-        "name": "Google Fact Check Tools Explorer",
-        "url": "https://toolbox.google.com/factcheck/explorer",
-        "description": "This tool allows you to easily browse and search for fact checks. For example, you can search for a politician's statement, or for a topic. You can also restrict results to a specific publisher.",
-        "author": "https://www.google.com/",
-        "type": "claimreview_aggregator",
-        "contains": {
-            "domain_classification": false,
-            "url_classification": false,
-            "rebuttal_suggestion": false,
-            "textual_claims": false,
-            "claimReviews": true,
-            "fact_checking_urls": true
-        },
-        "graph_enabled": false
-    },
+
     "buzzfeednews": {
         "name": "Analysis of fake news sites and viral posts, 2016 - 2018",
         "url": "https://github.com/BuzzFeedNews/2018-12-fake-news-top-50",
@@ -424,100 +309,8 @@
             "domain_classification": false
         }
     },
-    "ifcn": {
-        "name": "International Fact-Checking Network",
-        "url": "https://ifcncodeofprinciples.poynter.org/signatories",
-        "description": "This code of principles is for organizations that regularly publish nonpartisan reports on the accuracy of statements by public figures, major institutions, and other widely circulated claims of interest to society. It is the result of consultations among fact-checkers from around the world and offers conscientious practitioners principles to aspire to in their everyday work.",
-        "author": "https://www.poynter.org/",
-        "type": "factcheckers_list",
-        "contains": {
-            "domain_classification": true,
-            "fact_checkers": true
-        },
-        "graph_enabled": true,
-        "assesses": [
-            "sources"
-        ]
-    },
-    "reporterslab": {
-        "name": "Reporter's Lab",
-        "url": "https://reporterslab.org/fact-checking/#",
-        "description": "The Reporters’ Lab maintains a database of global fact-checking sites. You can use the map to explore sites around the world or use the menu below",
-        "author": "https://reporterslab.org/",
-        "type": "factcheckers_list",
-        "contains": {
-            "domain_classification": false,
-            "fact_checkers": false
-        }
-    },
-    "factcheckni": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true
-        }
-    },
-    "fullfact": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true,
-            "claimReviews": true
-        }
-    },
-    "leadstories": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true,
-            "claimReviews": true
-        }
-    },
-    "politifact": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true
-        }
-    },
-    "snopes": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true
-        }
-    },
-    "weeklystandard": {
-        "type": "factchecker",
-        "contains": {
-            "fact_checking_urls": true
-        }
-    },
-    "lemonde_decodex_hoax": {
-        "name": "Le Monde -  Les Decodeurs",
-        "url": "https://www.lemonde.fr/les-decodeurs/",
-        "description": "",
-        "author": "https://www.lemonde.fr/",
-        "type": "factchecker",
-        "contains": {
-            "claimReviews": true
-        }
-    },
-    "euvsdisinfo": {
-        "name": "EU vs DISINFORMATION",
-        "url": "https://euvsdisinfo.eu/",
-        "description": "",
-        "author": "https://euvsdisinfo.eu/",
-        "type": "factchecker",
-        "contains": {
-            "claimReviews": true
-        }
-    },
-    "istinomer": {
-        "name": "Istinomer",
-        "url": "http://www.istinomer.rs/",
-        "description": "",
-        "author": "http://www.istinomer.rs/",
-        "type": "factchecker",
-        "contains": {
-            "claimReviews": true
-        }
-    },
+
+
     "kallxo_kripometer": {
         "name": "KRYPOMETRI",
         "url": "https://www.kallxo.com/krypometer/",
@@ -527,15 +320,6 @@
         "contains": {
             "claimReviews": true
         }
-    },
-    "teyit_org": {
-        "name": "Teyit",
-        "url": "https://teyit.org/",
-        "description": "",
-        "author": "https://teyit.org/",
-        "type": "factchecker",
-        "contains": {
-            "claimReviews": true
-        }
     }
+
 }
