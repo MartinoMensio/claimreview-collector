@@ -1,0 +1,47 @@
+[tool.pdm]
+
+[project]
+name = "claimreview_scraper"
+version = "0.1.0"
+description = "ClaimReview Scraper for MisinfoMe"
+authors = [
+    {name = "Martino Mensio", email = "martino.mensio@open.ac.uk"},
+]
+dependencies = [
+    "requests",
+    "tqdm",
+    "extruct",
+    "flatten-json",
+    "python-dotenv",
+    "pymongo",
+    "tldextract",
+    "beautifulsoup4",
+    "lxml",
+    "plac",
+    "fastapi",
+    "uvicorn",
+    "dateparser",
+    "unidecode",
+    "pyld",
+    "schedule",
+    "goose3",
+    "scipy",
+    "jellyfish",
+    "pandas",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]  # This is dev dependencies
+dev1 = [
+    "ipykernel",
+    "nbformat",
+    "plotly",
+    "black",
+    #"tensorflow-text",
+]
+dev2 = ["mkdocs"]
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"

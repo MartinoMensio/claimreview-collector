@@ -1,5 +1,0 @@
--e .
-ipykernel
-nbformat
-plotly
-black
