@@ -1,4 +1,4 @@
-name: update
+name: update dependencies
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   pdm:
-    name: Update PDM
+    name: Update PDM lockfile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
