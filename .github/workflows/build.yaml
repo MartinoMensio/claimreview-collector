@@ -14,6 +14,7 @@ jobs:
     # TODO test before build
   docker:
     name: Build docker image
+    runs-on: ubuntu-latest
     needs: test
     steps:
       -
