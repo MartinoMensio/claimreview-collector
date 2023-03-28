@@ -12,14 +12,18 @@ jobs:
     name: Update PDM lockfile
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup PDM
+    - 
+      uses: actions/checkout@v3
+    - 
+      name: Setup PDM
       uses: pdm-project/setup-pdm@v3
       with:
         python-version: 3.11  # Version range or exact version of a Python version to use, the same as actions/setup-python
-    - name: Checking updates for pdm.lock
+    - 
+      name: Checking updates for pdm.lock
       run: pdm update
-    - name: add and commit changes for pdm.lock
+    - 
+      name: add and commit changes for pdm.lock
       uses: EndBug/add-and-commit@v9
       with:
         # The arguments for the `git add` command (see the paragraph below for more info)
@@ -51,7 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: pdm
     steps:
-    - uses: actions/checkout@v3
+    - 
+      uses: actions/checkout@v3
       with:
         ref: ${{github.ref_name}}
     # TODO: test before build
@@ -78,9 +83,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Get current date # for tagging the image, can go back in time if latest is problematic
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - 
+      name: Get current date # for tagging the image, can go back in time if latest is problematic
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     -
       name: Build and push
       uses: docker/build-push-action@v4
