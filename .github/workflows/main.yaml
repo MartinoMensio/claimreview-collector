@@ -1,11 +1,11 @@
-name: update dependencies
+name: main
 
 on:
   push:
     branches:
       - '*'
     schedule:
-    - cron: "0 0 * * 0" # weekly on Sunday at 0:00
+    - cron: "0 0 * * 0" # weekly on Sunday
 
 jobs:
   pdm:
@@ -46,4 +46,44 @@ jobs:
         # - exitAtEnd -> the action will go on, every pathspec error will be logged at the end, the step will fail.
         # Default: ignore
         pathspec_error_handling: ignore
-        
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: pdm
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    # TODO: test before build
+  docker:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref_name == 'master'
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    -
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    -
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - 
+      name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    -
+      name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest
