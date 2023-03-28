@@ -86,7 +86,7 @@ jobs:
     - 
       name: Get current date # for tagging the image, can go back in time if latest is problematic
       id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_STATE
     -
       name: Build and push
       uses: docker/build-push-action@v4
@@ -96,4 +96,4 @@ jobs:
         file: ./Dockerfile
         push: true
         provenance: false # needed on KMi servers with old docker, for the manifest
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest, ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:${{ steps.date.outputs.date }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest, ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:${{ env.TODAY }}
