@@ -40,7 +40,6 @@ dev1 = [
     "black",
     #"tensorflow-text",
 ]
-dev2 = ["mkdocs"]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]

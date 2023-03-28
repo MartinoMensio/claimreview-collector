@@ -8,7 +8,12 @@ This library can be used to deal with `claimReview` items:
 
 ## Requirements
 
-Install this library with `pip` (that uses `setup.py`).
+Install this library with:
+```
+pip install pdm
+pdm install
+```
+
 It is highly recommended (FOR NOW REQUIRED) that you have a MongoDB instance locally, so that the caching mechanism will make everything faster.
 
 ### FlareSolverrr

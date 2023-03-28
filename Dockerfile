@@ -1,15 +1,13 @@
 FROM python:3.11 as builder
 
+WORKDIR /app
+# install dependencies
 RUN pip install pdm
+# gcc may be needed for some dependencies
+RUN apt-get update && apt-get install -y gcc
+
 # ADD requirements.txt /app/requirements.txt
 COPY pyproject.toml pdm.lock /app/
-
-# ADD .env /app/.env
-WORKDIR /app
-
-# install dependencies
-# gcc may be needed for some dependencies
-RUN apt-get update && apt-get install -y gcc 
 # RUN pip install .
 # install pdm in .venv by default
 RUN pdm install --prod --no-lock --no-editable
