@@ -7,7 +7,7 @@ RUN pip install pdm
 RUN apt-get update && apt-get install -y gcc
 
 # ADD requirements.txt /app/requirements.txt
-COPY pyproject.toml pdm.lock /app/
+COPY pyproject.toml pdm.lock README.md /app/
 # RUN pip install .
 # install pdm in .venv by default
 RUN pdm install --prod --no-lock --no-editable

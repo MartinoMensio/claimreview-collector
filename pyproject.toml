@@ -30,6 +30,7 @@ dependencies = [
     "pandas",
 ]
 requires-python = ">=3.11"
+readme = "README.md"
 license = {text = "MIT"}
 
 [tool.pdm.dev-dependencies]  # This is dev dependencies
