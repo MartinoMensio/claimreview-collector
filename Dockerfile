@@ -9,6 +9,8 @@ COPY pyproject.toml pdm.lock README.md /app/
 WORKDIR /app
 
 # install dependencies
+# gcc needed sometimes for some dependencies
+RUN apt-get update && apt-get install -y gcc 
 # RUN pip install .
 RUN pdm install --prod --no-lock --no-editable
 
