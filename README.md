@@ -66,7 +66,7 @@ docker run -it --name mm35626_claimreview_collector_full -v `pwd`/data:/app/data
 # server web (ROLE=light) no need of twitter or misinfo backend. But need of credibility backend
 docker run --restart always -it --name mm35626_claimreview_collector_light -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -p 127.0.0.1:20400:8000 -e ROLE=light martinomensio/claimreview-collector
 # server (ROLE=full) without link to twitter_connector, using the public misinfome API. Credibility need for IFCN only (through misinfomeAPI)
-docker run --restart always -it --name mm35626_claimreview_collector_full -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data --link=mm35626_flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr:8191 --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="https://misinfo.me" -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -e DIRTYJSON_REST_ENDPOINT="http://dirtyjson_server:12345" --link=mm35626_dirtyjson:dirtyjson_server -p 20500:8000 -e ROLE=full -e PUBLISH_GITHUB=true martinomensio/claimreview-collector
+docker run --restart always -it --name mm35626_claimreview_collector_full -v `pwd`/.env:/app/.env -v `pwd`/data:/app/data --link=mm35626_flaresolverr:flaresolverr -e FLARESOLVERR_HOST=flaresolverr:8191 --link=mm35626_mongo:mongo -e MONGO_HOST=mongo:27017 -e MISINFO_BACKEND="https://misinfo.me" -e TWITTER_CONNECTOR="https://misinfo.me/misinfo/api/twitter" -e DIRTYJSON_REST_ENDPOINT="http://dirtyjson_server:12345" --link=mm35626_dirtyjson:dirtyjson_server -p 127.0.0.1:20500:8000 -e ROLE=full -e PUBLISH_GITHUB=true martinomensio/claimreview-collector
 
 
 # Auto-update
