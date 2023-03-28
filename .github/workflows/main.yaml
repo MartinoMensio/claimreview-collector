@@ -86,7 +86,7 @@ jobs:
     - 
       name: Get current date # for tagging the image, can go back in time if latest is problematic
       id: date
-      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_STATE
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
     -
       name: Build and push
       uses: docker/build-push-action@v4
