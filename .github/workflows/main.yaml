@@ -9,7 +9,7 @@ on:
 
 jobs:
   pdm:
-    name: Update PDM lockfile
+    name: Update PDM lockfile and requirements.txt (for security audit)
     runs-on: ubuntu-latest
     steps:
     - 
@@ -23,12 +23,15 @@ jobs:
       name: Checking updates for pdm.lock
       run: pdm update
     - 
+      name: Exporting requirements.txt
+      run: pdm export -o requirements.txt --without-hashes
+    - 
       name: add and commit changes for pdm.lock
       uses: EndBug/add-and-commit@v9
       with:
         # The arguments for the `git add` command (see the paragraph below for more info)
         # Default: '.'
-        add: 'pdm.lock'
+        add: 'pdm.lock requirements.txt'
         # Additional arguments for the git commit command. The --message argument is already set by the message input.
         # Default: ''
         commit: --signoff
@@ -42,7 +45,7 @@ jobs:
 
         # The message for the commit.
         # Default: 'Commit from GitHub Actions (name of the workflow)'
-        message: '[automatic] updated pdm lockfile'
+        message: '[automatic] updated pdm.lock and requirements.txt'
 
         # The way the action should handle pathspec errors from the add and remove commands. Three options are available:
         # - ignore -> errors will be logged but the step won't fail
