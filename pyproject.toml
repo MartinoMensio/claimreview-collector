@@ -40,7 +40,7 @@ dev1 = [
     "plotly",
     "black",
     #"tensorflow-text",
-    "sklearn",
+    "scikit-learn",
 ]
 
 [build-system]
