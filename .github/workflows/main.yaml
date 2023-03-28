@@ -86,5 +86,5 @@ jobs:
         platforms: linux/amd64,linux/arm64
         file: ./Dockerfile
         push: true
-        provenance: false
+        provenance: false # needed on KMi servers with old docker, for the manifest
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest
