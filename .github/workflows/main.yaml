@@ -7,10 +7,6 @@ on:
     schedule:
     - cron: "0 0 * * 0" # weekly on Sunday
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   pdm:
     name: Update PDM lockfile
@@ -63,10 +59,7 @@ jobs:
     name: Build docker image
     runs-on: ubuntu-latest
     needs: test
-    #if: github.ref_name == 'master'
-    permissions:
-      contents: read
-      packages: write
+    if: github.ref_name == 'master'
     steps:
     -
       name: Checkout
@@ -79,22 +72,18 @@ jobs:
     -
       name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-    - name: Log in to the Container registry
+    - 
+      name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-    - name: Build and push Docker image
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    -
+      name: Build and push
       uses: docker/build-push-action@v4
       with:
         context: .
+        platforms: linux/amd64,linux/arm64
+        file: ./Dockerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest
