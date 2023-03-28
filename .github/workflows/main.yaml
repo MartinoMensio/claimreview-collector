@@ -99,4 +99,4 @@ jobs:
         file: ./Dockerfile
         push: true
         provenance: false # needed on KMi servers with old docker, for the manifest
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:latest, ${{ secrets.DOCKERHUB_USERNAME }}/claimreview-collector:${{ env.TODAY }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest, ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.TODAY }}
