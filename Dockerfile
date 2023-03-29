@@ -5,6 +5,7 @@ WORKDIR /app
 RUN pip install pdm
 # gcc may be needed for some dependencies
 RUN apt-get update && apt-get install -y gcc
+# RUN apk --no-cache add musl-dev linux-headers g++ cargo
 
 # ADD requirements.txt /app/requirements.txt
 COPY pyproject.toml pdm.lock README.md /app/
@@ -12,8 +13,11 @@ COPY pyproject.toml pdm.lock README.md /app/
 # install pdm in .venv by default
 RUN pdm install --prod --no-lock --no-editable
 
-# run stage
+# run stage (cannot use alpine because scipy and jellyfish fail compilation)
 FROM python:3.11-slim as production
+# FROM python:3.11-alpine as production
+# pip and setuptools have open vulnerabilities
+RUN pip uninstall setuptools pip -y
 WORKDIR /app
 COPY --from=builder /app /app
 COPY claimreview_scraper /app/claimreview_scraper
