@@ -51,7 +51,7 @@ from claimreview_scraper.processing import unshortener, utils
 # ifcn_rev_urls = set(el['review_url'] for el in ifcn)
 # eu_rev_urls = set(el['review_url'] for el in eu)
 
-res = requests.get("https://ukrainefacts.org/uploads/data.json")
+res = requests.get("https://data.maldita.es/ukrainefacts")
 res.raise_for_status()
 svitlo = res.json()
 svitlo_mis_urls = set(el["disinfoLink"] for el in svitlo if el["disinfoLink"])
@@ -79,7 +79,7 @@ for el in tqdm.tqdm(svitlo):
                     "misinforming_url": misinforming_url_full,
                     "misinforming_url_original": misinforming_url,
                     "misinforming_domain": utils.get_url_domain(misinforming_url_full),
-                    "date_published": f"{occ['date']['year']}-{occ['date']['month']:02}-{occ['date']['day']:02}",
+                    "date_published": occ["date"],
                     "n_reviews": len(svitlo_by_mis_url[el["disinfoLink"]]),
                     "review_url": clean_field(occ["debunkLink"]),
                     "label": "disinfo",
