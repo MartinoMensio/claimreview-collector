@@ -1,4 +1,5 @@
-FROM python:3.11-alpine as base
+# cannot do 3.11 because of broken jellyfish
+FROM python:3.10-alpine as base
 # move to edge, removes a lot of vulnerabilities
 RUN sed -i -e 's/v[^/]*/edge/g' /etc/apk/repositories && \
     apk update && \
