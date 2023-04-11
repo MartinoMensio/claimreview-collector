@@ -37,7 +37,7 @@ summary = "Specifications for callback functions passed in to an API"
 
 [[package]]
 name = "beautifulsoup4"
-version = "4.12.0"
+version = "4.12.2"
 requires_python = ">=3.6.0"
 summary = "Screen-scraping library"
 dependencies = [
@@ -480,7 +480,7 @@ summary = "A small Python package for determining appropriate platform-specific 
 
 [[package]]
 name = "plotly"
-version = "5.14.0"
+version = "5.14.1"
 requires_python = ">=3.6"
 summary = "An open-source, interactive data visualization library for Python"
 dependencies = [
@@ -662,8 +662,8 @@ dependencies = [
 
 [[package]]
 name = "schedule"
-version = "1.1.0"
-requires_python = ">=3.6"
+version = "1.2.0"
+requires_python = ">=3.7"
 summary = "Job scheduling for humans."
 
 [[package]]
@@ -836,7 +836,8 @@ version = "0.5.1"
 summary = "Character encoding aliases for legacy web content"
 
 [metadata]
-lock_version = "4.1"
+lock_version = "4.2"
+groups = ["default", "dev1"]
 content_hash = "sha256:5553c29934137ebedfc673bee8ee365a45df7fde136ec52831cfb9ce3bccec6c"
 
 [metadata.files]
@@ -860,9 +861,9 @@ content_hash = "sha256:5553c29934137ebedfc673bee8ee365a45df7fde136ec52831cfb9ce3
     {url = "https://files.pythonhosted.org/packages/4c/1c/ff6546b6c12603d8dd1070aa3c3d273ad4c07f5771689a7b69a550e8c951/backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
     {url = "https://files.pythonhosted.org/packages/a2/40/764a663805d84deee23043e1426a9175567db89c8b3287b5c2ad9f71aa93/backcall-0.2.0.tar.gz", hash = "sha256:5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e"},
 ]
-"beautifulsoup4 4.12.0" = [
-    {url = "https://files.pythonhosted.org/packages/c5/4c/b5b7d6e1d4406973fb7f4e5df81c6f07890fa82548ac3b945deed1df9d48/beautifulsoup4-4.12.0.tar.gz", hash = "sha256:c5fceeaec29d09c84970e47c65f2f0efe57872f7cff494c9691a26ec0ff13234"},
-    {url = "https://files.pythonhosted.org/packages/ee/a7/06b189a2e280e351adcef25df532af3c59442123187e228b960ab3238687/beautifulsoup4-4.12.0-py3-none-any.whl", hash = "sha256:2130a5ad7f513200fae61a17abb5e338ca980fa28c439c0571014bc0217e9591"},
+"beautifulsoup4 4.12.2" = [
+    {url = "https://files.pythonhosted.org/packages/57/f4/a69c20ee4f660081a7dedb1ac57f29be9378e04edfcb90c526b923d4bebc/beautifulsoup4-4.12.2-py3-none-any.whl", hash = "sha256:bd2520ca0d9d7d12694a53d44ac482d181b4ec1888909b035a3dbf40d0f57d4a"},
+    {url = "https://files.pythonhosted.org/packages/af/0b/44c39cf3b18a9280950ad63a579ce395dda4c32193ee9da7ff0aed547094/beautifulsoup4-4.12.2.tar.gz", hash = "sha256:492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da"},
 ]
 "black 23.3.0" = [
     {url = "https://files.pythonhosted.org/packages/06/1e/273d610249f0335afb1ddb03664a03223f4826e3d1a95170a0142cb19fb4/black-23.3.0-cp39-cp39-win_amd64.whl", hash = "sha256:6b39abdfb402002b8a7d030ccc85cf5afff64ee90fa4c5aebc531e3ad0175ddb"},
@@ -1126,7 +1127,6 @@ content_hash = "sha256:5553c29934137ebedfc673bee8ee365a45df7fde136ec52831cfb9ce3
     {url = "https://files.pythonhosted.org/packages/55/bf/a6681cea7efd1a96db6603ecadafc0ed4e0bda5ac436bcfc63e62f476c3d/frozendict-2.3.6-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:9c8314f5b8812cb7bc6001595e5cc521dffe220a8789d942a3f946660cc45672"},
     {url = "https://files.pythonhosted.org/packages/6a/56/aad20a1c40c46c900ee064b7c8d00aedc350e199afc862f3163f889ed0ae/frozendict-2.3.6-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:bd420cad2ec3223b3210c3b5a30fdc4842021ff037ae3c00e5ba6dd48731b753"},
     {url = "https://files.pythonhosted.org/packages/71/b2/02c11f9de117b512566e3e7d76e9c4cbe22480e27b8b1ed0aaa6b367ffe1/frozendict-2.3.6-cp36-cp36m-win_amd64.whl", hash = "sha256:9c312b6dfe6a3b6b910637442989119d38bac417486c44a0ed402a80a4f5890e"},
-    {url = "https://files.pythonhosted.org/packages/93/0b/d07e3ebdc3e31acff5a59a7e087c3f19bc456691dfd9afefd427168350d1/frozendict-2.3.6.tar.gz", hash = "sha256:14e376fb0c8fe0b11b77872a84356dfa191b24a240be66bf5ec66d9b0d203bb8"},
     {url = "https://files.pythonhosted.org/packages/95/4b/ef0dc372ac8bfc0a7df26dc011a209b24613a727da9fb7c81781cae5d09f/frozendict-2.3.6-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:d310b7ea4fdfe70935d3e9193c8711689914b35300b7234137760c7cdbf257e1"},
     {url = "https://files.pythonhosted.org/packages/9a/b8/b22efbab94d8da1435f9f8b6683227b642104db5499e58ccbc3146c57515/frozendict-2.3.6-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:638d056ddff3e96f288176fcd18330ee68cc38f39ee67e10e43f4ee57552ed82"},
     {url = "https://files.pythonhosted.org/packages/be/f2/ec7ef35bb42adee62517e5ac3f70fdc66ccf28aa87018b9f69ce37f376b7/frozendict-2.3.6-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:1b4abc85e4788c2fe434851971a5fde4b079ed369965a21911e485dde97c08f4"},
@@ -1515,9 +1515,9 @@ content_hash = "sha256:5553c29934137ebedfc673bee8ee365a45df7fde136ec52831cfb9ce3
     {url = "https://files.pythonhosted.org/packages/15/04/3f882b46b454ab374ea75425c6f931e499150ec1385a73e55b3f45af615a/platformdirs-3.2.0.tar.gz", hash = "sha256:d5b638ca397f25f979350ff789db335903d7ea010ab28903f57b27e1b16c2b08"},
     {url = "https://files.pythonhosted.org/packages/b2/f3/4fb5fae710fc9f22a42cd90dc0547da18ec83e2e139294ab94f04c449cf5/platformdirs-3.2.0-py3-none-any.whl", hash = "sha256:ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e"},
 ]
-"plotly 5.14.0" = [
-    {url = "https://files.pythonhosted.org/packages/78/06/716dfc518422911c6c8863d4008b30401bb0c2cb20c7a2e5f910f25d3d1b/plotly-5.14.0-py2.py3-none-any.whl", hash = "sha256:2e3407d93a9700beebbef66d11f63992c58e058dd808442ee54af40f98fb4940"},
-    {url = "https://files.pythonhosted.org/packages/cc/60/5e739cb745df76b4401fed20f867a54feabc1aa2e35dc677ea4f556f9f11/plotly-5.14.0.tar.gz", hash = "sha256:02e40264f145e524d9628fd516031976b60d74a33bbabce037ea28580bcd4e0c"},
+"plotly 5.14.1" = [
+    {url = "https://files.pythonhosted.org/packages/15/5c/786e4572cf3217ba1707eeb99fe4bdb8fb138237690fa21641e341b1970c/plotly-5.14.1-py2.py3-none-any.whl", hash = "sha256:a63f3ad9e4cc2e02902a738e5e3e7f3d1307f2732ac71a6c28f1238ed3052826"},
+    {url = "https://files.pythonhosted.org/packages/dd/24/4f307b6e54892a4b91c58a1ee5826325529231d885df8aaa0f1863191f8d/plotly-5.14.1.tar.gz", hash = "sha256:bcac86d7fcba3eff7260c1eddc36ca34dae2aded10a0709808446565e0e53b93"},
 ]
 "prompt-toolkit 3.0.38" = [
     {url = "https://files.pythonhosted.org/packages/4b/bb/75cdcd356f57d17b295aba121494c2333d26bfff1a837e6199b8b83c415a/prompt_toolkit-3.0.38.tar.gz", hash = "sha256:23ac5d50538a9a38c8bde05fecb47d0b403ecd0662857a86f886f798563d5b9b"},
@@ -1921,9 +1921,9 @@ content_hash = "sha256:5553c29934137ebedfc673bee8ee365a45df7fde136ec52831cfb9ce3
     {url = "https://files.pythonhosted.org/packages/50/5c/d32aeed5c91e7970ee6ab8316c08d911c1d6044929408f6bbbcc763f8019/requests-file-1.5.1.tar.gz", hash = "sha256:07d74208d3389d01c38ab89ef403af0cfec63957d53a0081d8eca738d0247d8e"},
     {url = "https://files.pythonhosted.org/packages/77/86/cdb5e8eaed90796aa83a6d9f75cfbd37af553c47a291cd47bc410ef9bdb2/requests_file-1.5.1-py2.py3-none-any.whl", hash = "sha256:dfe5dae75c12481f68ba353183c53a65e6044c923e64c24b2209f6c7570ca953"},
 ]
-"schedule 1.1.0" = [
-    {url = "https://files.pythonhosted.org/packages/a8/b5/a291a4c0faa491fd5baefa6d89011ece581cff47b23c0a39b42a63383358/schedule-1.1.0.tar.gz", hash = "sha256:e6ca13585e62c810e13a08682e0a6a8ad245372e376ba2b8679294f377dfc8e4"},
-    {url = "https://files.pythonhosted.org/packages/eb/3b/040bd180eaef427dd160562ee66adc9f4f67088185c272edcdb899c609c7/schedule-1.1.0-py2.py3-none-any.whl", hash = "sha256:617adce8b4bf38c360b781297d59918fbebfb2878f1671d189f4f4af5d0567a4"},
+"schedule 1.2.0" = [
+    {url = "https://files.pythonhosted.org/packages/09/62/b9f933c01e3692393fb91cbe19015f91e1e69d409943a627c434518974f7/schedule-1.2.0.tar.gz", hash = "sha256:b4ad697aafba7184c9eb6a1e2ebc41f781547242acde8ceae9a0a25b04c0922d"},
+    {url = "https://files.pythonhosted.org/packages/9a/07/9ecb93e5019660059927a712854990ad045d5f14b6bc54149e863c76cd49/schedule-1.2.0-py2.py3-none-any.whl", hash = "sha256:415908febaba0bc9a7c727a32efb407d646fe994367ef9157d123aabbe539ea8"},
 ]
 "scikit-learn 1.2.2" = [
     {url = "https://files.pythonhosted.org/packages/17/13/d4142c9105507ba363d9f3602941b7baf79763cc17e73fa9be826ba3aa89/scikit_learn-1.2.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:9c710ff9f9936ba8a3b74a455ccf0dcf59b230caa1e9ba0223773c490cab1e51"},
