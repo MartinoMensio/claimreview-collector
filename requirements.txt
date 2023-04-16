@@ -19,7 +19,7 @@ decorator==5.1.1
 dnspython==2.3.0
 executing==1.2.0
 extruct==0.14.0
-fastapi==0.95.0
+fastapi==0.95.1
 fastjsonschema==2.16.3
 filelock==3.10.7
 flatten-json==0.1.13
