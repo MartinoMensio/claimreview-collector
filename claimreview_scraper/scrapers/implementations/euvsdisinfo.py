@@ -36,10 +36,6 @@ class Scraper(ScraperBase):
         # utils.write_json_with_path(claim_reviews, pathlib.Path('data/latest'), 'euvsdisinfo.json')
 
 
-def get_credibility_measures(original_review):
-    return {"credibility": -1.0, "confidence": 1.0}
-
-
 def retrieve(self_id):
     offset = 0
     all_reviews = {el["url"]: el for el in database_builder.get_original_data(self_id)}

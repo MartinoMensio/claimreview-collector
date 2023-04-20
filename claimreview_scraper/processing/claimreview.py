@@ -1,7 +1,11 @@
+"""
+Module that handles the processing of claimreviews
+"""
+
 import json
+from typing import Optional
 import extruct
 import requests
-import plac
 import re
 import os
 from bs4 import BeautifulSoup
@@ -13,15 +17,15 @@ from . import utils
 from . import unshortener
 from . import cache_manager
 
+# endpoint for dirtyjson, can be set with DIRTYJSON_REST_ENDPOINT env variable
 dirtyjson_rest_endpoint = os.environ.get(
     "DIRTYJSON_REST_ENDPOINT", "http://localhost:12345"
 )
 
-# subfolder_path = 'data'# utils.data_location / 'claimreviews'
-
 # the values of truthiness for the simplified labels
 simplified_labels_scores = {"true": 1.0, "mixed": 0.5, "fake": 0.0}
 
+# function to get the truthiness score from a str label
 credibility_score_from_label = lambda label: simplified_labels_scores[label] * 2 - 1.0
 
 # simplified to the three cases true/mixed/fake
@@ -90,7 +94,19 @@ label_maps = {
 }
 
 
-def get_corrected_url(url, unshorten=False):
+def get_corrected_url(url: str, unshorten=False) -> str:
+    """
+    Get the corrected URL for a given URL. You may need this because of:
+    - Errors in the data (see corrections below)
+    - URL shorteners
+
+    Args:
+        url (str): the URL to correct
+        unshorten (bool): whether to unshorten the URL first
+
+    Returns:
+        str: the corrected URL
+    """
     # url = re.sub(r'http://(punditfact.com)/(.*)', r'https://politifact.com/\2', url)
     corrections = {
         "http://www.puppetstringnews.com/blog/obama-released-10-russian-agents-from-us-custody-in-2010-during-hillarys-uranium-deal": "https://www.politifact.com/punditfact/statements/2017/dec/06/puppetstringnewscom/story-misleads-tying-obama-russian-spy-swap-hillar/",
@@ -106,7 +122,16 @@ def get_corrected_url(url, unshorten=False):
     return unshortened
 
 
-def fix_page(page):
+def fix_page(page: str) -> str:
+    """
+    Fixes some common errors in the metadata of the page
+
+    Args:
+        page (str): the page to fix
+
+    Returns:
+        str: the fixed page
+    """
     # page = re.sub('"claimReviewed": ""([^"]*)"', r'"claimReviewed": "\1"', page)
     page = re.sub('"claimReviewed": "(.*)",', r'"claimReviewed": "\1",', page)
     page = re.sub('}"itemReviewed"', '}, "itemReviewed"', page)
@@ -129,7 +154,16 @@ def fix_page(page):
     return page
 
 
-def retrieve_claimreview(url):
+def retrieve_claimreview(url: str) -> dict:
+    """
+    Retrieve the ClaimReview metadata from a URL
+
+    Args:
+        url (str): the URL to retrieve the metadata from
+
+    Returns:
+        dict: the metadata
+    """
     result = []
     # url_fixed = get_corrected_url(url)
     url_fixed = url
@@ -294,11 +328,6 @@ def _jsonld_parser(page):
 
 
 def _microdata_parser(page):
-    # soup = BeautifulSoup(page, 'html.parser')
-    # matches = soup.find_all('div', attrs={'itemtype': 'http://schema.org/ClaimReview'})
-    # print(matches)
-    # for m in matches:
-    #
     data = extruct.extract(page, syntaxes=["microdata"])
     # filter before flattening otherwise merge errors
     microdata = [
@@ -445,135 +474,8 @@ _domain_parser_map = {
 }
 
 
-def clean_claim_url(url, unshorten=True):
-    result = url
-    # remove the "mm:ss mark of URL" that is used for some videos
-    if result:
-        result = re.sub(r".*\s+mark(\sof)?\s+(.+)", r"\2", result)
-        domain = utils.get_url_domain(result)
-        # some sameAs point to wikipedia page of person/organisation
-        if re.match(r".*wikipedia\.org", domain):
-            result = None
-        # some sameAs point to twitter.com/screen_name and not to twitter.com/screen_name/status
-        elif re.match(r"https?://(www.)?twitter\.com/[^/]*/?$", result):
-            result = None
-        if unshorten:
-            result = unshortener.unshorten(result)
-    return result
-
-
-def get_claim_urls(claimReview, unshorten=True):
-    result = None
-    itemReviewed = claimReview.get("itemReviewed", None)
-    if not itemReviewed:
-        itemReviewed = claimReview.get("properties", {}).get("itemReviewed", None)
-    if itemReviewed:
-        appearance = itemReviewed.get("appearance", None)
-        if appearance:
-            # new field appearance in https://pending.schema.org/Claim
-            result = appearance[0]["url"]
-        else:
-            sameAs = itemReviewed.get("sameAs", None)
-            if sameAs:
-                result = itemReviewed["sameAs"]
-            else:
-                author = itemReviewed.get("author", None)
-                if not author:
-                    author = itemReviewed.get("properties", {}).get("author", None)
-                if author:
-                    # exit(0)
-                    sameAs = author.get("sameAs", None)
-                    if not sameAs:
-                        sameAs = author.get("properties", {}).get("sameAs", None)
-                    # if sameAs:
-                    #    print(sameAs)
-                result = sameAs
-    # TODO also return sameAs if present on the claim directly, other links there!!
-    if type(result) == list:
-        # TODO consider multiple values
-        result = [clean_claim_url(el, unshorten=unshorten) for el in result]
-    else:
-        result = clean_claim_url(result, unshorten=unshorten)
-    return result
-
-
-def get_claim_rating(claimReview):
-    # what to do with these labels? for now returns None so the claims are discarded
-    # {'Known since 2008', 'Lacks context', 'Unproven claim', 'Tactics look typical', 'Cannot Be Verified', 'Shift from past position', 'Easily beats the market', 'Includes Hispanic Other Black', 'More words than action', 'By Some Counts Yes', 'Roe grants federal right', 'Not a Muslim migrant', 'Polls depend on wording', 'Had seat at table', "Record doesn't say that", 'Coverage has limits', 'Wrong', 'Not accurate', 'Photo is real', 'Misleads', 'Met half of them', 'Mostly entered before Obama', 'No evidence', 'Wrong use of word', 'Mis- leading', 'Lie of the Year', 'Other spending nears $200M', 'Too soon to say', 'Possible but risky', 'White House not studio', 'Obama Called in 2012', 'Trump ordered new probe', 'Disputed Claim', 'Clinton role still unclear', 'Flip- flop', 'False', 'They are not eligible', 'No such plan', 'Not what GM says', 'In dispute', 'Trump deserves some credit', 'Can still be deported', 'Spinning the facts', 'Revised after backlash', 'Personal tweet taken down', "It's Calif. law", "Japan's leader acted first", 'Mostly false', 'Study in Dispute', 'Salary not only factor', 'No contact', 'Needs Context', 'Old stat', "He's very close", 'Flip- Flop', 'Rates are even higher', 'Staff error', 'In effect since 1965', 'Far from clear', 'Number not that high', 'Claim omits key facts', "Didn't use that word", 'Ignores US GDP size', 'Needs context', 'U.S. has trade surplus', 'Depends on the metric', 'Not the Whole Story', 'Way early to say', 'Numbers are close', 'Trump role emerged later', 'Depends on source', 'No way to verify', 'Effect not clear', 'No way to know', 'Result of Trump policy', 'Twitter fixed a glitch', 'Ignores all tax hikes', 'Vetted by State Dept.', 'His numbers are outdated', 'Fuzzy math', 'Latino numbers much higher', 'Not the same thing', 'Not what Pelosi said', 'Not the whole story', 'Experts question wall impact', 'Flynn talked Russia sanction', 'Lacks Context', 'Under Dispute', 'Supports border tech security', 'Unlikely but possible', 'Could be much worse', 'Lacks Evidence', 'No MS-13 removal data', 'Legal rules unclear', 'She told law schools', 'Not Missouri students', "Don't count your chickens", 'Depends on intent', 'Not that clear cut', 'History poses big hurdle', 'But little impact yet'}
-
-    reviewRating = claimReview.get("reviewRating", None)
-    if not reviewRating:
-        reviewRating = claimReview.get("properties", {}).get("reviewRating", None)
-    if not reviewRating:
-        return None
-    try:
-        if "properties" in reviewRating:
-            reviewRating = reviewRating["properties"]
-        best = int(reviewRating["bestRating"])
-        worst = int(reviewRating["worstRating"])
-        value = int(reviewRating["ratingValue"])
-        if best == -1 and worst == -1:
-            score = None
-        else:
-            score = (value - worst) / (best - worst)
-            # correct errors like: 'bestRating': '10', 'ratingValue': '0', 'worstRating': '1'
-            score = min(score, 1.0)
-            score = max(score, 0.0)
-    except:
-        score = None
-    if not score:
-        # TODO map textual label to score
-        score = None
-        try:
-            scoreTxt = reviewRating.get("alternateName", None) or reviewRating.get(
-                "properties", {}
-            ).get("alternateName", None)
-        except Exception as e:
-            print(reviewRating)
-            raise e
-        simplified_label = simplify_label(scoreTxt)
-        if simplified_label:
-            score = simplified_labels_scores[simplified_label]
-    return score
-
-
-def get_label(claimReview):
-    """get a label true/mixed/fake, very simplified"""
-    score = get_claim_rating(claimReview)
-    result = None
-    if score != None:
-        # convert to fake/true
-        if score <= 0.30:
-            result = "fake"
-        elif score >= 0.8:
-            result = "true"
-        else:
-            result = "mixed"
-    return result
-
-
 def simplify_label(label):
     return label_maps.get(label, None)
-
-
-def to_fact_checking_url(claimReview, source="claimReview", unshorten=True):
-    if "url" not in claimReview:
-        print(claimReview)
-        raise ValueError("missing URL")
-    url = claimReview["url"]
-    claim_url = get_claim_urls(claimReview, unshorten=unshorten)
-    if url == claim_url:
-        print("same url and claim_url: {}".format(url))
-        claim_url = None
-    return {
-        "url": url,
-        "source": source,
-        "claim": claimReview.get("claimReviewed", None),
-        "claim_url": claim_url,
-        "label": get_label(claimReview),
-        "date": claimReview.get("datePublished", None),
-        "author": claimReview.get("author", {}).get("name", None),
-    }
 
 
 def _to_jsonld(microdata):
@@ -600,60 +502,3 @@ def _to_jsonld(microdata):
         del data
     jsonld_data = flatten_json.unflatten(jsonld_data)
     return [jsonld_data]
-
-
-"""
-def get_claimreviews_from_factcheckers(original_claimreviews):
-    result = []
-    for idx, c in enumerate(tqdm(original_claimreviews)):
-        c_full = get_claimreview_from_factcheckers(c)
-        result.append(c_full)
-
-    return result
-"""
-
-# def get_claimreview_from_factcheckers(original_claimreview_url, ignore_cache=False):
-#     """This method enriches a claimReview item with more data by going to the url of the publisher"""
-
-#     result = []
-
-#     # get the correct URL (some of them are wrong in the original dataset)
-#     fixed_url = get_corrected_url(original_claimreview_url)
-
-#     # this part with id and file saving is just to be able to restore the operation after a failure so that the single claims are saved onto disk on by one
-#     try:
-#         id = utils.string_to_md5(fixed_url)
-#         #print(id)
-#     except Exception as e:
-#         print(fixed_url)
-#         raise e
-#     partial_file_name = '{}.json'.format(id)
-#     partial_file_path = subfolder_path / partial_file_name
-#     #print(partial_file_name)
-#     if not ignore_cache and os.path.isfile(partial_file_path):
-#         # if it's been already saved, read it
-#         partial = utils.read_json(partial_file_path)
-#     else:
-#         # otherwise download the original claimReview from the fact checker
-#         try:
-#             url, partial = retrieve_claimreview(fixed_url)
-#             # and save it to disk
-#             utils.write_json_with_path(partial, subfolder_path, partial_file_name)
-#         except Exception as e:
-#             print(e)
-#             return result
-#     if not partial:
-#         # in this case there is no claimReview metadata on the fact checker website
-#         #print(c['url'])
-#         # return the original claimreview
-#         return []
-#     if len(partial):
-#         # there can be multiple claimReviews in a single fact checking page
-#         for j, claimReview in enumerate(partial):
-#             # the wrong claimReview.url needs to be fixed
-#             claimReview['url'] = fixed_url
-#             # save this in the result
-#             #result['{}::{}'.format(fixed_url, j)] = claimReview
-#             result.append(claimReview)
-
-#     return result

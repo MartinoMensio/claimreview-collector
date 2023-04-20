@@ -55,18 +55,6 @@ def extract_claimreviews(data_list):
     return claim_reviews
 
 
-def get_credibility_measures(claim_review):
-    rating = claimreview.get_claim_rating(claim_review)
-    if rating is None:
-        credibility = 0.0
-        confidence = 0.0
-    else:
-        print(rating, claim_review["reviewRating"])
-        credibility = (rating - 0.5) * 2
-        confidence = 1.0
-    return {"credibility": credibility, "confidence": confidence}
-
-
 def download_all_feeds():
     response = requests.get(feed_directory)
     if response.status_code != 200:

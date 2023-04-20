@@ -150,43 +150,6 @@ def retrieve(self_id, scraping=False):
     return results
 
 
-# def extract_urls_rebuttals_domains_factcheckers(claimReviews):
-#     urls = []
-#     rebuttals = defaultdict(lambda: defaultdict(list))
-#     # if os.path.exists(subfolder_path / 'fact_checking_urls.json'):
-#     #     fact_checking_urls = utils.read_json(subfolder_path / 'fact_checking_urls.json')
-#     # else:
-#     fact_checking_urls = []
-
-#     for j, claimReview in enumerate(claimReviews):
-#         claim_urls = claimreview.get_claim_urls(claimReview)
-#         fixed_url = claimReview['url']
-#         if claim_urls:
-#             rebuttals[claim_urls][fixed_url] = ['google_factcheck_explorer']
-#             label = claimreview.get_label(claimReview)
-#             if label:
-#                 urls.append({'url': claim_urls, 'label': label, 'source': 'google_factcheck_explorer'})
-
-#         # found = next((item for item in fact_checking_urls if (item['url'] == claimReview['url'] and item['claim'] == claimReview.get('claimReviewed', None))), None)
-#         # if found:
-#         #     print('found')
-#         #     break
-
-#         fact_checking_urls.append(claimreview.to_fact_checking_url(claimReview, 'google_factcheck_explorer'))
-
-#     utils.write_json_with_path(rebuttals, subfolder_path, 'rebuttals.json')
-#     utils.write_json_with_path(urls, subfolder_path, 'urls.json')
-#     by_domain = utils.compute_by_domain(urls)
-#     utils.write_json_with_path(by_domain, subfolder_path, 'domains.json')
-#     utils.write_json_with_path(fact_checking_urls, subfolder_path, 'fact_checking_urls.json')
-
-#     fact_checkers = list(set([utils.get_url_domain(el['url']) for el in claimReviews]))
-#     lambda_aggregator = lambda el: utils.get_url_domain(el['url'])
-#     fact_checkers = groupby(sorted(claimReviews, key=lambda_aggregator), key=lambda_aggregator)
-#     fact_checkers = {k: len(list(v)) for k, v in fact_checkers}
-#     utils.write_json_with_path(fact_checkers, subfolder_path, 'fact_checkers.json')
-
-
 def main(update=True):
     scraper = Scraper()
     scraper.scrape(update=update)

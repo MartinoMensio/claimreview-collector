@@ -3,17 +3,25 @@ this module caches all the web GET requests using the mongo collection "cache".
 """
 
 import requests
-import os
-import json
-import hashlib
-
-from pathlib import Path
 
 from . import unshortener
 from . import database_builder
 
 
-def get(url, unshorten=True, force_refresh=False, verify=True, headers={}):
+def get(url: str, unshorten=True, force_refresh=False, verify=True, headers={}) -> str:
+    """
+    Get the HTML of a URL, either from cache or from the web.
+
+    Args:
+        url (str): the URL to get
+        unshorten (bool): whether to unshorten the URL first
+        force_refresh (bool): whether to force a refresh of the cache
+        verify (bool): whether to verify SSL certificates
+        headers (dict): headers to send with the request
+
+    Returns:
+        str: the HTML of the URL
+    """
     if unshorten:
         url_short = url
         url = unshortener.unshorten(url_short)
