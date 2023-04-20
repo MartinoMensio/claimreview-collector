@@ -380,6 +380,8 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
         )
     utils.write_json_with_path(table, data_path, "links_all_full.json")
 
+    analyse_mapping()
+
     return {
         "raw_claimreviews_count": len(raw_crs),
         "raw_claimreviews_recollected_count": len(recollected_crs),

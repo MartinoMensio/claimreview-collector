@@ -537,7 +537,7 @@ def extract():
     print("there are", len(results), "tweet reviews")
 
     utils.write_json_with_path(tweet_reviews, data_path, "tweet_reviews.json")
-    # analyse_mapping()
+    analyse_mapping()
 
     return {
         "tweet_reviews_count": len(results),
