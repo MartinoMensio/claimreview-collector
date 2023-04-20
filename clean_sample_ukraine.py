@@ -146,7 +146,8 @@ fig.show()
 
 df.to_csv("ukraine.tsv", sep="\t", index=False)
 # df.to_csv('cleaned_table_recollected.csv', sep='\t', index=False)
-raise ValueError(1234)
+# raise ValueError(1234)
+exit(0)
 
 by_factchecker_100 = (
     df.groupby("fact_checker")
