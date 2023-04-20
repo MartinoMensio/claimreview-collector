@@ -9,7 +9,7 @@ from ...processing import database_builder
 from ...processing import utils, claimreview, extract_claim_reviews
 from ...processing import flaresolverr
 
-LIST_URL = "https://euvsdisinfo.eu/disinformation-cases/?offset={}"
+LIST_URL = "https://euvsdisinfo.eu/disinformation-cases/?offset={}&per_page=100&orderby=date&order=DESC"
 
 
 class Scraper(ScraperBase):
@@ -54,6 +54,7 @@ def retrieve(self_id):
         soup = BeautifulSoup(text, "lxml")
 
         articles = soup.select("tr.disinfo-db-post ")
+        offset_increase = len(articles)
         if not articles:
             go_on = False
             break
@@ -102,7 +103,7 @@ def retrieve(self_id):
 
         print(len(all_reviews))
         # print(all_statements)
-        offset += 10
+        offset += offset_increase
 
         # if offset > 20:
         #     break
