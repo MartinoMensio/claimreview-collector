@@ -35,6 +35,10 @@ license = {text = "MIT"}
 
 [tool.pdm.dev-dependencies]  # This is dev dependencies
 dev1 = [
+    "pytest",
+    "coveralls",
+]
+dev2 = [
     "ipykernel",
     "nbformat",
     "plotly",
