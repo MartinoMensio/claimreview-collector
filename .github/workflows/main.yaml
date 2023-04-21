@@ -75,13 +75,13 @@ jobs:
       run: sudo docker run --name mongo -d -p 27017:27017 mongo
     - 
       name: Run pytest
-      run: coverage run -m pytest
+      run: python -m coverage run -m pytest
     - 
       name: generate coverage report
-      run: coverage xml -i # creates coverage.xml
+      run: python -m coverage xml -i # creates coverage.xml
     - 
       name: Upload coverage data to coveralls.io
-      run: coveralls --service=github
+      run: python -m coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   docker:
