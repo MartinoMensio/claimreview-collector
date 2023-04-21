@@ -198,7 +198,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
             labels = set()
             appearances = set()
             for cr in crs_cluster:
-                mapped_label = claimreview.claimreview_get_coinform_label(cr)
+                mapped_label = claimreview.get_coinform_label(cr)
                 labels.add(mapped_label)
                 appearances.update(
                     claimreview.claimreview_get_claim_appearances(
@@ -240,7 +240,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
                     "appearances": list(appearances),
                     "reviews": [
                         {
-                            "label": claimreview.claimreview_get_coinform_label(cr),
+                            "label": claimreview.get_coinform_label(cr),
                             "original_label": cr.get("reviewRating", {}).get(
                                 "alternateName", ""
                             ),

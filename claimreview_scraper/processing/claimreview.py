@@ -22,11 +22,16 @@ dirtyjson_rest_endpoint = os.environ.get(
     "DIRTYJSON_REST_ENDPOINT", "http://localhost:12345"
 )
 
-# the values of truthiness for the simplified labels
-simplified_labels_scores = {"true": 1.0, "mixed": 0.5, "fake": 0.0}
+# The following dicts are used to map the labels and the scores coming from the claimReviews
 
-# function to get the truthiness score from a str label
-credibility_score_from_label = lambda label: simplified_labels_scores[label] * 2 - 1.0
+# the values of truthiness for the simplified labels in [0;1] range with None for 'not_verifiable'
+simplified_labels_scores = {
+    "credible": 1.0,
+    "mostly_credible": 0.8,
+    "uncertain": 0.5,
+    "not_credible": 0.0,
+    "not_verifiable": None,
+}
 
 # simplified to the coinform labels
 label_maps = {
@@ -188,7 +193,7 @@ label_maps = {
 }
 
 
-def claimreview_get_rating(claimreview):
+def get_numeric_rating(claimreview):
     """takes a claimReviews and outputs a score of truthfulness between [0;1] or None if not verifiable"""
     # take the reviewRating
     reviewRating = claimreview.get("reviewRating", None)
@@ -245,10 +250,10 @@ def claimreview_get_rating(claimreview):
     return score
 
 
-def claimreview_get_coinform_label(cr):
+def get_coinform_label(cr):
     """takes a ClaimReviews and outputs a CoInform score"""
     # unify to the score (easier to work with numbers)
-    score = claimreview_get_rating(cr)
+    score = get_numeric_rating(cr)
     # and then map the score to the labels
     mapped_label = get_coinform_label_from_score(score)
     return mapped_label
@@ -346,9 +351,7 @@ def claimreview_get_claim_appearances(claimreview, unshorten=True):
         # remove spaces around
         cleaned_result = [el.strip() for el in cleaned_result if el]
         # just keep http(s) links
-        cleaned_result = [
-            el for el in cleaned_result if re.match("^https?:\/\/.*$", el)
-        ]
+        cleaned_result = [el for el in cleaned_result if re.match("^https?://.*$", el)]
         # remove loops to evaluation of itself
         cleaned_result = [
             el
@@ -407,7 +410,7 @@ def fix_page(page: str) -> str:
     # Politifact broken http://www.politifact.com/north-carolina/statements/2016/mar/30/pat-mccrory/pat-mccrory-wrong-when-he-says-north-carolinas-new
     page = re.sub('" "twitter": "', '", "twitter": "', page)
     # CDATA error
-    page = re.sub("<!\[CDATA\[[\r\n]+[^\]]*[\r\n]+\]\]>", "false", page)
+    page = re.sub("<!\\[CDATA\\[[\r\n]+[^\\]]*[\r\n]+\\]\\]>", "false", page)
     # fixing double quote
     # page = re.sub(r'("[^"]+":\s+")(.*)"', lambda x: '{}{}"'.format(x.group(1), x.group(2).replace('"', "''")), page)
     # try:

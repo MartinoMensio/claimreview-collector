@@ -24,18 +24,6 @@ client = database_builder.client
 data_path = Path("data/latest")
 
 
-# The following dicts are used to map the labels and the scores coming from the claimReviews
-
-# the values of truthiness for the simplified labels in [0;1] range with None for 'not_verifiable'
-simplified_labels_scores = {
-    "credible": 1.0,
-    "mostly_credible": 0.8,
-    "uncertain": 0.5,
-    "not_credible": 0.0,
-    "not_verifiable": None,
-}
-
-
 ### UTILITIES
 
 
@@ -85,7 +73,7 @@ def extract():
             twitter_match = False
             review_rating = cr.get("reviewRating", {})
             original_label = review_rating.get("alternateName", "")
-            mapped_label = claimreview.claimreview_get_coinform_label(cr)
+            mapped_label = claimreview.get_coinform_label(cr)
             for a in appearances:
                 try:
                     match = re.search(
