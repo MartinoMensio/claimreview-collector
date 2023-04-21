@@ -399,38 +399,6 @@ def get_corrected_url(url: str, unshorten=False) -> str:
     return unshortened
 
 
-def fix_page(page: str) -> str:
-    """
-    Fixes some common errors in the metadata of the page
-
-    Args:
-        page (str): the page to fix
-
-    Returns:
-        str: the fixed page
-    """
-    # page = re.sub('"claimReviewed": ""([^"]*)"', r'"claimReviewed": "\1"', page)
-    page = re.sub('"claimReviewed": "(.*)",', r'"claimReviewed": "\1",', page)
-    page = re.sub('}"itemReviewed"', '}, "itemReviewed"', page)
-    # Politifact broken http://www.politifact.com/north-carolina/statements/2016/mar/30/pat-mccrory/pat-mccrory-wrong-when-he-says-north-carolinas-new
-    page = re.sub('" "twitter": "', '", "twitter": "', page)
-    # CDATA error
-    page = re.sub("<!\\[CDATA\\[[\r\n]+[^\\]]*[\r\n]+\\]\\]>", "false", page)
-    # fixing double quote
-    # page = re.sub(r'("[^"]+":\s+")(.*)"', lambda x: '{}{}"'.format(x.group(1), x.group(2).replace('"', "''")), page)
-    # try:
-    #     result = re.search('claimReviewed": "(.*)",', page, re.UNICODE | re.IGNORECASE)
-    #     if result is not None:
-    #         double_quoted = result.group(1)
-    #         print(double_quoted)
-    #         double_quoted_fixed = double_quoted.replace('"', '\'\'')
-    #         page = page.replace(double_quoted, double_quoted_fixed)
-    # except AttributeError as e:
-    #     print(e)
-
-    return page
-
-
 def retrieve_claimreview(url: str) -> dict:
     """
     Retrieve the ClaimReview metadata from a URL
