@@ -8,13 +8,23 @@ import requests
 # https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
 
 REPO_FULL_NAME = os.environ.get("REPO_FULL_NAME", "MartinoMensio/claimreview-data")
-GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", None)
 
 DATA_PATH = "data"
 
 auth_header = {"Authorization": f"token {GITHUB_TOKEN}"}
 
 
+def _check_github_token(func):
+    def wrapper(*args, **kwargs):
+        if GITHUB_TOKEN is None:
+            raise ValueError("GITHUB_TOKEN not set for write operations")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@_check_github_token
 def create_release(date, result_stats):
     print("creating release", date)
     GITHUB_API_URL = f"https://api.github.com/repos/{REPO_FULL_NAME}/releases"
@@ -46,6 +56,7 @@ def create_release(date, result_stats):
     return res
 
 
+@_check_github_token
 def upload_stats(assets_url, result_stats):
     # upload attachments
     print("uploading stats for", result_stats["date"])
@@ -61,6 +72,7 @@ def upload_stats(assets_url, result_stats):
     return res
 
 
+@_check_github_token
 def upload_zip(date, assets_url):
     file_name = f"{date}.zip"
     file_path = f"{DATA_PATH}/{date}.zip"
@@ -85,7 +97,7 @@ def upload_zip(date, assets_url):
 def get_release_asset_from_tag(tag, asset_name):
     # https://api.github.com/repos/MartinoMensio/claimreview-data/releases/tags/2021_02_01
     GITHUB_API_URL = f"https://api.github.com/repos/{REPO_FULL_NAME}/releases"
-    res = requests.get(f"{GITHUB_API_URL}/tags/{tag}", headers=auth_header)
+    res = requests.get(f"{GITHUB_API_URL}/tags/{tag}")
     res.raise_for_status()
     #
     data = res.json()
@@ -97,7 +109,7 @@ def get_release_asset_from_tag(tag, asset_name):
         raise ValueError(f"asset {asset_name} not found")
     #
     # download asset
-    headers = {**auth_header, "Accept": "application/octet-stream"}
+    headers = {"Accept": "application/octet-stream"}
     res = requests.get(f"{GITHUB_API_URL}/assets/{match}", headers=headers)
     res.raise_for_status()
     #
@@ -114,7 +126,7 @@ def add_stats_to_all_releases():
         if tag == "latest":
             continue
         GITHUB_API_URL = f"https://api.github.com/repos/{REPO_FULL_NAME}/releases"
-        res = requests.get(f"{GITHUB_API_URL}/tags/{tag}", headers=auth_header)
+        res = requests.get(f"{GITHUB_API_URL}/tags/{tag}")
         res.raise_for_status()
         res_data = res.json()
         assets_url = res_data["upload_url"].replace("{?name,label}", "")
