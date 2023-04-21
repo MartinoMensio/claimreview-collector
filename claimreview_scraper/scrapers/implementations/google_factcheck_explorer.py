@@ -3,7 +3,6 @@
 import json
 import requests  # not cache manager
 import os
-import plac
 
 from datetime import datetime
 from collections import defaultdict

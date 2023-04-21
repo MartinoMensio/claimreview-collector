@@ -17,7 +17,6 @@ dependencies = [
     "tldextract",
     "beautifulsoup4",
     "lxml",
-    "plac",
     "fastapi",
     "uvicorn",
     "dateparser",
