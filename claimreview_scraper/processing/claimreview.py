@@ -35,6 +35,11 @@ simplified_labels_scores = {
 
 # simplified to the coinform labels
 label_maps = {
+    "credible": "credible",
+    "mostly_credible": "credible",
+    "uncertain": "uncertain",
+    "not_credible": "not_credible",
+    "not_verifiable": "not_verifiable",
     # from buzzface
     "mostly true": "mostly_credible",
     "mixture of true and false": "uncertain",
@@ -272,7 +277,7 @@ def get_coinform_label_from_score(score):
     return "not_credible"
 
 
-def claimreview_get_claim_appearances(claimreview, unshorten=True):
+def get_claim_appearances(claimreview, unshorten=True):
     """from a `ClaimReview`, get all the URLs mentioned as appearances"""
     try:
         factchecker_url = claimreview["url"]

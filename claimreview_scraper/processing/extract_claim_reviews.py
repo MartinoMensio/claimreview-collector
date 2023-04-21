@@ -201,9 +201,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
                 mapped_label = claimreview.get_coinform_label(cr)
                 labels.add(mapped_label)
                 appearances.update(
-                    claimreview.claimreview_get_claim_appearances(
-                        cr, unshorten=unshorten
-                    )
+                    claimreview.get_claim_appearances(cr, unshorten=unshorten)
                 )
                 date_published = cr.get("datePublished", None)
                 if date_published:

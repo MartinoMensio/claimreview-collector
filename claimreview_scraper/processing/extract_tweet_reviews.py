@@ -64,7 +64,7 @@ def extract():
         try:
             url = cr.get("url", "")
             domain = utils.get_url_domain(url)
-            appearances = claimreview.claimreview_get_claim_appearances(cr)
+            appearances = claimreview.get_claim_appearances(cr)
             if domain not in ifcn_domains:
                 not_ifcn_cnt += 1
                 not_ifcn_review_domains.add(domain)
