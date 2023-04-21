@@ -203,6 +203,8 @@ cr_5 = {
     "retrieved_by": "lemonde_decodex_hoax",
 }
 
+shortened_cr_url = "https://bit.ly/claimreview-example"
+
 
 def test_get_numeric_rating():
     assert claimreview.get_numeric_rating(cr_1) == 0
@@ -238,12 +240,22 @@ def test_get_claim_appearances():
     )
 
 
+def test_get_corrected_url():
+    corrected_url = claimreview.get_corrected_url(shortened_cr_url, unshorten=True)
+    assert "afp.com" in corrected_url
+
+
 def test_retrieve_claimreview():
     url = cr_1["url"]
     url, crs = claimreview.retrieve_claimreview(url)
     cr = crs[0]
-    print(cr)
     assert cr["url"] == cr_1["url"]
+
+    # example using sharethefacts
+    url = "https://www.politifact.com/factchecks/2019/may/20/cory-booker/fact-checking-cory-bookers-statistic-about-connect/"
+    url, crs = claimreview.retrieve_claimreview(url)
+    cr = crs[0]
+    assert cr["url"] == url
 
 
 def test_simplify_label():
