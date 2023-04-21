@@ -28,70 +28,339 @@ simplified_labels_scores = {"true": 1.0, "mixed": 0.5, "fake": 0.0}
 # function to get the truthiness score from a str label
 credibility_score_from_label = lambda label: simplified_labels_scores[label] * 2 - 1.0
 
-# simplified to the three cases true/mixed/fake
+# simplified to the coinform labels
 label_maps = {
     # from buzzface
-    "mostly true": "true",
-    "mixture of true and false": "mixed",
-    "mostly false": "fake",
-    "no factual content": None,
+    "mostly true": "mostly_credible",
+    "mixture of true and false": "uncertain",
+    "mostly false": "not_credible",
+    "no factual content": "not_credible",
     # from factcheckni
-    "Accurate": "true",
-    #'Unsubstantiated': not true nor folse, no proofs --> discard
-    "Inaccurate": "fake",
+    "Accurate": "credible",
+    "Unsubstantiated": "not_verifiable",  # not true nor false, no proofs
+    "Inaccurate": "not_credible",
+    "inaccurate": "not_credible",
     # from mrisdal, opensources, pontes_fakenewssample
-    "fake": "fake",
-    "bs": "fake",
-    "bias": "fake",
-    "conspiracy": "fake",
-    "junksci": "fake",
+    "fake": "not_credible",
+    "bs": "not_credible",  # bullshit
+    "bias": "uncertain",
+    "conspiracy": "not_credible",
+    "junksci": "not_credible",
     #'hate': 'fake', # hate speech is not necessarily fake
-    "clickbait": "fake",
+    "clickbait": "not_credible",
     #'unreliable': 'fake',
-    "reliable": "true",
-    "conspirancy": "fake",
+    "reliable": "credible",
+    "conspirancy": "not_credible",
     # from leadstories
-    "Old Fake News": "fake",
-    "Fake News": "fake",
-    "Hoax Alert": "fake",
+    "Old Fake News": "not_credible",
+    "Fake News": "not_credible",
+    "Hoax Alert": "not_credible",
     # from politifact
-    "False": "fake",
-    "True": "true",
-    "Mostly True": "true",
-    "Half True": "mixed",
-    "Half-True": "mixed",
-    "Mostly False": "fake",
-    "Pants on Fire!": "fake",
+    "False": "not_credible",
+    "True": "credible",
+    "Mostly True": "mostly_credible",
+    "Half True": "uncertain",
+    "Half-True": "uncertain",
+    "Mostly False": "not_credible",
+    "Pants on Fire!": "not_credible",
+    "pants on fire": "not_credible",
+    "cherry picks": "uncertain",
     # from golbeck_fakenews
-    "Fake": "fake",
+    "Fake": "not_credible",
     # from liar (politifact-dashed)
-    "false": "fake",
-    "true": "true",
-    "mostly-true": "true",
-    "mostly-false": "fake",
-    "barely-true": "fake",
-    "pants-fire": "fake",
-    "half-true": "mixed",
+    "false": "not_credible",
+    "true": "credible",
+    "mostly-true": "mostly_credible",
+    "mostly-false": "not_credible",
+    "barely-true": "uncertain",
+    "pants-fire": "not_credible",
+    "half-true": "uncertain",
     # from vlachos_factchecking
-    "TRUE": "true",
-    "FALSE": "fake",
-    "MOSTLY TRUE": "true",
-    "MOSTLY FALSE": "fake",
-    "HALF TRUE": "mixed",
+    "TRUE": "credible",
+    "FALSE": "not_credible",
+    "MOSTLY TRUE": "mostly_credible",
+    "MOSTLY FALSE": "not_credible",
+    "HALF TRUE": "uncertain",
     # others from ClaimReviews
-    "Accurate": "true",
-    "Inaccurate": "fake",
-    "Wrong": "fake",
-    "Not accurate": "fake",
-    "Lie of the Year": "fake",
-    "Mostly false": "fake",
+    "Accurate": "credible",
+    "Inaccurate": "not_credible",
+    "Wrong": "not_credible",
+    "Not accurate": "not_credible",
+    "Lie of the Year": "not_credible",
+    "Mostly false": "not_credible",
     # metafact.ai labels
-    "Affirmative": "true",
-    "Negative": "fake",
-    "Uncertain": "mixed",
-    #'Not Enough Experts': ??
-    "disinfo": "fake",
+    "Affirmative": "credible",
+    "Negative": "not_credible",
+    "Uncertain": "uncertain",
+    "Not Enough Experts": "not_verifiable",
+    # tempo (indonesian)
+    "BENAR": "credible",
+    "SEBAGIAN BENAR": "uncertain",
+    "TIDAK TERBUKTI": "uncertain",  # unproven
+    "SESAT": "uncertain",  # facts are correct, but wrong conclusions (misleading)
+    "KELIRU": "not_credible",
+    "mixture": "uncertain",
+    "somewhat true": "mostly_credible",
+    "somewhat false": "uncertain",
+    "misleading": "not_credible",
+    "ambiguous": "uncertain",
+    # newtral.es
+    "falso": "not_credible",
+    # verificat
+    "fals": "not_credible",
+    # other things
+    ": false": "not_credible",
+    ": true": "credible",
+    ": mixture": "uncertain",
+    "rating: false": "not_credible",
+    "rating by fact crescendo: false": "not_credible",
+    "verdadero": "credible",
+    "verdad a medias": "uncertain",
+    # factnameh
+    "\u0646\u0627\u062f\u0631\u0633\u062a": "not_credible",  # false
+    "\u0646\u06cc\u0645\u0647 \u062f\u0631\u0633\u062a": "uncertain",  # half true
+    "\u06af\u0645\u0631\u0627\u0647\u200c\u06a9\u0646\u0646\u062f\u0647": "not_credible",  # misleading
+    # fullfact (this is the beginning of the label, they have very long labels)
+    "correct": "credible",
+    "that\u2019s correct": "credible",
+    "incorrect": "not_credible",
+    "this is false": "not_credible",
+    "roughly correct": "uncertain",
+    "broadly correct": "uncertain",
+    "this isn't correct": "not_credible",
+    "this is correct": "credible",
+    "not far off": "mostly_credible",
+    "that\u2019s wrong": "not_credible",
+    "it\u2019s correct": "credible",
+    "this is true": "credible",
+    "this is wrong": "not_credible",
+    "that's correct": "credible",
+    "that is correct": "credible",
+    "these aren\u2019t all correct": "uncertain",
+    # teyit.org
+    "yanliş": "not_credible",
+    "doğru": "credible",
+    "karma": "uncertain",
+    "belirsiz": "not_verifiable",  #'uncertain'
+    # lemonde
+    "faux": "not_credible",
+    # istinomer
+    "neistina": "not_credible",
+    "skoro neistina": "uncertain",  # almost untrue
+    # https://evrimagaci.org ???
+    "sahte": "not_credible",
+    # https://verafiles.org
+    "mali": "not_credible",
+    # poligrafo
+    "verdadeiro": "credible",
+    "engañoso": "not_credible",  # misleading
+    "contraditorio": "uncertain",  # contradictory
+    # pagella politica
+    "vero": "credible",
+    "c’eri quasi": "mostly_credible",  # almost true
+    "c'eri quasi": "mostly_credible",  # almost true
+    "pinocchio andante": "not_credible",
+    "panzana pazzesca": "not_credible",
+    "nì": "uncertain",
+    # euvsdisinfo
+    "disinfo": "not_credible",
+    # from twitter subset
+    "Фейк": "not_credible",
+    # 'usatoday.com'
+    "partly false": "uncertain",
+    # factcheck.org
+    "baseless claim": "not_verifiable",
+    "mixed.": "uncertain",
+    "experts disagree": "not_credible",
+    "one pinocchio": "mostly_credible",
+    "two pinocchios": "uncertain",
+    "three pinocchios": "not_credible",
+    "four pinocchios": "not_credible",
+    "the statement is false": "not_credible",
+    "erroné": "not_credible",
+    "c'est faux": "not_credible",
+    "not correct": "not_credible",
+    "not true": "not_credible",
+    "largely accurate": "mostly_credible",
+    "mixed": "uncertain",
+    "partially true": "uncertain",
+    "partly right": "uncertain",
 }
+
+
+def claimreview_get_rating(claimreview):
+    """takes a claimReviews and outputs a score of truthfulness between [0;1] or None if not verifiable"""
+    # take the reviewRating
+    reviewRating = claimreview.get("reviewRating", None)
+    if not reviewRating:
+        # sometimes reviewRating is inside "properties"
+        reviewRating = claimreview.get("properties", {}).get("reviewRating", None)
+    if not reviewRating:
+        # nothing to say
+        return None
+
+    if "properties" in reviewRating:
+        reviewRating = reviewRating["properties"]
+
+    score = None
+
+    # first take the textual label
+    try:
+        scoreTxt = reviewRating.get("alternateName", "") or reviewRating.get(
+            "properties", {}
+        ).get("alternateName", "")
+        if isinstance(scoreTxt, dict):
+            scoreTxt = scoreTxt["@value"]
+    except Exception as e:
+        print(reviewRating)
+        raise e
+    try:
+        # map it to the coinform labels
+        simplified_label = simplify_label(scoreTxt)
+    except Exception as e:
+        print(claimreview["url"])
+        print(reviewRating)
+        raise e
+    if simplified_label:
+        # get the numerical score
+        score = simplified_labels_scores[simplified_label]
+
+    # second strategy: if the textual label is unknown, take the rating value
+    if score == None:
+        try:
+            best = int(reviewRating["bestRating"])
+            worst = int(reviewRating["worstRating"])
+            value = int(reviewRating["ratingValue"])
+            if best == -1 and worst == -1:
+                score = None
+            else:
+                score = (value - worst) / (best - worst)
+                # correct errors like: 'bestRating': '10', 'ratingValue': '0', 'worstRating': '1'
+                score = min(score, 1.0)
+                score = max(score, 0.0)
+        except Exception as e:
+            # in the case the numbers are not found, there is not any information that can be used to map the rating
+            score = None
+
+    return score
+
+
+def claimreview_get_coinform_label(cr):
+    """takes a ClaimReviews and outputs a CoInform score"""
+    # unify to the score (easier to work with numbers)
+    score = claimreview_get_rating(cr)
+    # and then map the score to the labels
+    mapped_label = get_coinform_label_from_score(score)
+    return mapped_label
+
+
+def get_coinform_label_from_score(score):
+    """The inverse function of `simplified_labels_scores`"""
+    if score is None:
+        return "not_verifiable"
+    if score > 0.8:
+        return "credible"
+    if score > 0.6:
+        return "mostly_credible"
+    if score > 0.4:
+        return "uncertain"
+    return "not_credible"
+
+
+def claimreview_get_claim_appearances(claimreview, unshorten=True):
+    """from a `ClaimReview`, get all the URLs mentioned as appearances"""
+    try:
+        factchecker_url = claimreview["url"]
+        factchecker_domain = utils.get_url_domain(factchecker_url)
+        result = []
+        itemReviewed = claimreview.get("itemReviewed", None)
+        if not itemReviewed:
+            itemReviewed = claimreview.get("properties", {}).get("itemReviewed", None)
+        if itemReviewed:
+            # sometimes the appearances are stored in the correct place
+            appearance = itemReviewed.get("appearance", [])
+            if isinstance(appearance, str):
+                # checkyourfact.com sometimes just puts the url as string
+                appearance = [{"url": appearance}]
+            if not isinstance(appearance, list):
+                appearance = [appearance]
+            # get also the firstAppearance
+            firstAppearance = itemReviewed.get("firstAppearance", [])
+            if isinstance(firstAppearance, str):
+                firstAppearance = [{"url": firstAppearance}]
+            if not isinstance(firstAppearance, list):
+                firstAppearance = [firstAppearance]
+            appearances = firstAppearance + appearance
+            if appearances:
+                # new field appearance in https://pending.schema.org/Claim
+                # print(appearances)
+                result.extend([el.get("url", None) for el in appearances if el])
+            # sometimes in itemReviewed.url
+            itemReviewed_url = itemReviewed.get("url", None)
+            if not isinstance(itemReviewed_url, list):
+                # has list inside https://factcheck.afp.com/hoax-circulates-online-indian-prime-minister-modi-was-appointed-chairman-world-health-organization
+                itemReviewed_url = [itemReviewed_url]
+            if itemReviewed_url:
+                # raise ValueError(claimreview['url'])
+                result.extend(itemReviewed_url)
+            # sometimes instead the appearances are listed in itemReviewed
+            # NEVER HAPPENING
+            # sameAs = itemReviewed.get('sameAs', None)
+            # if sameAs:
+            #     result.append(sameAs)
+            # DIRTY DATA IN AUTHOR
+            # else:
+            #     author = itemReviewed.get('author', None)
+            #     if not author:
+            #         author = itemReviewed.get('properties', {}).get('author', None)
+            #     if author:
+            #         sameAs = author.get('sameAs', None)
+            #         if not sameAs:
+            #             sameAs = author.get('properties', {}).get('sameAs', None)
+            #     if sameAs:
+            #         if isinstance(sameAs, list):
+            #             result.extend(sameAs)
+            #         else:
+            #             result.append(sameAs)
+
+        # TODO also return sameAs if present on the claim directly, other links there!!
+
+        # split appearances that are a single field with comma or ` and `
+        cleaned_result = []
+        for el in result:
+            if not el:
+                continue
+            if not isinstance(el, str):
+                cleaned_result.extend(el)
+            if "," in el:
+                els = el.split(",")
+                cleaned_result.extend(els)
+            if " " in el:
+                els = el.split(" ")
+                cleaned_result.extend(els)
+            elif " and " in el:
+                els = el.split(" and ")
+                cleaned_result.extend(els)
+            else:
+                cleaned_result.append(el)
+        # remove spaces around
+        cleaned_result = [el.strip() for el in cleaned_result if el]
+        # just keep http(s) links
+        cleaned_result = [
+            el for el in cleaned_result if re.match("^https?:\/\/.*$", el)
+        ]
+        # remove loops to evaluation of itself
+        cleaned_result = [
+            el
+            for el in cleaned_result
+            if utils.get_url_domain(el) != factchecker_domain
+        ]
+        if unshorten:
+            cleaned_result = [unshortener.unshorten(el) for el in cleaned_result]
+        return cleaned_result
+    except Exception as e:
+        print(claimreview)
+        raise (e)
 
 
 def get_corrected_url(url: str, unshorten=False) -> str:
@@ -475,7 +744,24 @@ _domain_parser_map = {
 
 
 def simplify_label(label):
-    return label_maps.get(label, None)
+    """maps from the fact-checker label to the coinform label"""
+    # normalise string to lowercase and strip spaces around
+    label = label.strip().lower()
+    label = label.replace("fact crescendo rating: ", "")
+    label = label.replace("fact crescendo rating - ", "")
+    label = label.replace("fact crescendo rating ", "")
+    # first look for the full label
+    result = label_maps.get(label, None)
+    # then if the label begins with something known
+    if not result:
+        for k, v in label_maps.items():
+            if label.startswith(k.lower()):
+                result = v
+                break
+    if not result:
+        # return None which will get mapped
+        pass
+    return result
 
 
 def _to_jsonld(microdata):
