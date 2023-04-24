@@ -38,7 +38,7 @@ SAFE_CHARS = "".join(
         if c not in "%#"
     ]
 )
-VALID_DOMAIN = re.compile("^[a-zA-Z_\\d-]{1,63}(\.[a-zA-Z\\d-]{1,63})*$")
+VALID_DOMAIN = re.compile("^[a-zA-Z_\\d-]{1,63}(\\.[a-zA-Z\\d-]{1,63})*$")
 
 
 def escape(unescaped_str):
