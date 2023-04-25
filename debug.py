@@ -1,3 +1,3 @@
-from claimreview_scraper.scrapers.implementations import leadstories
+from claimreview_collector.scrapers.implementations import leadstories
 
 leadstories.main()

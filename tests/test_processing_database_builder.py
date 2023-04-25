@@ -1,6 +1,6 @@
 import pytest
 
-from claimreview_scraper.processing import database_builder
+from claimreview_collector.processing import database_builder
 
 
 def test_clean_db():

@@ -25,10 +25,10 @@ mv ukraine.tsv $TODAY_FOLDER/ukraine_IFCN.tsv
 # EUvsDisinfo data
 echo "Getting EUvsDisinfo data..."
 set +e
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo
+python -m claimreview_collector.scrapers.implementations.euvsdisinfo
 echo Getting EUvsDisinfo data again...
 set -e
-python -m claimreview_scraper.scrapers.implementations.euvsdisinfo
+python -m claimreview_collector.scrapers.implementations.euvsdisinfo
 echo "Running clean_sample_ukraine.py..."
 python clean_sample_ukraine.py
 mv ukraine.tsv $TODAY_FOLDER/ukraine_euvsdisinfo.tsv
@@ -36,7 +36,7 @@ mv ukraine.tsv $TODAY_FOLDER/ukraine_euvsdisinfo.tsv
 
 # UkraineFacts data
 echo "Getting UkraineFacts data..."
-python -m claimreview_scraper.scrapers.implementations.ukrainefacts
+python -m claimreview_collector.scrapers.implementations.ukrainefacts
 mv ukraine_ukrainefacts.tsv $TODAY_FOLDER/ukraine_ukrainefacts.tsv
 
 echo "Done!"

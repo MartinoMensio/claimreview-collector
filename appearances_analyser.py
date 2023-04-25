@@ -17,7 +17,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from claimreview_scraper.processing import utils, cache_manager
+from claimreview_collector.processing import utils, cache_manager
 
 claims_path = "data/latest/claim_reviews.json"
 # claims_path = 'data/latest/euvsdisinfo.json'

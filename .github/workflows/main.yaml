@@ -126,3 +126,18 @@ jobs:
         push: true
         provenance: false # needed on KMi servers with old docker, for the manifest
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest, ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.TODAY }}
+  update-main-repo:
+    name: Update main repo
+    runs-on: ubuntu-latest
+    needs: docker
+    # if: github.ref_name == 'master' # already checked in docker job
+    permissions: write-all
+    steps:
+    - 
+      name: trigger main repo
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.MISINFOME_GH_TOKEN }}
+        repository: MartinoMensio/MisinfoMe
+        event-type: 'Update: ${{ github.event.repository.name }}'
+        client-payload: '{ "submodule": "claimreview-collector" , "repository": "${{ github.event.repository.name }}", "commit_sha": "${{ github.sha }}" }'

@@ -1,7 +1,7 @@
 [tool.pdm]
 
 [project]
-name = "claimreview_scraper"
+name = "claimreview_collector"
 version = "0.1.0"
 description = "ClaimReview Scraper for MisinfoMe"
 authors = [

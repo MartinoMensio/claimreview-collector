@@ -21,7 +21,7 @@ url_redirects_collection = None
 def connect():
     global client, db, claimReviews_collection, lastupdated_collection, cache_collection, url_redirects_collection
     client = MongoClient(host=MONGO_HOST)
-    db = client["claimreview_scraper"]
+    db = client["claimreview_collector"]
     # collections
     claimReviews_collection = db["claim_reviews"]
     lastupdated_collection = db["last_updated"]

@@ -8,10 +8,10 @@ import plotly.express as px
 from pathlib import Path
 
 
-import claimreview_scraper
-from claimreview_scraper.processing import database_builder, utils
-from claimreview_scraper.processing import claimreview
-from claimreview_scraper.routers import data
+import claimreview_collector
+from claimreview_collector.processing import database_builder, utils
+from claimreview_collector.processing import claimreview
+from claimreview_collector.routers import data
 
 
 # STEPS:
@@ -159,7 +159,7 @@ by_factchecker_100.to_csv("by_factchecker_100.csv", sep="\t", index=False)
 
 
 ### plot
-from claimreview_scraper.processing import utils
+from claimreview_collector.processing import utils
 from plotly import graph_objects as go
 import pandas as pd
 

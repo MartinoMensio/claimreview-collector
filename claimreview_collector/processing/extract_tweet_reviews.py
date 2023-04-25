@@ -60,7 +60,7 @@ def extract():
     multiple_reviews_cnt = 0
     disagreeing_cnt = 0
     disagreeing_reviews = {}
-    for cr in client["claimreview_scraper"]["claim_reviews"].find():
+    for cr in client["claimreview_collector"]["claim_reviews"].find():
         try:
             url = cr.get("url", "")
             domain = utils.get_url_domain(url)

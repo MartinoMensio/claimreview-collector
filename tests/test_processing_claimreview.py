@@ -1,4 +1,4 @@
-from claimreview_scraper.processing import claimreview
+from claimreview_collector.processing import claimreview
 
 # textual label
 cr_1 = {

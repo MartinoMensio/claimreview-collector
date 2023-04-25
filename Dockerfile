@@ -35,7 +35,7 @@ FROM base as production
 # pip and setuptools have open vulnerabilities
 RUN pip uninstall setuptools pip -y
 COPY --from=builder /app /app
-COPY claimreview_scraper /app/claimreview_scraper
-# CMD ["uvicorn", "claimreview_scraper.main:app", "--host", "0.0.0.0"]
+COPY claimreview_collector /app/claimreview_collector
+# CMD ["uvicorn", "claimreview_collector.main:app", "--host", "0.0.0.0"]
 # set environment as part of CMD because pdm installs there
-CMD . .venv/bin/activate && uvicorn claimreview_scraper.main:app --host 0.0.0.0
+CMD . .venv/bin/activate && uvicorn claimreview_collector.main:app --host 0.0.0.0

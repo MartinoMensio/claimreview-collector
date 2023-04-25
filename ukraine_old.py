@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
-from claimreview_scraper.processing import utils
+from claimreview_collector.processing import utils
 
 data_path = "/Users/mm35626/Downloads/2022_02_28/claim_reviews.json"
 

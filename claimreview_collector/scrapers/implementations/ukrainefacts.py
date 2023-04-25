@@ -42,7 +42,7 @@ def clean_field(field):
 import requests
 import pandas as pd
 from collections import defaultdict
-from claimreview_scraper.processing import unshortener, utils
+from claimreview_collector.processing import unshortener, utils
 
 # ifcn = utils.read_tsv('ukraine_IFCN.tsv')
 # eu = utils.read_tsv('ukraine_euvsdisinfo_newlines_fixed.tsv')

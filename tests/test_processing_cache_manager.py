@@ -1,4 +1,4 @@
-from claimreview_scraper.processing import cache_manager
+from claimreview_collector.processing import cache_manager
 
 url = "https://www.datacommons.org/factcheck/download#fcmt-data"
 bitly_url = "https://bit.ly/test-bitly-datacommons"
