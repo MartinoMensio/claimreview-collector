@@ -33,7 +33,7 @@ lxml==4.9.2
 mf2py==1.1.2
 numpy==1.24.2
 packaging==23.0
-pandas==2.0.0
+pandas==2.0.1
 Pillow==9.4.0
 pluggy==1.0.0
 pyahocorasick==2.0.0
