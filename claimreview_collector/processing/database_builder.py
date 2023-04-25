@@ -158,6 +158,10 @@ def get_count_unique_from_scraper(scraper_name):
     return len(list(results))
     # return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))
 
+@_check_connected
+def get_all_claimreviews():
+    return claimReviews_collection.find()
+
 
 @_check_connected
 def get_url_redirect(url):

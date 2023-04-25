@@ -14,13 +14,13 @@ from . import extract_tweet_reviews, database_builder
 from . import claimreview
 
 
-client = database_builder.client
+# client = database_builder.client
 data_path = Path("data/latest")
 
 
 def claims_nationality_distribution():
     ifcn_domains = extract_tweet_reviews.get_ifcn_domains()
-    urls = set(client["claimreview_collector"]["claim_reviews"].distinct("url"))
+    urls = set(database_builder.get_all_factchecking_urls())
     print(len(urls), "unique fact-checking URLs")
     urls_by_domain = defaultdict(list)
     # filter published by IFCN signatories
@@ -82,7 +82,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
     raw_crs = []
     raw_crs_filtered = []
     # step 1: determine which claim reviews to recollect from fact-checker
-    for cr in client["claimreview_collector"]["claim_reviews"].find():
+    for cr in database_builder.get_all_claimreviews():
         del cr["_id"]
         raw_crs.append(cr)
         url = cr.get("url", "")
