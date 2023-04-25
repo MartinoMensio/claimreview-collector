@@ -125,7 +125,7 @@ jobs:
         file: ./Dockerfile
         push: true
         provenance: false # needed on KMi servers with old docker, for the manifest
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest, ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.TODAY }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:dev, ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.TODAY }}
   update-main-repo:
     name: Update main repo
     runs-on: ubuntu-latest
