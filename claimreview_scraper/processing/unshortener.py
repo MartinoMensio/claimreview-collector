@@ -9,6 +9,7 @@ import string
 
 from . import utils, database_builder, webarchives
 
+# only used in ROLE=full to direct to MisinfoMe backend
 MISINFO_BACKEND = os.environ.get("MISINFO_BACKEND", "http://localhost:5000")
 
 

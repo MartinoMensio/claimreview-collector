@@ -27,6 +27,7 @@ from ..main import ROLE
 
 router = APIRouter()
 
+# only used in ROLE=full to notify the light instance
 MISINFO_BACKEND = os.environ.get("MISINFO_BACKEND", None)
 print("MISINFO_BACKEND", MISINFO_BACKEND)
 base_path = os.getcwd()
