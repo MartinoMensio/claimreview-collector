@@ -21,14 +21,13 @@ dependencies = [
     "uvicorn",
     "dateparser",
     "unidecode",
-    "pyld",
     "schedule",
     "goose3",
     "scipy",
-    "jellyfish",
+    "jellyfish!=0.11.2",
     "pandas",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
