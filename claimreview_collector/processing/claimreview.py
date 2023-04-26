@@ -301,6 +301,8 @@ def get_claim_appearances(claimreview, unshorten=True):
             if not isinstance(firstAppearance, list):
                 firstAppearance = [firstAppearance]
             appearances = firstAppearance + appearance
+            # some are just URLs, some are objects with URLs
+            appearances = [{"url": el} if isinstance(el, str) else el for el in appearances]
             if appearances:
                 # new field appearance in https://pending.schema.org/Claim
                 # print(appearances)

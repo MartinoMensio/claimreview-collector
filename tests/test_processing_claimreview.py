@@ -203,6 +203,41 @@ cr_5 = {
     "retrieved_by": "lemonde_decodex_hoax",
 }
 
+cr_6 = {
+    "@type": "ClaimReview",
+    "datePublished": "2019-01-23T14:22:00+0100",
+    "url": "https://www.tjekdet.dk/faktatjek/nej-forskere-anbefaler-ikke-drikke-en-oel-mod-hovedpine",
+    "claimReviewed": "Forskere anbefaler at drikke en øl mod hovedpine.",
+    "itemReviewed": {
+        "@type": "CreativeWork",
+        "datePublished": "2019-01-15",
+        "appearance": [
+            "https://deldette.dk/post/5967",
+            "1",
+            "glem-smertestillende-piller-forskere-anbefaler-at-drikke-en-l.html",
+        ],
+        "author": {"@type": "Person", "name": "Detdette.dk", "sameAs": "Detdette.dk"},
+    },
+    "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "1",
+        "bestRating": "1",
+        "worstRating": "1",
+        "alternateName": "Falsk",
+    },
+    "author": {
+        "@type": "Person",
+        "name": "TjekDet",
+        "url": "https://tjekdet.dk",
+        "sameAs": [
+            "https://twitter.com/TjekDet",
+            "https://www.facebook.com/tjekdetdk",
+            "https://www.linkedin.com/company/tjekdet",
+            "https://www.instagram.com/tjekdet/",
+        ],
+    },
+}
+
 shortened_cr_url = "https://bit.ly/claimreview-example"
 
 
@@ -238,6 +273,11 @@ def test_get_claim_appearances():
     assert (
         appearances[0] == "https://www.facebook.com/CorentinFNJ/posts/250959068694828"
     )
+    # list of urls
+    appearances = claimreview.get_claim_appearances(cr_6)
+    print(appearances)
+    assert len(appearances) == 1
+    assert appearances[0] == "https://deldette.dk/post/5967"
 
 
 def test_get_corrected_url():
