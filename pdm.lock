@@ -229,7 +229,7 @@ summary = "A simple immutable dictionary"
 
 [[package]]
 name = "goose3"
-version = "3.1.13"
+version = "3.1.14"
 requires_python = ">=3.7"
 summary = "Html Content / Article Extractor, web scrapping for Python3"
 dependencies = [
@@ -1248,9 +1248,9 @@ content_hash = "sha256:6e1fcf785f47a00c374adb98f6f8558a1156c2b9b120b4e960f0522ec
     {url = "https://files.pythonhosted.org/packages/e6/34/e632c8b70a65a9c83c751f2fc6e9d01f497704861975056770e37b99afd5/frozendict-2.3.6-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:2178f8cc97d4ca8736df2fea0ca18094e259db086b560e5905ecac7f0894adc5"},
     {url = "https://files.pythonhosted.org/packages/fb/f2/6a0230b19aeb4fe83dc0e66bdef3a8c27c56828b473c894d61321a10c3cf/frozendict-2.3.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1e3255b0f33a65b558d99d067c1dbedc6f30effe66967d5b201c7fcffb20a86e"},
 ]
-"goose3 3.1.13" = [
-    {url = "https://files.pythonhosted.org/packages/7a/74/f752da5356461ae39632b620ad9e53d1fe8ecb797bfa5ab74907ad879506/goose3-3.1.13-py3-none-any.whl", hash = "sha256:144026261d85d781b1a2cb9acb6898820a139842d61e5fbdc3228ad138911773"},
-    {url = "https://files.pythonhosted.org/packages/cf/40/96520a413af87d7539360a9f086e7aad6d2a8dc33347817153fee80748ab/goose3-3.1.13.tar.gz", hash = "sha256:1e96a753537f0b2c7e6f8ec2a596db56152f02ef4ebc29252815a696db12c025"},
+"goose3 3.1.14" = [
+    {url = "https://files.pythonhosted.org/packages/83/85/99267057cc1cd8216a2fd0d20b1e9ad748dd14544aff498e7fa993dcad0e/goose3-3.1.14.tar.gz", hash = "sha256:f040e99da059ac46a452e0baf3cd172b97dd3394620a9517755661cf0217597b"},
+    {url = "https://files.pythonhosted.org/packages/ae/8f/9383ee7fd746386fd874da9d490e642ffc54fa833aff8d81ebd14984c03b/goose3-3.1.14-py3-none-any.whl", hash = "sha256:58c11ea0b3983cdde991848019c9352b484ec4d2e69539ddf9d571aa72d4122c"},
 ]
 "h11 0.14.0" = [
     {url = "https://files.pythonhosted.org/packages/95/04/ff642e65ad6b90db43e668d70ffb6736436c7ce41fcc549f4e9472234127/h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
