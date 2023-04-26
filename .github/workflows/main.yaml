@@ -134,10 +134,19 @@ jobs:
     permissions: write-all
     steps:
     - 
+      name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{github.ref_name}}
+    - 
+      name: Get current sha
+      id: sha
+      run: echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+    - 
       name: trigger main repo
       uses: peter-evans/repository-dispatch@v2
       with:
         token: ${{ secrets.MISINFOME_GH_TOKEN }}
         repository: MartinoMensio/MisinfoMe
         event-type: 'Update: ${{ github.event.repository.name }}'
-        client-payload: '{ "submodule": "claimreview-collector" , "repository": "${{ github.event.repository.name }}", "commit_sha": "${{ github.sha }}" }'
+        client-payload: '{ "submodule": "claimreview-collector" , "repository": "${{ github.event.repository.name }}", "commit_sha": "${{ env.SHA }}" }'
