@@ -193,6 +193,7 @@ def download_data(stats: StatsBody):
     load_random_samples()
     # and provide newest factchecks
     load_latest_factchecks()
+    return {"status": "ok"}
 
 
 def check_satisfy(
