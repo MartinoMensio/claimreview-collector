@@ -659,8 +659,8 @@ summary = "Alternative regular expression module, to replace re."
 
 [[package]]
 name = "requests"
-version = "2.28.2"
-requires_python = ">=3.7, <4"
+version = "2.29.0"
+requires_python = ">=3.7"
 summary = "Python HTTP for Humans."
 dependencies = [
     "certifi>=2017.4.17",
@@ -756,7 +756,7 @@ summary = "threadpoolctl"
 
 [[package]]
 name = "tldextract"
-version = "3.4.0"
+version = "3.4.1"
 requires_python = ">=3.7"
 summary = "Accurately separates a URL's subdomain, domain, and public suffix, using the Public Suffix List (PSL). By default, this includes the public ICANN TLDs and their exceptions. You can optionally support the Public Suffix List's private domains as well."
 dependencies = [
@@ -823,7 +823,7 @@ summary = "HTTP library with thread-safe connection pooling, file post, and more
 
 [[package]]
 name = "uvicorn"
-version = "0.21.1"
+version = "0.22.0"
 requires_python = ">=3.7"
 summary = "The lightning-fast ASGI server."
 dependencies = [
@@ -1945,9 +1945,9 @@ content_hash = "sha256:eeb66dc6c1759bd7af0db9d0954c038e9a06901d7161f2620462a9c15
     {url = "https://files.pythonhosted.org/packages/fe/68/63349d423d856993cbe1939f9189c826e757a4bb08fda931e6e7bfeb70cd/regex-2023.3.23-cp39-cp39-win32.whl", hash = "sha256:7304863f3a652dab5e68e6fb1725d05ebab36ec0390676d1736e0571ebb713ef"},
     {url = "https://files.pythonhosted.org/packages/fe/b3/afcb0c6fde8c5ee24c7cb5d29d0caafb9b57dd4b1400ca66cfc12d67e2b4/regex-2023.3.23-cp39-cp39-win_amd64.whl", hash = "sha256:54c3fa855a3f7438149de3211738dd9b5f0c733f48b54ae05aa7fce83d48d858"},
 ]
-"requests 2.28.2" = [
-    {url = "https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf/requests-2.28.2.tar.gz", hash = "sha256:98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf"},
-    {url = "https://files.pythonhosted.org/packages/d2/f4/274d1dbe96b41cf4e0efb70cbced278ffd61b5c7bb70338b62af94ccb25b/requests-2.28.2-py3-none-any.whl", hash = "sha256:64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa"},
+"requests 2.29.0" = [
+    {url = "https://files.pythonhosted.org/packages/4c/d2/70fc708727b62d55bc24e43cc85f073039023212d482553d853c44e57bdb/requests-2.29.0.tar.gz", hash = "sha256:f2e34a75f4749019bb0e3effb66683630e4ffeaf75819fb51bebef1bf5aef059"},
+    {url = "https://files.pythonhosted.org/packages/cf/e1/2aa539876d9ed0ddc95882451deb57cfd7aa8dbf0b8dbce68e045549ba56/requests-2.29.0-py3-none-any.whl", hash = "sha256:e8f3c9be120d3333921d213eef078af392fba3933ab7ed2d1cba3b56f2568c3b"},
 ]
 "requests-file 1.5.1" = [
     {url = "https://files.pythonhosted.org/packages/50/5c/d32aeed5c91e7970ee6ab8316c08d911c1d6044929408f6bbbcc763f8019/requests-file-1.5.1.tar.gz", hash = "sha256:07d74208d3389d01c38ab89ef403af0cfec63957d53a0081d8eca738d0247d8e"},
@@ -2031,9 +2031,9 @@ content_hash = "sha256:eeb66dc6c1759bd7af0db9d0954c038e9a06901d7161f2620462a9c15
     {url = "https://files.pythonhosted.org/packages/1b/c7/3d85f8b3894ba7228d0c74e16e97a36a72b2cd2b0e0f8f89b5d435d11f71/threadpoolctl-3.1.0.tar.gz", hash = "sha256:a335baacfaa4400ae1f0d8e3a58d6674d2f8828e3716bb2802c44955ad391380"},
     {url = "https://files.pythonhosted.org/packages/61/cf/6e354304bcb9c6413c4e02a747b600061c21d38ba51e7e544ac7bc66aecc/threadpoolctl-3.1.0-py3-none-any.whl", hash = "sha256:8b99adda265feb6773280df41eece7b2e6561b772d21ffd52e372f999024907b"},
 ]
-"tldextract 3.4.0" = [
-    {url = "https://files.pythonhosted.org/packages/40/0a/71c8f011b1528d2eb08867f7e6c6588f166cfc7f9e89521614206c3ccaee/tldextract-3.4.0-py3-none-any.whl", hash = "sha256:47aa4d8f1a4da79a44529c9a2ddc518663b25d371b805194ec5ce2a5f615ccd2"},
-    {url = "https://files.pythonhosted.org/packages/9f/67/9442fd49ac0d234933c9c90cb2e2f072d9df021577547c09456dd4484ed4/tldextract-3.4.0.tar.gz", hash = "sha256:78aef13ac1459d519b457a03f1f74c1bf1c2808122a6bcc0e6840f81ba55ad73"},
+"tldextract 3.4.1" = [
+    {url = "https://files.pythonhosted.org/packages/56/5a/be9ad223cd080960dd991a18e3e9e019348bbb03669634edac0e397b5f25/tldextract-3.4.1.tar.gz", hash = "sha256:fa9e50c4a03bede2a1d95dca620d661678484626858ccf388cf9671a0dd497a4"},
+    {url = "https://files.pythonhosted.org/packages/fb/21/dad9eaedad757362458f92f9345307cc847956ab9775ee9ab5a0fcb912cf/tldextract-3.4.1-py3-none-any.whl", hash = "sha256:26f646987b01ae2946e7491cce4aaf54129f3489a196a274e6c843ec72968313"},
 ]
 "tornado 6.3" = [
     {url = "https://files.pythonhosted.org/packages/00/47/51366fdc68fbd552150f5e36582875c8c8cd14623f946ce37730418e3580/tornado-6.3-cp38-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:912df5712024564e362ecce43c8d5862e14c78c8dd3846c9d889d44fbd7f4951"},
@@ -2076,9 +2076,9 @@ content_hash = "sha256:eeb66dc6c1759bd7af0db9d0954c038e9a06901d7161f2620462a9c15
     {url = "https://files.pythonhosted.org/packages/21/79/6372d8c0d0641b4072889f3ff84f279b738cd8595b64c8e0496d4e848122/urllib3-1.26.15.tar.gz", hash = "sha256:8a388717b9476f934a21484e8c8e61875ab60644d29b9b39e11e4b9dc1c6b305"},
     {url = "https://files.pythonhosted.org/packages/7b/f5/890a0baca17a61c1f92f72b81d3c31523c99bec609e60c292ea55b387ae8/urllib3-1.26.15-py2.py3-none-any.whl", hash = "sha256:aa751d169e23c7479ce47a0cb0da579e3ede798f994f5816a74e4f4500dcea42"},
 ]
-"uvicorn 0.21.1" = [
-    {url = "https://files.pythonhosted.org/packages/8c/f1/7c45fe2a09133e103dcf0621831545c268cd3f7a5d58dc7e470be91b2cd0/uvicorn-0.21.1-py3-none-any.whl", hash = "sha256:e47cac98a6da10cd41e6fd036d472c6f58ede6c5dbee3dbee3ef7a100ed97742"},
-    {url = "https://files.pythonhosted.org/packages/ea/fa/362dc074f4c886e4bff1d994ed1929ed2c2a5ba85827d8f1d745fbe66de2/uvicorn-0.21.1.tar.gz", hash = "sha256:0fac9cb342ba099e0d582966005f3fdba5b0290579fed4a6266dc702ca7bb032"},
+"uvicorn 0.22.0" = [
+    {url = "https://files.pythonhosted.org/packages/ad/bd/d47ee02312640fcf26c7e1c807402d5c5eab468571153a94ec8f7ada0e46/uvicorn-0.22.0-py3-none-any.whl", hash = "sha256:e9434d3bbf05f310e762147f769c9f21235ee118ba2d2bf1155a7196448bd996"},
+    {url = "https://files.pythonhosted.org/packages/c6/dd/0d3bab50ab4ef8bec849f89fec2adc2fabcc397018c30e57d9f0d4009c5e/uvicorn-0.22.0.tar.gz", hash = "sha256:79277ae03db57ce7d9aa0567830bbb51d7a612f54d6e1e3e92da3ef24c2c8ed8"},
 ]
 "w3lib 2.1.1" = [
     {url = "https://files.pythonhosted.org/packages/0b/29/755466b52987cf553231ca929149c62583b938dc9cd5a7cc63c9dcf2175c/w3lib-2.1.1.tar.gz", hash = "sha256:0e1198f1b745195b6b3dd1a4cd66011fbf82f30a4d9dabaee1f9e5c86f020274"},
