@@ -73,22 +73,29 @@ def load_latest_factchecks():
         for el in claim_reviews
         if el["date_published"] and el["date_published"] <= today
     ]
-    latest = sorted(
+    latest_100 = sorted(
         filtered_claim_reviews, key=lambda el: el["date_published"], reverse=True
-    )[:10]
+    )[:100]
+    latest = []
     goose = Goose()
-    for el in latest:
-        page_text = cache_manager.get(
-            el["review_url"],
-            unshorten=False,
-            verify=False,
-            headers={
-                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36",
-                "Cookie": "wp_gdpr=1|1;",
-            },
-        )
-        article = goose.extract(raw_html=page_text)
-        el["goose"] = article.infos
+    for el in latest_100:
+        try:
+            page_text = cache_manager.get(
+                el["review_url"],
+                unshorten=False,
+                verify=False,
+                headers={
+                    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36",
+                    "Cookie": "wp_gdpr=1|1;",
+                },
+            )
+            article = goose.extract(raw_html=page_text)
+            el["goose"] = article.infos
+            latest.append(el)
+            if len(latest) >= 10:
+                break
+        except Exception as e:
+            print(e)
     # TODO filter by fact-checkers:
     # - double-check what the different fact-checkers show here, e.g. ellinikahoaxes contains title and description of CloudFlare DDoS protection
     # - language filtering: what is the lanugage of our public? Does it make sense to show weird characters?
