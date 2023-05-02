@@ -35,7 +35,7 @@ def read_tsv(input_path, with_header=True, delimiter="\t"):
 def write_tsv(path, data, sep="\t"):
     """write tsv file"""
     with open(path, "w") as f:
-        writer = csv.DictWriter(f, delimiter=sep)
+        writer = csv.DictWriter(f, fieldnames=data[0].keys(), delimiter=sep)
         writer.writeheader()
         writer.writerows(data)
 
