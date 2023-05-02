@@ -8,8 +8,7 @@ import plotly.graph_objects as go
 from tqdm import tqdm
 from scipy.spatial.distance import pdist
 
-from sklearn.cluster import AgglomerativeClustering
-from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import linkage
 
 
 def read_json(path):

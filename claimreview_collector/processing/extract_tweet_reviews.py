@@ -195,46 +195,5 @@ def analyse_mapping():
     utils.write_json_with_path(m, data_path, "tweet_labels_mapping.json")
 
 
-def filter_data():
-    import pandas as pd
-    import dateparser
-
-    data = read_json(data_path / "tweet_reviews.json")
-    start_date = dateparser.parse("1 september 2020")
-
-    for d in data:
-        del d["reviews"]
-
-    df = pd.DataFrame(data)
-    parsing_fn = lambda v: dateparser.parse(v.replace("+0000", "")) if v else None
-    tweet_url_fn = (
-        lambda v: f'https://twitter.com/{v["screen_name"]}/status/{v["id"]}'
-        if v["screen_name"]
-        else None
-    )
-    df["created_at_parsed"] = df["created_at"].apply(parsing_fn)
-    df["tweet_url"] = df.apply(tweet_url_fn, axis=1)
-
-    df_recent = df[df["created_at_parsed"] >= start_date]
-    by_label = df_recent.groupby("label").count()
-    df_recent_credible = df_recent[df_recent["label"] == "credible"]
-    df_recent_mostly_credible = df_recent[df_recent["label"] == "mostly_credible"]
-    df_recent_ok = pd.concat([df_recent_credible, df_recent_mostly_credible])
-    df_recent_ok.to_csv(
-        "data/tweet_reviews_credible_or_mostly_september_october.tsv",
-        sep="\t",
-        index=False,
-    )
-
-    df_credible = df[df["label"] == "credible"]
-    df_mostly_credible = df[df["label"] == "mostly_credible"]
-    df_ok = pd.concat([df_credible, df_credible])
-    df_ok.to_csv("data/tweet_reviews_credible_or_mostly.tsv", sep="\t", index=False)
-    df_ok_en = df_ok[df_ok["lang"] == "en"]
-    df_ok_en.to_csv(
-        "data/tweet_reviews_credible_or_mostly_english.tsv", sep="\t", index=False
-    )
-
-
 if __name__ == "__main__":
     extract()

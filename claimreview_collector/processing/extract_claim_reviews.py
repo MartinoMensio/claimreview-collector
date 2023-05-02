@@ -2,7 +2,6 @@ import tqdm
 import scipy
 import jellyfish
 import dateparser
-import pandas as pd
 import numpy as np
 from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
@@ -42,16 +41,15 @@ def claims_nationality_distribution():
     utils.write_json_with_path(countries_cnt, data_path, "fact_checks_by_country.json")
 
     # create nice plot (requires plotly installed)
-    if False:
-        import pandas as pd
-        import plotly.express as px
+    # import pandas as pd
+    # import plotly.express as px
 
-        t = [{"country": k, "count": v} for k, v in countries_cnt.items()]
-        t = sorted(t, key=lambda el: el["count"], reverse=True)
-        df = pd.DataFrame(t)
-        fig = px.bar(df, x="country", y="count")
-        fig.show()
-        fig.write_image("countries_factchecks_counts.pdf")
+    # t = [{"country": k, "count": v} for k, v in countries_cnt.items()]
+    # t = sorted(t, key=lambda el: el["count"], reverse=True)
+    # df = pd.DataFrame(t)
+    # fig = px.bar(df, x="country", y="count")
+    # fig.show()
+    # fig.write_image("countries_factchecks_counts.pdf")
 
 
 def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
@@ -462,9 +460,7 @@ def analyse_mapping():
     utils.write_json_with_path(stats, data_path, "claim_labels_mapping.json")
 
     rows = sorted(stats, key=lambda el: el["count"], reverse=True)
-    df = pd.DataFrame(rows)
-    df.to_csv(data_path / "labels.tsv", index=False, sep="\t")
-    print(df.groupby("coinform_label").sum())
+    utils.write_tsv(data_path / "labels.tsv", data=rows, sep="\t")
 
 
 def main():

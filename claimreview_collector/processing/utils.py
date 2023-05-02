@@ -32,6 +32,14 @@ def read_tsv(input_path, with_header=True, delimiter="\t"):
     return results
 
 
+def write_tsv(path, data, sep="\t"):
+    """write tsv file"""
+    with open(path, "w") as f:
+        writer = csv.DictWriter(f, delimiter=sep)
+        writer.writeheader()
+        writer.writerows(data)
+
+
 def write_json_with_path(content, path, filename, indent=2):
     """dump to json file, creating folder if necessary"""
     if not os.path.isdir(path):
