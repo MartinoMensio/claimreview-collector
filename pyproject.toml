@@ -34,20 +34,19 @@ readme = "README.md"
 license = {text = "MIT"}
 
 [tool.pdm.dev-dependencies]  # This is dev dependencies
-dev1 = [
+test = [
     "pytest",
     "coveralls",
-]
-dev2 = [
     "ipykernel",
     "nbformat",
     "plotly",
-    "black",
-]
-dev3 = [ # these 3 are installed as dev
+    # these 3 are installed as dev
     "pandas",
     "scipy",
     "numpy",
+]
+lint = [ 
+    "black",
 ]
 
 [tool.pdm.resolution]
