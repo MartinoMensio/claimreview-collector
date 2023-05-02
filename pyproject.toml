@@ -23,9 +23,11 @@ dependencies = [
     "unidecode",
     "schedule",
     "goose3",
-    "scipy",
     "jellyfish!=0.11.2",
-    "pandas",
+    # on musllinux they are installed from anaconda
+    # on other architectures they are installed from dev3
+    # "scipy",
+    # "numpy",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
@@ -41,9 +43,21 @@ dev2 = [
     "nbformat",
     "plotly",
     "black",
-    #"tensorflow-text",
-    "scikit-learn",
 ]
+dev3 = [ # these 3 are installed as dev
+    "pandas",
+    "scipy",
+    "numpy",
+]
+
+[tool.pdm.resolution]
+respect-source-order = true
+
+[[tool.pdm.source]]
+name = "anaconda"
+url = "https://pypi.anaconda.org/scipy-wheels-nightly/simple"
+verify_ssl = true
+
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]

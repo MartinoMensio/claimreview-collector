@@ -21,8 +21,8 @@ RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 # ADD requirements.txt /app/requirements.txt
 COPY pyproject.toml pdm.lock README.md /app/
-# RUN pip install .
-# install pdm in .venv by default
+# create .venv and install anaconda dependencies (otherwise it takes ages to build wheels)
+RUN virtualenv .venv && . .venv/bin/activate && pip install --pre -i https://pypi.anaconda.org/scipy-wheels-nightly/simple scipy numpy
 # this task takes ~50 minutes because of building wheels of numpy, scipy and jellyfish
 RUN pdm install --prod --no-lock --no-editable
 
