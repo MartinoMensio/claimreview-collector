@@ -4,7 +4,7 @@ set -e
 # date in format 2023_03_30
 # TODAY=$(date +%Y_%m_%d)
 # last day (get from API)
-TODAY=2023_04_19
+TODAY=2023_05_02
 TODAY_FOLDER=ukraine_archive/ukraine_$TODAY
 mkdir -p $TODAY_FOLDER
 
