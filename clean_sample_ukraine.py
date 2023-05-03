@@ -6,6 +6,7 @@ from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
 import plotly.express as px
 from pathlib import Path
+import dotenv
 
 
 import claimreview_collector
@@ -14,32 +15,19 @@ from claimreview_collector.processing import claimreview
 from claimreview_collector.routers import data
 
 
-# STEPS:
-# - get all ClaimReviews as before
-# - collect them again (cache) from the fact-checking website (to remove Google Factcheck Tools mismatches)
-# - process as before ()
+dotenv.load_dotenv()
 
+textrazor_keys = []
+for textrazor_n_keys in range(1, 100):
+    textrazor_key = os.getenv(f"TEXTRAZOR_KEY_{textrazor_n_keys}")
+    if textrazor_key is not None:
+        textrazor_keys.append(textrazor_key)
+    else:
+        break
+if len(textrazor_keys) == 0:
+    raise ValueError("no textrazor keys found")
+textrazor_key_active = 0
 
-# BEFORE cleaning
-# "claim_reviews": {
-#       "claimreviews_merged_count": 126248,
-#       "raw_claimreviews_count": 203257,
-#       "ifcn_domains_count": 117,
-#       "claimreviews_not_from_ifcn_count": 34551,
-#       "claimreviews_unique_review_urls_count": 110008,
-#       "claimreviews_unique_appearances_count": 59443,
-#       "not_matching_reviews_labels_count": 1035,
-#       "links_not_credible_count": 51262
-#     },
-
-# TODO from raw
-# claimreviews = utils.read_json('data/latest/claim_reviews_raw.json')
-# claimreviews = database_builder.get_all_factchecking_urls()
-# urls = list(set(el['url'] for el in claimreviews))
-# original = []
-# with ThreadPool(8) as pool:
-#     for url, crs in tqdm(pool.imap_unordered(claimreview.retrieve_claimreview, urls_100), total=len(urls_100)):
-#         original.extend(crs)
 
 # TODO only from links not credible table
 links = utils.read_json("data/latest/links_all_full.json")
@@ -63,22 +51,24 @@ if os.path.exists(languages_cache_path):
 
 
 def get_language(text):
+    global textrazor_key_active
     if text in languages_map:
         return languages_map[text]
     else:
         res = requests.post(
             "https://api.textrazor.com/",
             headers={
-                "X-TextRazor-Key": "113a014b5a98b3eab42fb073646cdac079d232fe2f28eef001190ce1"
+                "X-TextRazor-Key": textrazor_keys[textrazor_key_active],
             },
             data={
                 "text": text,
             },
         )
+        textrazor_key_active = (textrazor_key_active + 1) % len(textrazor_keys)
         if res.status_code != 200:
             print(res.text)
             error = res.json()["error"]
-            if "TextRazor cannot analyze documents of language: ":
+            if "TextRazor cannot analyze documents of language: " in error:
                 language = error.split(
                     "TextRazor cannot analyze documents of language: "
                 )[1][:3]
