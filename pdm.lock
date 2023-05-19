@@ -732,7 +732,7 @@ summary = "Retry code until it succeeds"
 
 [[package]]
 name = "tldextract"
-version = "3.4.2"
+version = "3.4.3"
 requires_python = ">=3.7"
 summary = "Accurately separates a URL's subdomain, domain, and public suffix, using the Public Suffix List (PSL). By default, this includes the public ICANN TLDs and their exceptions. You can optionally support the Public Suffix List's private domains as well."
 dependencies = [
@@ -1966,9 +1966,9 @@ content_hash = "sha256:4660372c5e0fa9373b4d741442d48a55a3f37326f2e92171b44cc772f
     {url = "https://files.pythonhosted.org/packages/d3/f0/6ccd8854f4421ce1f227caf3421d9be2979aa046939268c9300030c0d250/tenacity-8.2.2.tar.gz", hash = "sha256:43af037822bd0029025877f3b2d97cc4d7bb0c2991000a3d59d71517c5c969e0"},
     {url = "https://files.pythonhosted.org/packages/e7/b0/c23bd61e1b32c9b96fbca996c87784e196a812da8d621d8d04851f6c8181/tenacity-8.2.2-py3-none-any.whl", hash = "sha256:2f277afb21b851637e8f52e6a613ff08734c347dc19ade928e519d7d2d8569b0"},
 ]
-"tldextract 3.4.2" = [
-    {url = "https://files.pythonhosted.org/packages/a6/13/bd0d0d855df1c161bdf4098b7006d9f8e68a5288377da12adfb801ddcb1d/tldextract-3.4.2-py3-none-any.whl", hash = "sha256:1f168f0a1c000a757aefed94a5bda10349c58976cb2ef1cc17c6e3b213440521"},
-    {url = "https://files.pythonhosted.org/packages/bf/d7/f146b8ff570f138f98521dd770026f790b43448aa10d19706bc1d09a44a8/tldextract-3.4.2.tar.gz", hash = "sha256:98e36b0aa3a6d8fd084d80d75ae1372da02027efb556c146a59dfd14457071ba"},
+"tldextract 3.4.3" = [
+    {url = "https://files.pythonhosted.org/packages/ce/d5/fd274ffb00ace49387b3de13eb8346f7003ee23b01c2bc8c2737a9e856f4/tldextract-3.4.3-py3-none-any.whl", hash = "sha256:5ed3fd01df4e78b8b378bdff94397cd8cdb130b54d2681c40d254beadd50f69f"},
+    {url = "https://files.pythonhosted.org/packages/f6/c6/31e43b2ba3c21421c0d3beb5c6a616d649fcb008054c770b594dcd7c7805/tldextract-3.4.3.tar.gz", hash = "sha256:d3fbbfcdadbaff5d414dd8a77cfcc8c3aa811fa5470d8bad289b4c508f39d778"},
 ]
 "tornado 6.3.1" = [
     {url = "https://files.pythonhosted.org/packages/0f/b7/766847a44120b977d841fd2cfa2e2deaa0794a6b85ef43dc2b46393223ee/tornado-6.3.1-cp38-abi3-musllinux_1_1_i686.whl", hash = "sha256:ffdce65a281fd708da5a9def3bfb8f364766847fa7ed806821a69094c9629e8a"},

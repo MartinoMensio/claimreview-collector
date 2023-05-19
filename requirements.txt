@@ -87,7 +87,7 @@ soupsieve==2.4.1
 stack-data==0.6.2
 starlette==0.27.0
 tenacity==8.2.2
-tldextract==3.4.2
+tldextract==3.4.3
 tornado==6.3.1
 tqdm==4.65.0
 traitlets==5.9.0
