@@ -4,37 +4,45 @@ RUN sed -i -e 's/v[^/]*/edge/g' /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
     apk add libgcc openblas libstdc++
-# libgcc openblas libstdc++ are needed for jellifish and scipy
+# libgcc openblas libstdc++ are needed for jellifish that is built without static linking
 WORKDIR /app
+
+
 
 # builder stage
 FROM base as builder
 
 # install dependencies
 RUN pip install pdm
-# gcc may be needed for some dependencies
-# RUN apt-get update && apt-get install -y gcc
-# RUN apk --no-cache add musl-dev linux-headers g++ cargo
-# dependencies for building wheel of scipy and jellyfish (extra: cargo)
-RUN apk --no-cache --update-cache add gcc gfortran python3 python3-dev py-pip build-base wget freetype-dev libpng-dev openblas-dev cargo
-RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
 
-# ADD requirements.txt /app/requirements.txt
+# add cargo to be able to build jellyfish for musl
+RUN apk --no-cache --update-cache add cargo
+
+# add files for installation of dependencies
 COPY pyproject.toml pdm.lock README.md /app/
-# create .venv and install anaconda dependencies (otherwise it takes ages to build wheels)
+
+# install scipy and numpy from anaconda wheels (support for musl).
+# This requires creating virtualenv first. PDM will use this virtualenv
 RUN virtualenv .venv && . .venv/bin/activate && pip install --pre -i https://pypi.anaconda.org/scipy-wheels-nightly/simple scipy numpy
-# this task takes ~50 minutes because of building wheels of numpy, scipy and jellyfish
+
+# install pdm in .venv by default
 RUN pdm install --prod --no-lock --no-editable
 
-# run stage
-# FROM python:3.11-slim as production
-FROM base as production
-# FROM python:3.11-alpine as production
+# remove pip and setuptools from .venv to remove vulnerabilities
+RUN . .venv/bin/activate && pip uninstall setuptools pip -y
 
-# pip and setuptools have open vulnerabilities
+
+
+# production stage
+FROM base as production
+# pip and setuptools have open vulnerabilities, remove them
 RUN pip uninstall setuptools pip -y
+
+# files from builder
 COPY --from=builder /app /app
+# files from application
 COPY claimreview_collector /app/claimreview_collector
-# CMD ["uvicorn", "claimreview_collector.main:app", "--host", "0.0.0.0"]
-# set environment as part of CMD because pdm installs there
+
+
+# set environment and launch uvicorn
 CMD . .venv/bin/activate && uvicorn claimreview_collector.main:app --host 0.0.0.0
