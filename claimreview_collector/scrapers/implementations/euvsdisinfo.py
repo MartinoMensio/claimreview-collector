@@ -55,7 +55,7 @@ def retrieve(self_id):
             go_on = False
             break
         for s in articles:
-            if found_consecutively >= 10:
+            if found_consecutively >= 100000:
                 # this is the moment to stop. We already retrieved from now on
                 print(
                     f"Interrupting after finding {found_consecutively} elements already stored"

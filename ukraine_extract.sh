@@ -4,7 +4,27 @@ set -e
 # date in format 2023_03_30
 # TODAY=$(date +%Y_%m_%d)
 # last day (get from API)
-TODAY=2023_05_02
+
+TODAY=0
+
+while getopts d:h flag
+do
+    case "${flag}" in
+        h) help=1;;
+        d) if [[ "$OPTARG" =~ ^[0-9]{4}_[0-9]{2}_[0-9]{2}$ ]]; then
+          TODAY=$OPTARG
+          else
+              echo "Date must be in format YYYY_MM_DD"
+              exit 1
+          fi;;
+    esac
+done
+
+# check if today is set
+if [ $TODAY = 0 ]; then
+    echo "Date must be set with -d flag"
+    exit 1
+fi
 TODAY_FOLDER=ukraine_archive/ukraine_$TODAY
 mkdir -p $TODAY_FOLDER
 
