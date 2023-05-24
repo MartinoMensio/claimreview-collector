@@ -1,0 +1,19 @@
+name: pr
+
+on:
+  pull_request:
+
+jobs:
+  trigger-main-branch:
+    name: trigger main branch
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    permissions: write-all
+    steps:
+    - 
+      name: trigger main workflow
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.MISINFOME_GH_TOKEN }}
+        repository: ${{ github.event.repository.full_name }}
+        event-type: 'Received PR from ${{ github.actor }}'

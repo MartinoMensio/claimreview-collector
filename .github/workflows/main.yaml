@@ -6,6 +6,7 @@ on:
       - '*'
   schedule:
     - cron: "0 23 * * 0" # weekly on Sunday evening
+  repository_dispatch:
 
 jobs:
   pdm:
