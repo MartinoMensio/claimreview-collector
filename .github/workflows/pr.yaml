@@ -14,6 +14,4 @@ jobs:
       name: trigger main workflow
       uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.MISINFOME_GH_TOKEN }}
-        repository: ${{ github.event.repository.full_name }}
         event-type: 'Received PR from ${{ github.actor }}'
