@@ -40,7 +40,6 @@ def clean_field(field):
 
 # code to comapre this against IFCN and euvsdisinfo
 import requests
-import pandas as pd
 from collections import defaultdict
 from claimreview_collector.processing import unshortener, utils
 
@@ -91,5 +90,6 @@ for el in tqdm.tqdm(svitlo):
                 }
             )
 
-df = pd.DataFrame(svitlo_tsv)
-df.to_csv("ukraine_ukrainefacts.tsv", sep="\t", index=False)
+# df = pd.DataFrame(svitlo_tsv)
+# df.to_csv("ukraine_ukrainefacts.tsv", sep="\t", index=False)
+utils.write_tsv(svitlo_tsv, "ukraine_ukrainefacts.tsv")

@@ -1,7 +1,12 @@
 import os
 import json
 import requests
-import pandas as pd
+
+try:
+    import pandas as pd
+except ImportError:
+    print("pandas not installed")
+    pd = None
 from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
 import plotly.express as px
@@ -118,23 +123,25 @@ for el in tqdm(with_ukraine_recent, desc="getting language"):
 
 utils.write_json_with_path(languages_map, Path(""), "languages_cache.json")
 
-df = pd.DataFrame(with_ukraine_recent)
-# date filter
-df = df[df["date_published"] > date_start]
+if pd:
+    df = pd.DataFrame(with_ukraine_recent)
+    # date filter
+    df = df[df["date_published"] > date_start]
 
+    fig = px.histogram(df, x="date_published")
+    fig.show()
+    fig = px.histogram(df, x="label")
+    fig.show()
+    fig = px.histogram(df, x="fact_checker")
+    fig.show()
+    fig = px.histogram(df, x="factcheck_language")
+    fig.show()
+    fig = px.histogram(df, x="misinforming_domain")
+    fig.show()
 
-fig = px.histogram(df, x="date_published")
-fig.show()
-fig = px.histogram(df, x="label")
-fig.show()
-fig = px.histogram(df, x="fact_checker")
-fig.show()
-fig = px.histogram(df, x="factcheck_language")
-fig.show()
-fig = px.histogram(df, x="misinforming_domain")
-fig.show()
-
-df.to_csv("ukraine.tsv", sep="\t", index=False)
+    df.to_csv("ukraine.tsv", sep="\t", index=False)
+else:
+    utils.write_tsv("ukraine.tsv", with_ukraine_recent)
 # df.to_csv('cleaned_table_recollected.csv', sep='\t', index=False)
 # raise ValueError(1234)
 exit(0)
