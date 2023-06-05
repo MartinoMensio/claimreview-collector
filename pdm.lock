@@ -181,7 +181,7 @@ dependencies = [
 
 [[package]]
 name = "fastapi"
-version = "0.95.2"
+version = "0.96.0"
 requires_python = ">=3.7"
 summary = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 dependencies = [
@@ -210,7 +210,7 @@ dependencies = [
 
 [[package]]
 name = "goose3"
-version = "3.1.14"
+version = "3.1.15"
 requires_python = ">=3.7"
 summary = "Html Content / Article Extractor, web scrapping for Python3"
 dependencies = [
@@ -404,8 +404,8 @@ summary = "Type system extensions for programs checked with the mypy type checke
 
 [[package]]
 name = "nbformat"
-version = "5.8.0"
-requires_python = ">=3.7"
+version = "5.9.0"
+requires_python = ">=3.8"
 summary = "The Jupyter Notebook format"
 dependencies = [
     "fastjsonschema",
@@ -1143,9 +1143,9 @@ content_hash = "sha256:4660372c5e0fa9373b4d741442d48a55a3f37326f2e92171b44cc772f
     {url = "https://files.pythonhosted.org/packages/a2/67/bf5b6b06fe12bff1a5c16d31f9ba5c32d5aa393fc82143133016c0b5a6da/extruct-0.14.0-py2.py3-none-any.whl", hash = "sha256:22739b23a7fd66239137838b8cde7b15ce838ad7a0e0721dba86058df206a2da"},
     {url = "https://files.pythonhosted.org/packages/e4/a6/439617b8f649215bdd039e86033f5cdf7c9ccfa769d26860417ace1001ea/extruct-0.14.0.tar.gz", hash = "sha256:4c74a3f0c6829252fa40b3a1c7364c966265fd4c0f0dbcef019d1b839e3434bf"},
 ]
-"fastapi 0.95.2" = [
-    {url = "https://files.pythonhosted.org/packages/4e/1a/04887c641b67e6649bde845b9a631f73a7abfbe3afda83957e09b95d88eb/fastapi-0.95.2-py3-none-any.whl", hash = "sha256:d374dbc4ef2ad9b803899bd3360d34c534adc574546e25314ab72c0c4411749f"},
-    {url = "https://files.pythonhosted.org/packages/75/e1/976b2e281bdfb0b6690b5d3c2d932d309729e49305ef5449be381e0672a3/fastapi-0.95.2.tar.gz", hash = "sha256:4d9d3e8c71c73f11874bcf5e33626258d143252e329a01002f767306c64fb982"},
+"fastapi 0.96.0" = [
+    {url = "https://files.pythonhosted.org/packages/18/59/bc4b64f5bbb0b36497f8fe52794c4441bea06258b710c36cc597c04abaa3/fastapi-0.96.0.tar.gz", hash = "sha256:71232d47c2787446991c81c41c249f8a16238d52d779c0e6b43927d3773dbe3c"},
+    {url = "https://files.pythonhosted.org/packages/b4/61/b62cd764a6d23220e5e8195405f6926643a41b088d3de550407e8a4edd80/fastapi-0.96.0-py3-none-any.whl", hash = "sha256:b8e11fe81e81eab4e1504209917338e0b80f783878a42c2b99467e5e1019a1e9"},
 ]
 "fastjsonschema 2.16.3" = [
     {url = "https://files.pythonhosted.org/packages/62/70/0b49eee4a6aef4b67699e65fe8b8f4a3a25d39971bcd6f1c930a91141f3b/fastjsonschema-2.16.3.tar.gz", hash = "sha256:4a30d6315a68c253cfa8f963b9697246315aa3db89f98b97235e345dedfb0b8e"},
@@ -1158,9 +1158,9 @@ content_hash = "sha256:4660372c5e0fa9373b4d741442d48a55a3f37326f2e92171b44cc772f
 "flatten-json 0.1.13" = [
     {url = "https://files.pythonhosted.org/packages/cb/be/8f8e563004c7eae0b03be0fc6427a4ce07691c758250fdb31a9e934028d4/flatten_json-0.1.13.tar.gz", hash = "sha256:ee352333e8293e957ccb1b4597a111fc4f6da88ab74b8cb3f8f51eed1e12f500"},
 ]
-"goose3 3.1.14" = [
-    {url = "https://files.pythonhosted.org/packages/83/85/99267057cc1cd8216a2fd0d20b1e9ad748dd14544aff498e7fa993dcad0e/goose3-3.1.14.tar.gz", hash = "sha256:f040e99da059ac46a452e0baf3cd172b97dd3394620a9517755661cf0217597b"},
-    {url = "https://files.pythonhosted.org/packages/ae/8f/9383ee7fd746386fd874da9d490e642ffc54fa833aff8d81ebd14984c03b/goose3-3.1.14-py3-none-any.whl", hash = "sha256:58c11ea0b3983cdde991848019c9352b484ec4d2e69539ddf9d571aa72d4122c"},
+"goose3 3.1.15" = [
+    {url = "https://files.pythonhosted.org/packages/8e/6b/551c50641fce0422f96dc34b9af14a0a5a4e367f8ebcce27dc199fcfa7e9/goose3-3.1.15.tar.gz", hash = "sha256:42c11d9893fb68890c96bae2ec2b869c5fb18e2a83f1ab15f1d638dbb269bc40"},
+    {url = "https://files.pythonhosted.org/packages/c5/ea/6b5fb158e1074a9f2b68c0f11e368016aa46c15f6d2d5349fd4d223c6801/goose3-3.1.15-py3-none-any.whl", hash = "sha256:48f872c87c7bd5dc0ba51feaf8ae53a1b1588865ba3dbcfa792534edd04240ed"},
 ]
 "h11 0.14.0" = [
     {url = "https://files.pythonhosted.org/packages/95/04/ff642e65ad6b90db43e668d70ffb6736436c7ce41fcc549f4e9472234127/h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
@@ -1347,9 +1347,9 @@ content_hash = "sha256:4660372c5e0fa9373b4d741442d48a55a3f37326f2e92171b44cc772f
     {url = "https://files.pythonhosted.org/packages/2a/e2/5d3f6ada4297caebe1a2add3b126fe800c96f56dbe5d1988a2cbe0b267aa/mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
     {url = "https://files.pythonhosted.org/packages/98/a4/1ab47638b92648243faf97a5aeb6ea83059cc3624972ab6b8d2316078d3f/mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
 ]
-"nbformat 5.8.0" = [
-    {url = "https://files.pythonhosted.org/packages/08/b7/8b964e977438037b57de31d312d67046e215295899107576e3708b0ea223/nbformat-5.8.0.tar.gz", hash = "sha256:46dac64c781f1c34dfd8acba16547024110348f9fc7eab0f31981c2a3dc48d1f"},
-    {url = "https://files.pythonhosted.org/packages/1d/f6/38f4694b5035306a8c2685e9e6ea7bf46ea344c03422d7131442ac9677c1/nbformat-5.8.0-py3-none-any.whl", hash = "sha256:d910082bd3e0bffcf07eabf3683ed7dda0727a326c446eeb2922abe102e65162"},
+"nbformat 5.9.0" = [
+    {url = "https://files.pythonhosted.org/packages/73/b0/7dcb4288e9096fc544e4c511253c5720210748dd37c23f0486541d145a0a/nbformat-5.9.0.tar.gz", hash = "sha256:e98ebb6120c3efbafdee2a40af2a140cadee90bb06dd69a2a63d9551fcc7f976"},
+    {url = "https://files.pythonhosted.org/packages/e1/ce/7f0f454b4e7f1cb31345f9f977bdce7486033a1c08b5945b17ea95c4afbc/nbformat-5.9.0-py3-none-any.whl", hash = "sha256:8c8fa16d6d05062c26177754bfbfac22de644888e2ef69d27ad2a334cf2576e5"},
 ]
 "nest-asyncio 1.5.6" = [
     {url = "https://files.pythonhosted.org/packages/35/76/64c51c1cbe704ad79ef6ec82f232d1893b9365f2ff194111787dc91b004f/nest_asyncio-1.5.6.tar.gz", hash = "sha256:d267cc1ff794403f7df692964d1d2a3fa9418ffea2a3f6859a439ff482fef290"},
