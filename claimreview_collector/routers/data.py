@@ -100,5 +100,5 @@ def update_ukraine(stats: StatsBody):
     # already checked up that this is ROLE==full
     if ROLE == "light":
         raise HTTPException(status_code=400, detail="light instance cannot update")
-    # download_data(stats)
+    download_data(stats)
     return ukraine_retrieve.collect(stats.date)
