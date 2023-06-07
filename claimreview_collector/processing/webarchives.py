@@ -46,9 +46,9 @@ def archivetoday_resolve_url(url):
         text = flaresolverr.get_cloudflare(url, timeout=2)
         soup = BeautifulSoup(text, "lxml")
 
-        # print(url)
+        domain = utils.get_url_domain(url)  # the specific archive.today domain
         original_url = soup.select_one(
-            'form[action="https://archive.ph/search/"] input'
+            f'form[action="https://{domain}/search/"] input'
         )["value"]
         # long_link = soup.select_one('input#SHARE_LONGLINK')['value']
         # # parse page with beautifulsoup
