@@ -334,7 +334,7 @@ def update_data():
 
     # compute ukraine data
     try:
-        ukraine_stats = ukraine_retrieve.collect()
+        ukraine_stats = ukraine_retrieve.collect(date=today)
         result_stats["ukraine_stats"] = ukraine_stats
         include_ukraine = True
     except Exception as e:
