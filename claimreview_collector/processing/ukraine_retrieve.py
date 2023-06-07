@@ -133,7 +133,7 @@ def collect(date: str):
     )
     euvsdisinfo_len = len(ukraine_res)
 
-    print("collecting ukraine data: IFCN")
+    print("collecting ukraine data: ukrainefacts")
     # ukrainefacts
     ukrainefacts_len = ukrainefacts.main(
         output_path=f"{ukraine_path}/ukraine_{date}/ukraine_ukrainefacts.tsv"
