@@ -210,7 +210,7 @@ dependencies = [
 
 [[package]]
 name = "goose3"
-version = "3.1.15"
+version = "3.1.16"
 requires_python = ">=3.7"
 summary = "Html Content / Article Extractor, web scrapping for Python3"
 dependencies = [
@@ -1158,9 +1158,9 @@ content_hash = "sha256:4660372c5e0fa9373b4d741442d48a55a3f37326f2e92171b44cc772f
 "flatten-json 0.1.13" = [
     {url = "https://files.pythonhosted.org/packages/cb/be/8f8e563004c7eae0b03be0fc6427a4ce07691c758250fdb31a9e934028d4/flatten_json-0.1.13.tar.gz", hash = "sha256:ee352333e8293e957ccb1b4597a111fc4f6da88ab74b8cb3f8f51eed1e12f500"},
 ]
-"goose3 3.1.15" = [
-    {url = "https://files.pythonhosted.org/packages/8e/6b/551c50641fce0422f96dc34b9af14a0a5a4e367f8ebcce27dc199fcfa7e9/goose3-3.1.15.tar.gz", hash = "sha256:42c11d9893fb68890c96bae2ec2b869c5fb18e2a83f1ab15f1d638dbb269bc40"},
-    {url = "https://files.pythonhosted.org/packages/c5/ea/6b5fb158e1074a9f2b68c0f11e368016aa46c15f6d2d5349fd4d223c6801/goose3-3.1.15-py3-none-any.whl", hash = "sha256:48f872c87c7bd5dc0ba51feaf8ae53a1b1588865ba3dbcfa792534edd04240ed"},
+"goose3 3.1.16" = [
+    {url = "https://files.pythonhosted.org/packages/24/99/216f5ad2f7da1a57c409b8a498052fd1d93ef7d1047c927f727a6f664f4e/goose3-3.1.16-py3-none-any.whl", hash = "sha256:6581b0f8f253f0e4500de2f51b122a4f0fa4811775403ee05f834e21b13942a8"},
+    {url = "https://files.pythonhosted.org/packages/8b/8a/eeedcb61a5949df77d5f8f80b9361f08eacd058e6c5a4bfce6c7f44a16a0/goose3-3.1.16.tar.gz", hash = "sha256:db754351a872bd301b6fc29fbd952efa9999ed753cfadee19ca60927acc3bd05"},
 ]
 "h11 0.14.0" = [
     {url = "https://files.pythonhosted.org/packages/95/04/ff642e65ad6b90db43e668d70ffb6736436c7ce41fcc549f4e9472234127/h11-0.14.0-py3-none-any.whl", hash = "sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761"},
