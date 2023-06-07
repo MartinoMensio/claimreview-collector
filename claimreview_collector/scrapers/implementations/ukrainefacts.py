@@ -99,7 +99,7 @@ def main(output_path="ukraine_ukrainefacts.tsv"):
 
     # df = pd.DataFrame(svitlo_tsv)
     # df.to_csv("ukraine_ukrainefacts.tsv", sep="\t", index=False)
-    utils.write_tsv(svitlo_tsv, output_path)
+    utils.write_tsv(output_path, svitlo_tsv)
     return len(svitlo_tsv)
 
 
