@@ -16,6 +16,7 @@ from . import (
     extract_tweet_reviews,
     database_builder,
     cache_manager,
+    ukraine_retrieve,
 )
 from .. import scrapers
 from ..publishing import github
@@ -65,7 +66,12 @@ def load_latest_factchecks():
     claim_reviews = utils.read_json(file_path)
     # TODO define policy e.g. max 2 for each fact-checker
     for el in claim_reviews:
-        el["date_published"] = max(r["date_published"] for r in el["reviews"])
+        dates = [r["date_published"] for r in el["reviews"]]
+        dates = [el for el in dates if el]
+        if dates:
+            el["date_published"] = max(dates)
+        else:
+            el["date_published"] = None
     today = datetime.datetime.today().strftime("%Y-%m-%d")
     filtered_claim_reviews = [
         el
@@ -288,7 +294,7 @@ def random_sample(
 
 def update_data():
     result_stats = {}
-    today = datetime.datetime.today().strftime("%Y_%m_%d")  # TODO yyyy_mm_dd
+    today = datetime.datetime.today().strftime("%Y_%m_%d")
     print("today", today)
     zip_path = f"{folder}/{today}.zip"
     today_path = f"{folder}/{today}"
@@ -297,7 +303,6 @@ def update_data():
     stats_scrapers = scrapers.scrape_daily()
     result_stats["scrapers_stats"] = stats_scrapers
     # extract
-    # TODO keep stats
     cr_stats = extract_claim_reviews.extract_ifcn_claimreviews()
     # tw_stats = extract_tweet_reviews.extract() # TODO this is the slowest, keep the tweets cached in twitter_connector
     result_stats["claim_reviews"] = cr_stats
@@ -327,9 +332,19 @@ def update_data():
     index["latest"] = result_stats
     utils.write_json_with_path(index, Path(folder), "index.json")
 
+    # compute ukraine data
+    try:
+        ukraine_stats = ukraine_retrieve.collect()
+        result_stats["ukraine_stats"] = ukraine_stats
+        include_ukraine = True
+    except Exception as e:
+        include_ukraine = False
+
     try:
         if PUBLISH_GITHUB:
-            github.create_release(date=today, result_stats=result_stats)
+            github.create_release(
+                date=today, result_stats=result_stats, include_ukraine=include_ukraine
+            )
             notify_light_instance(result_stats)
     except Exception as e:
         print(e)

@@ -16,10 +16,11 @@ claimReviews_collection = None
 lastupdated_collection = None
 cache_collection = None
 url_redirects_collection = None
+language_collection = None
 
 
 def connect():
-    global client, db, claimReviews_collection, lastupdated_collection, cache_collection, url_redirects_collection
+    global client, db, claimReviews_collection, lastupdated_collection, cache_collection, url_redirects_collection, language_collection
     client = MongoClient(host=MONGO_HOST)
     db = client["claimreview_collector"]
     # collections
@@ -27,6 +28,7 @@ def connect():
     lastupdated_collection = db["last_updated"]
     cache_collection = db["cache"]
     url_redirects_collection = client["utilities"]["url_redirects"]
+    language_collection = db["language"]
 
 
 def _check_connected(fn):
@@ -158,6 +160,7 @@ def get_count_unique_from_scraper(scraper_name):
     return len(list(results))
     # return len(claimReviews_collection.distinct('url', {'retrieved_by': scraper_name}))
 
+
 @_check_connected
 def get_all_claimreviews():
     return claimReviews_collection.find()
@@ -174,3 +177,21 @@ def save_url_redirect(from_url, to_url):
         # just be sure not to go beyond the MongoDB limit of 1024
         url_mapping = {"_id": from_url[:1000], "to": to_url}
         return replace_safe(url_redirects_collection, url_mapping)
+
+
+@_check_connected
+def language_get(text):
+    id = utils.string_to_md5(text)
+    res = language_collection.find_one({"_id": id})
+    if res:
+        return res["language"]
+    else:
+        return None
+
+
+@_check_connected
+def language_put(text, language):
+    id = utils.string_to_md5(text)
+    return language_collection.replace_one(
+        {"_id": id}, {"_id": id, "text": text, "language": language}, True
+    )

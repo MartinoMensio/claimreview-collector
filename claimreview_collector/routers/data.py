@@ -10,6 +10,7 @@ from ..processing import (
     extract_tweet_reviews,
     database_builder,
     cache_manager,
+    ukraine_retrieve,
 )
 from .. import scrapers
 from ..publishing import github
@@ -56,7 +57,7 @@ def download_data(stats: StatsBody):
 
 @router.get("/latest_factchecks")
 def get_latest_factchecks():
-    data_manager.get_latest_factchecks()
+    return data_manager.get_latest_factchecks()
 
 
 @router.get("/sample")
@@ -92,3 +93,12 @@ def update_data():
     if ROLE == "light":
         raise HTTPException(status_code=400, detail="light instance cannot update")
     return data_manager.update_data()
+
+
+@router.post("/update/ukraine")
+def update_ukraine(stats: StatsBody):
+    # already checked up that this is ROLE==full
+    if ROLE == "light":
+        raise HTTPException(status_code=400, detail="light instance cannot update")
+    # download_data(stats)
+    return ukraine_retrieve.collect(stats.date)

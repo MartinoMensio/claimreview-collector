@@ -25,7 +25,7 @@ def _check_github_token(func):
 
 
 @_check_github_token
-def create_release(date, result_stats):
+def create_release(date, result_stats, include_ukraine=False):
     print("creating release", date)
     GITHUB_API_URL = f"https://api.github.com/repos/{REPO_FULL_NAME}/releases"
 
@@ -52,6 +52,8 @@ def create_release(date, result_stats):
 
     res = upload_stats(assets_url, result_stats)
     res = upload_zip(date, assets_url)
+    if include_ukraine:
+        upload_ukraine(date, assets_url)
 
     return res
 
@@ -76,6 +78,28 @@ def upload_stats(assets_url, result_stats):
 def upload_zip(date, assets_url):
     file_name = f"{date}.zip"
     file_path = f"{DATA_PATH}/{date}.zip"
+    mime_type = mimetypes.guess_type(file_path)[0]
+    # GITHUB_RELEASE_URL = f'https://uploads.github.com/repos/{REPO_FULL_NAME}/releases/{release_id}'
+    # GITHUB_FILE_URL = f'{GITHUB_RELEASE_URL}/assets?name={file_name}'
+    headers = {**auth_header, "Content-Type": mime_type}
+    print("uploading data")
+    res = requests.post(
+        f"{assets_url}?name={file_name}",
+        headers=headers,
+        data=open(file_path, "rb").read(),
+    )
+    # requests.get(assets_url, headers=auth_header)
+    res.raise_for_status()
+    print(res.status_code)
+    # --upload-file ${ASSETS_PATH}/${file_name}
+    print("data uploaded")
+    return res
+
+
+@_check_github_token
+def upload_ukraine(date, assets_url):
+    file_name = f"ukraine{date}.zip"
+    file_path = f"{DATA_PATH}/ukraine/ukraine_{date}.zip"
     mime_type = mimetypes.guess_type(file_path)[0]
     # GITHUB_RELEASE_URL = f'https://uploads.github.com/repos/{REPO_FULL_NAME}/releases/{release_id}'
     # GITHUB_FILE_URL = f'{GITHUB_RELEASE_URL}/assets?name={file_name}'

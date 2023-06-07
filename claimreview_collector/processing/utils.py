@@ -43,6 +43,13 @@ def write_tsv(path, data, sep="\t"):
         writer.writerows(data)
 
 
+def write_tsv_with_path(data, path, filename, sep="\t"):
+    """write tsv file, creating folder if necessary"""
+    if not os.path.isdir(path):
+        os.makedirs(path)
+    return write_tsv(path / filename, data, sep=sep)
+
+
 def write_json_with_path(content, path, filename, indent=2):
     """dump to json file, creating folder if necessary"""
     if not os.path.isdir(path):

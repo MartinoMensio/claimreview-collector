@@ -50,46 +50,58 @@ from claimreview_collector.processing import unshortener, utils
 # ifcn_rev_urls = set(el['review_url'] for el in ifcn)
 # eu_rev_urls = set(el['review_url'] for el in eu)
 
-res = requests.get("https://data.maldita.es/ukrainefacts")
-res.raise_for_status()
-svitlo = res.json()
-svitlo_mis_urls = set(el["disinfoLink"] for el in svitlo if el["disinfoLink"])
-svitlo_rev_urls = set(
-    occ["debunkLink"] for el in svitlo for occ in el["ocurrences"] if occ["debunkLink"]
-)
 
-svitlo_by_mis_url = defaultdict(list)
-for el in svitlo:
-    if el["disinfoLink"]:
+def main(output_path="ukraine_ukrainefacts.tsv"):
+    res = requests.get("https://data.maldita.es/ukrainefacts")
+    res.raise_for_status()
+    svitlo = res.json()
+    svitlo_mis_urls = set(el["disinfoLink"] for el in svitlo if el["disinfoLink"])
+    svitlo_rev_urls = set(
+        occ["debunkLink"]
+        for el in svitlo
+        for occ in el["ocurrences"]
+        if occ["debunkLink"]
+    )
+
+    svitlo_by_mis_url = defaultdict(list)
+    for el in svitlo:
+        if el["disinfoLink"]:
+            for occ in el["ocurrences"]:
+                if occ["debunkLink"]:
+                    svitlo_by_mis_url[el["disinfoLink"]].append(occ["debunkLink"])
+
+    svitlo_tsv = []
+    for el in tqdm.tqdm(svitlo, desc="ukrainefacts"):
+        if not el["disinfoLink"]:
+            continue
         for occ in el["ocurrences"]:
-            if occ["debunkLink"]:
-                svitlo_by_mis_url[el["disinfoLink"]].append(occ["debunkLink"])
+            misinforming_url = clean_field(el["disinfoLink"])
+            if misinforming_url and misinforming_url.startswith("http"):
+                misinforming_url_full = unshortener.unshorten(misinforming_url)
+                svitlo_tsv.append(
+                    {
+                        "misinforming_url": misinforming_url_full,
+                        "misinforming_url_original": misinforming_url,
+                        "misinforming_domain": utils.get_url_domain(
+                            misinforming_url_full
+                        ),
+                        "date_published": occ["date"],
+                        "n_reviews": len(svitlo_by_mis_url[el["disinfoLink"]]),
+                        "review_url": clean_field(occ["debunkLink"]),
+                        "label": "disinfo",
+                        "original_label": None,
+                        "fact_checker": occ["factchecker"],
+                        "country": occ["country"]["name"],
+                        "claim_text": clean_field(occ["debunkTitle"]),
+                        "factcheck_language": occ["country"]["name"],
+                    }
+                )
 
-svitlo_tsv = []
-for el in tqdm.tqdm(svitlo):
-    if not el["disinfoLink"]:
-        continue
-    for occ in el["ocurrences"]:
-        misinforming_url = clean_field(el["disinfoLink"])
-        if misinforming_url and misinforming_url.startswith("http"):
-            misinforming_url_full = unshortener.unshorten(misinforming_url)
-            svitlo_tsv.append(
-                {
-                    "misinforming_url": misinforming_url_full,
-                    "misinforming_url_original": misinforming_url,
-                    "misinforming_domain": utils.get_url_domain(misinforming_url_full),
-                    "date_published": occ["date"],
-                    "n_reviews": len(svitlo_by_mis_url[el["disinfoLink"]]),
-                    "review_url": clean_field(occ["debunkLink"]),
-                    "label": "disinfo",
-                    "original_label": None,
-                    "fact_checker": occ["factchecker"],
-                    "country": occ["country"]["name"],
-                    "claim_text": clean_field(occ["debunkTitle"]),
-                    "factcheck_language": occ["country"]["name"],
-                }
-            )
+    # df = pd.DataFrame(svitlo_tsv)
+    # df.to_csv("ukraine_ukrainefacts.tsv", sep="\t", index=False)
+    utils.write_tsv(svitlo_tsv, output_path)
+    return len(svitlo_tsv)
 
-# df = pd.DataFrame(svitlo_tsv)
-# df.to_csv("ukraine_ukrainefacts.tsv", sep="\t", index=False)
-utils.write_tsv(svitlo_tsv, "ukraine_ukrainefacts.tsv")
+
+if __name__ == "__main__":
+    main()

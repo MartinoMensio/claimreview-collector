@@ -55,7 +55,7 @@ def retrieve(self_id):
             go_on = False
             break
         for s in articles:
-            if found_consecutively >= 100000:
+            if found_consecutively >= 100:
                 # this is the moment to stop. We already retrieved from now on
                 print(
                     f"Interrupting after finding {found_consecutively} elements already stored"
@@ -109,6 +109,12 @@ def retrieve(self_id):
 
 def main():
     scraper = Scraper()
+    try:
+        scraper.scrape()
+    except Exception as e:
+        # first time gives exception (something is wrong with dict / lists)
+        print(e)
+    # but second time it's ok
     scraper.scrape()
 
 

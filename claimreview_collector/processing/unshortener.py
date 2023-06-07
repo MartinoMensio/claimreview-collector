@@ -282,7 +282,7 @@ def unshorten_local(url, use_cache=True):
             result = webarchives.resolve_url(url_normalised)
             if use_cache:
                 database_builder.save_url_redirect(url_normalised, result)
-        if domain in shortening_domains:
+        elif domain in shortening_domains:
             try:
                 res = requests.head(url_normalised, allow_redirects=True, timeout=2)
                 result = res.url

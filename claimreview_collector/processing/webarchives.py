@@ -43,7 +43,7 @@ def archivetoday_resolve_url(url):
 
     # via cloudflare it works, no captcha
     try:
-        text = flaresolverr.get_cloudflare(url)
+        text = flaresolverr.get_cloudflare(url, timeout=2)
         soup = BeautifulSoup(text, "lxml")
 
         # print(url)
@@ -73,6 +73,7 @@ domains = {
     "archive.li": archivetoday_resolve_url,
     "archive.fo": archivetoday_resolve_url,
     "archive.md": archivetoday_resolve_url,
+    "archive.vn": archivetoday_resolve_url,
 }
 
 
