@@ -11,11 +11,6 @@ def get_cloudflare(url, timeout=60):
     global cloudflare_stuff
     # https://github.com/FlareSolverr/FlareSolverr
     if not cloudflare_stuff:
-        # res = requests.post(f'http://{flaresolverr_host}/v1', json={
-        #     'cmd': 'sessions.create',
-        #     'session': 'test'
-        # })
-        # res.raise_for_status()
         cloudflare_stuff = "test"
     res = requests.post(
         f"http://{flaresolverr_host}/v1",
@@ -26,7 +21,12 @@ def get_cloudflare(url, timeout=60):
             "maxTimeout": timeout * 1000,
         },
     )
-    print(res.json())
+    if res.status_code != 200:
+        # destroy session, it will be created again
+        requests.post(
+            f"http://{flaresolverr_host}/v1",
+            json={"cmd": "sessions.destroy", "session": "test"},
+        )
     res.raise_for_status()
     content = res.json()
     if content["solution"]["status"] not in [200, 404]:

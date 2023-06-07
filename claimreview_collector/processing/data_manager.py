@@ -338,6 +338,7 @@ def update_data():
         result_stats["ukraine_stats"] = ukraine_stats
         include_ukraine = True
     except Exception as e:
+        print(e)
         include_ukraine = False
 
     try:
