@@ -21,7 +21,7 @@ dnspython==2.3.0
 docopt==0.6.2
 executing==1.2.0
 extruct==0.14.0
-fastapi==0.97.0
+fastapi==0.98.0
 fastjsonschema==2.16.3
 filelock==3.12.0
 flatten-json==0.1.13
@@ -31,11 +31,11 @@ html-text==0.5.2
 html5lib==1.1
 idna==3.4
 iniconfig==2.0.0
-ipykernel==6.23.2
+ipykernel==6.23.3
 ipython==8.13.1
 isodate==0.6.1
 jedi==0.18.2
-jellyfish==0.11.1
+jellyfish==1.0.0
 jsonschema==4.17.3
 jstyleson==0.0.2
 jupyter-client==8.2.0
@@ -65,11 +65,11 @@ pure-eval==0.2.2
 pyahocorasick==2.0.0
 pydantic==1.10.7
 pygments==2.15.1
-pymongo==4.3.3
+pymongo==4.4.0
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
-pytest==7.3.2
+pytest==7.4.0
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 pytz==2023.3
