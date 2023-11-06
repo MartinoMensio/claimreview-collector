@@ -4,9 +4,7 @@
 name = "claimreview_collector"
 version = "0.1.0"
 description = "ClaimReview Scraper for MisinfoMe"
-authors = [
-    {name = "Martino Mensio", email = "martino.mensio@open.ac.uk"},
-]
+authors = [{ name = "Martino Mensio", email = "martino.mensio@open.ac.uk" }]
 dependencies = [
     "requests",
     "tqdm",
@@ -23,7 +21,7 @@ dependencies = [
     "unidecode",
     "schedule",
     "goose3",
-    "jellyfish!=0.11.2",
+    "jellyfish",
     # on musllinux they are installed from anaconda
     # on other architectures they are installed from dev3
     # "scipy",
@@ -31,9 +29,9 @@ dependencies = [
 ]
 requires-python = ">=3.11"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
-[tool.pdm.dev-dependencies]  # This is dev dependencies
+[tool.pdm.dev-dependencies] # This is dev dependencies
 test = [
     "pytest",
     "coveralls",
@@ -43,11 +41,9 @@ test = [
     # these 3 are installed as dev
     "pandas",
     "scipy",
-    "numpy",
+    # "numpy", # this breaks stuff, but if commented out it is installed anyways (fixing pipeline)
 ]
-lint = [ 
-    "black",
-]
+lint = ["black"]
 
 [tool.pdm.resolution]
 respect-source-order = true
