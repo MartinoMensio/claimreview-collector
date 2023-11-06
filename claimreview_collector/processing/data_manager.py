@@ -355,7 +355,9 @@ def update_data():
 
 def notify_light_instance(stats):
     """send a POST request to misinfome data update"""
-    requests.post(f"{MISINFO_BACKEND}/misinfo/api/data/update", json=stats)
+    res = requests.post(f"{MISINFO_BACKEND}/misinfo/api/data/update", json=stats)
+    print('notify_light_instance', res.status_code, res.text)
+    res.raise_for_status()
 
 
 def make_archive(source, destination):
