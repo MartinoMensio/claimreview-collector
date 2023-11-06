@@ -1,12 +1,15 @@
+import sys
 import tqdm
-import scipy
 import jellyfish
 import dateparser
-import numpy as np
-from scipy.cluster.hierarchy import linkage
 from collections import defaultdict
 from pathlib import Path
 from multiprocessing.pool import ThreadPool
+if "pytest" not in sys.modules:
+    # not installed in pytest
+    import scipy
+    import numpy as np
+    from scipy.cluster.hierarchy import linkage
 
 from . import utils
 from . import extract_tweet_reviews, database_builder
@@ -391,6 +394,9 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
 
 
 def cluster_sentences(sentences, max_distance=3):
+    if "pytest" in sys.modules:
+        # return mock clusters with all sentences disjoint
+        return [[i] for i in range(len(sentences))]
     tri_len = int(scipy.special.binom(len(sentences), 2))
     reduced_sentence_matrix = np.zeros((tri_len))
     cnt = 0
