@@ -40,7 +40,7 @@ test = [
     "plotly",
     # these 3 are installed as dev
     "pandas",
-    "scipy",
+    # "scipy", # this breaks pipeline
     # "numpy", # this breaks stuff, but if commented out it is installed anyways (fixing pipeline)
 ]
 lint = ["black"]

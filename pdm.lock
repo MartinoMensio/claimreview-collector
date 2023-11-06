@@ -5,7 +5,7 @@
 groups = ["default", "lint", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:86ea7dd113b64122f2e2f6dda6e519d3ea952eec012a8cd912afd491e6e46f76"
+content_hash = "sha256:642256df695c9fa08c5b565cd56fc17d669720fd1ea95681f6b0aa39206d9772"
 
 [[package]]
 name = "anyio"
@@ -1235,18 +1235,6 @@ summary = "Job scheduling for humans."
 files = [
     {file = "schedule-1.2.1-py2.py3-none-any.whl", hash = "sha256:14cdeb083a596aa1de6dc77639a1b2ac8bf6eaafa82b1c9279d3612823063d01"},
     {file = "schedule-1.2.1.tar.gz", hash = "sha256:843bc0538b99c93f02b8b50e3e39886c06f2d003b24f48e1aa4cadfa3f341279"},
-]
-
-[[package]]
-name = "scipy"
-version = "1.6.1"
-requires_python = ">=3.7"
-summary = "SciPy: Scientific Library for Python"
-dependencies = [
-    "numpy>=1.16.5",
-]
-files = [
-    {file = "scipy-1.6.1.tar.gz", hash = "sha256:c4fceb864890b6168e79b0e714c585dbe2fd4222768ee90bc1aa0f8218691b11"},
 ]
 
 [[package]]
