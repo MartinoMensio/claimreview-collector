@@ -121,7 +121,7 @@ def retrieve(self_id, scraping=False):
                     "author": {
                         "@type": "Person",
                         "name": r[0][1][0],
-                        "sameAs": r[0][4][0][1] if len(r[0][4]) else None,
+                        "sameAs": r[0][4][0][1] if r[0][4] and len(r[0][4]) else None,
                     }
                     if len(r[0][1])
                     else {},
