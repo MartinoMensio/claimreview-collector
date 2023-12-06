@@ -133,17 +133,23 @@ def retrieve(self_id, scraping=False):
                 #'review_title': r[0][3][0][8],
                 #'claim_url': r[0][4][0][1] if len(r[0][4]) else None
             }
-            appearance = r[0][1][2]
-            firstAppearance = len(r[0]) > 13 and r[0][13]
-            if appearance:
-                claimReview["itemReviewed"]["appearance"] = [
-                    {"url": u} for u in appearance
-                ]
-            if firstAppearance:
-                claimReview["itemReviewed"]["firstAppearance"] = {
-                    "type": "CreativeWork",
-                    "url": firstAppearance,
-                }
+            try:
+                appearance = r[0][1][2]
+                if appearance:
+                    claimReview["itemReviewed"]["appearance"] = [
+                        {"url": u} for u in appearance
+                    ]
+            except IndexError:
+                print('No appearance for', r[0][3][0][1])
+            try:
+                firstAppearance = len(r[0]) > 13 and r[0][13]
+                if firstAppearance:
+                    claimReview["itemReviewed"]["firstAppearance"] = {
+                        "type": "CreativeWork",
+                        "url": firstAppearance,
+                    }
+            except IndexError:
+                print('No firstAppearance for', r[0][3][0][1])
             results.append(claimReview)
         except IndexError as e:
             print(json.dumps(r))
