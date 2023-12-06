@@ -8,6 +8,7 @@ authors = [{ name = "Martino Mensio", email = "martino.mensio@open.ac.uk" }]
 dependencies = [
     "requests",
     "certifi>=2023.11.17",
+    "tornado>=6.4",
     "tqdm",
     "extruct",
     "flatten-json",
