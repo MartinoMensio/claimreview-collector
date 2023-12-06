@@ -57,7 +57,11 @@ def get_recent(self_id, lang="", offset=0, num_results=1000, query="list:recent"
     # text = response.text[5:].encode().decode('utf-8', 'ignore')
 
     content = json.loads(response.text[5:])
-    reviews = content[0][1]
+    try:
+        reviews = content[0][1]
+    except IndexError:
+        print("No reviews found for offset", offset, "and num_results", num_results)
+        return []
     if reviews:
         database_builder.save_original_data(
             self_id, [{"raw": el} for el in reviews], clean=offset == 0
