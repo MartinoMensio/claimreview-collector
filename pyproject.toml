@@ -7,6 +7,7 @@ description = "ClaimReview Scraper for MisinfoMe"
 authors = [{ name = "Martino Mensio", email = "martino.mensio@open.ac.uk" }]
 dependencies = [
     "requests",
+    "certifi>=2023.11.17",
     "tqdm",
     "extruct",
     "flatten-json",
