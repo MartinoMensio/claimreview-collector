@@ -126,7 +126,8 @@ def retrieve(self_id, scraping=False):
                     if len(r[0][1])
                     else {},
                     "url": r[0][10],
-                }
+                } if len(r[0]) > 10 and r[0][10]
+                else {},
                 #'claim_author': r[0][1][0] if len(r[0][1]) else None,
                 #'id': r[0][2],
                 #'review_author': r[0][3][0][0][0],
