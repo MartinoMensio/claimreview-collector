@@ -7,7 +7,7 @@ asttokens==2.2.1
 attrs==23.1.0
 backcall==0.2.0
 beautifulsoup4==4.12.3
-black==24.2.0
+black==24.3.0
 certifi==2024.2.2
 cffi==1.15.1; implementation_name == "pypy"
 charset-normalizer==3.1.0
@@ -48,7 +48,7 @@ lxml==5.1.0
 matplotlib-inline==0.1.6
 mf2py==1.1.2
 mypy-extensions==1.0.0
-nbformat==5.9.2
+nbformat==5.10.3
 nest-asyncio==1.5.6
 numpy==1.26.1; python_version == "3.11" or python_version >= "3.12"
 packaging==23.1
@@ -59,7 +59,7 @@ pexpect==4.8.0; sys_platform != "win32"
 pickleshare==0.7.5
 pillow==10.2.0
 platformdirs==3.5.0
-plotly==5.19.0
+plotly==5.20.0
 pluggy==1.4.0
 prompt-toolkit==3.0.38
 psutil==5.9.5
