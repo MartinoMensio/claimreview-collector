@@ -52,7 +52,7 @@ nbformat==5.10.4
 nest-asyncio==1.5.6
 numpy==1.26.1; python_version == "3.11" or python_version >= "3.12"
 packaging==23.1
-pandas==2.2.1
+pandas==2.2.2
 parso==0.8.3
 pathspec==0.11.1
 pexpect==4.8.0; sys_platform != "win32"
