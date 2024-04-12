@@ -7,7 +7,7 @@ asttokens==2.2.1
 attrs==23.1.0
 backcall==0.2.0
 beautifulsoup4==4.12.3
-black==24.3.0
+black==24.4.0
 certifi==2024.2.2
 cffi==1.15.1; implementation_name == "pypy"
 charset-normalizer==3.1.0
