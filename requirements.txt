@@ -7,7 +7,7 @@ asttokens==2.2.1
 attrs==23.1.0
 backcall==0.2.0
 beautifulsoup4==4.12.3
-black==24.4.0
+black==24.4.1
 certifi==2024.2.2
 cffi==1.15.1; implementation_name == "pypy"
 charset-normalizer==3.1.0
@@ -69,7 +69,7 @@ pyahocorasick==2.0.0
 pycparser==2.21; implementation_name == "pypy"
 pydantic==1.10.7
 pygments==2.15.1
-pymongo==4.6.3
+pymongo==4.7.0
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
