@@ -7,7 +7,7 @@ asttokens==2.2.1
 attrs==23.1.0
 backcall==0.2.0
 beautifulsoup4==4.12.3
-black==24.4.1
+black==24.4.2
 certifi==2024.2.2
 cffi==1.15.1; implementation_name == "pypy"
 charset-normalizer==3.1.0
@@ -60,7 +60,7 @@ pickleshare==0.7.5
 pillow==10.3.0
 platformdirs==3.5.0
 plotly==5.21.0
-pluggy==1.4.0
+pluggy==1.5.0
 prompt-toolkit==3.0.38
 psutil==5.9.5
 ptyprocess==0.7.0; sys_platform != "win32"
@@ -73,7 +73,7 @@ pymongo==4.7.0
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
-pytest==8.1.1
+pytest==8.2.0
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 pytz==2023.3
