@@ -93,7 +93,7 @@ starlette==0.37.2
 tenacity==8.2.2
 tldextract==5.1.2
 tornado==6.4
-tqdm==4.66.2
+tqdm==4.66.3
 traitlets==5.9.0
 typing-extensions==4.8.0
 tzdata==2023.3
