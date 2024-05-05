@@ -39,8 +39,9 @@ def claims_nationality_distribution():
     countries_cnt = defaultdict(int)
     for sig in ifcn_signatories:
         domain = sig["domain"]
-        country = sig["original"]["country"]
-        countries_cnt[country] += len(urls_by_domain[domain])
+        country = sig["original"].get("country")
+        if country:
+            countries_cnt[country] += len(urls_by_domain[domain])
     utils.write_json_with_path(countries_cnt, data_path, "fact_checks_by_country.json")
 
     # create nice plot (requires plotly installed)
