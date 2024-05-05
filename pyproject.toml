@@ -14,7 +14,7 @@ dependencies = [
     "pymongo",
     "tldextract",
     "beautifulsoup4",
-    "lxml",
+    "lxml==5.1.0",    # this is the latest version that works with extruct
     "fastapi",
     "uvicorn",
     "dateparser",
