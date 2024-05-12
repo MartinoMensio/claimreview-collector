@@ -79,7 +79,7 @@ pyahocorasick==2.0.0
 pycparser==2.21; implementation_name == "pypy"
 pydantic==1.10.7
 pygments==2.15.1
-pymongo==4.7.1
+pymongo==4.7.2
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
