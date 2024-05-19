@@ -83,7 +83,7 @@ pymongo==4.7.2
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
-pytest==8.2.0
+pytest==8.2.1
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 python-multipart==0.0.9
