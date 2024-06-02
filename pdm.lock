@@ -101,12 +101,12 @@ files = [
 
 [[package]]
 name = "certifi"
-version = "2024.2.2"
+version = "2024.6.2"
 requires_python = ">=3.6"
 summary = "Python package for providing Mozilla's CA Bundle."
 files = [
-    {file = "certifi-2024.2.2-py3-none-any.whl", hash = "sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1"},
-    {file = "certifi-2024.2.2.tar.gz", hash = "sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f"},
+    {file = "certifi-2024.6.2-py3-none-any.whl", hash = "sha256:ddc6c8ce995e6987e7faf5e3f1b02b302836a0e5d98ece18392cb1a36c72ad56"},
+    {file = "certifi-2024.6.2.tar.gz", hash = "sha256:3cd43f1c6fa7dedc5899d69d3ad0398fd018ad1a17fba83ddaf78aa46c747516"},
 ]
 
 [[package]]
@@ -314,21 +314,22 @@ files = [
 
 [[package]]
 name = "extruct"
-version = "0.16.0"
+version = "0.17.0"
+requires_python = ">=3.8"
 summary = "Extract embedded metadata from HTML markup"
 dependencies = [
     "html-text>=0.5.1",
     "jstyleson",
     "lxml",
+    "lxml-html-clean",
     "mf2py",
     "pyrdfa3",
-    "rdflib>=6.0.0; python_version >= \"3.7\"",
-    "six",
+    "rdflib>=6.0.0",
     "w3lib",
 ]
 files = [
-    {file = "extruct-0.16.0-py2.py3-none-any.whl", hash = "sha256:2499ea9e7d22744745ca708acee9542a4aa231871620c4f65f869a1286e64aa8"},
-    {file = "extruct-0.16.0.tar.gz", hash = "sha256:d09cb3d86d149a276b277b3bd45b2b867ef3ec78bed9cd58ee0f2ae01ae670c4"},
+    {file = "extruct-0.17.0-py2.py3-none-any.whl", hash = "sha256:5f1d8e307fbb0c41f64ce486ddfaf16dc67e4b8f6e9570c57b123409ee37a307"},
+    {file = "extruct-0.17.0.tar.gz", hash = "sha256:a94c0be5b5fd95a8370204ecc02687bd27845d536055d8d1c69a0a30da0420c7"},
 ]
 
 [[package]]
@@ -606,48 +607,53 @@ files = [
 
 [[package]]
 name = "jellyfish"
-version = "1.0.3"
+version = "1.0.4"
 requires_python = ">=3.7"
 summary = "Approximate and phonetic matching of strings."
 files = [
-    {file = "jellyfish-1.0.3-cp311-cp311-macosx_10_7_x86_64.whl", hash = "sha256:06d75c438a735a689986ba6a199daa60da30515dd99696b08c10c800b08a8725"},
-    {file = "jellyfish-1.0.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:abd8388161df3ec6469b7b6fdad1066efb3958d885b7390ed105824c7e4ac68f"},
-    {file = "jellyfish-1.0.3-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:61f0317789d139456c678f7a68a93130d3c0227e76d200cbeedf156719747d8f"},
-    {file = "jellyfish-1.0.3-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:553f195f2d24702b8586c6bd73a938c028d417f58ca4aaf735d827db7e21e827"},
-    {file = "jellyfish-1.0.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5aea474cf64998eb102d622944fde3d9198b17a2ec36ed1cae34fdb1887015fb"},
-    {file = "jellyfish-1.0.3-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:65e4256c44963337fcc63897f01f4a754bdc17e4d740bceb55c04ab94ca9c07e"},
-    {file = "jellyfish-1.0.3-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:0ad15b58b808c76082b19c606a7a32d4c2c92520bbcb3a5c637e36520248e18b"},
-    {file = "jellyfish-1.0.3-cp311-none-win32.whl", hash = "sha256:0a5fff421ec821d37ad316f1f8e7706c5868d662d1dadcdbefd38ba1df45152d"},
-    {file = "jellyfish-1.0.3-cp311-none-win_amd64.whl", hash = "sha256:c53895523a7a911621c4f46ffafb234ddbcd467a0e63782304c68652ba8dea41"},
-    {file = "jellyfish-1.0.3-cp312-cp312-macosx_10_7_x86_64.whl", hash = "sha256:7bf482b872dea6267fd486957bb018c69f11618130f0e2e2cd04a9dd64be32f5"},
-    {file = "jellyfish-1.0.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:e162ab1c140a6ceb44a7d13e53b94a0ad5f796a4b1389bb91dc6448f7cfecd73"},
-    {file = "jellyfish-1.0.3-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3ce7aeb268acecec02f8f863a8343641064cb83d3d2fc44f4b2ca9fb31a1395d"},
-    {file = "jellyfish-1.0.3-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:484051e6eaa55063e8683dca4336acff5d66c794b8517d569f4055e3df38a789"},
-    {file = "jellyfish-1.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a53b8636935f169bf928140ff09207c3cb24cbd76d87a1fd11785061cc7c57d3"},
-    {file = "jellyfish-1.0.3-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:cad69bc4174757abfc232c2741e3a6e08ad2050be9d84d91f58ff0936a8cce40"},
-    {file = "jellyfish-1.0.3-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:0271686a4e0cfa67a62ae151e71ef556df1b562373a29d107c3bff4f2308d3ec"},
-    {file = "jellyfish-1.0.3-cp312-none-win32.whl", hash = "sha256:9af1447ebff6e8429ccd09ae632becb5612a0ea6bd9eb3aa8c2069a5586b0455"},
-    {file = "jellyfish-1.0.3-cp312-none-win_amd64.whl", hash = "sha256:c5aa3b4775c9eb7c814eb0eab5632b5ff476fdfea2be83b10d40bb821e01aa05"},
-    {file = "jellyfish-1.0.3-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2f581d9b5b9e4f1967b980a31c584f01e62fc6ab24f94834a55d343bd438ccee"},
-    {file = "jellyfish-1.0.3-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:11f98c3041dbc80229916809b7a4aa9cc27142f385b6f334d9d8215b217fe87a"},
-    {file = "jellyfish-1.0.3-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:92e17def9f6a3f6d6e7bc49040907a969ab6c1acd5bbc5db92fd65662f509ee4"},
-    {file = "jellyfish-1.0.3-pp310-pypy310_pp73-musllinux_1_1_i686.whl", hash = "sha256:5b957602492ae611e052bc945693b91e9ab2bf1c11273c731f5ac718721d6e6e"},
-    {file = "jellyfish-1.0.3-pp310-pypy310_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:a2ce180fd087425e9a6f94979c84657cd91f331c3811b146c83605465d78130c"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-macosx_10_7_x86_64.whl", hash = "sha256:141665836bb227e6c7e16195b292c8e0624ad6ba48471984c7d5a593876ba16b"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-macosx_11_0_arm64.whl", hash = "sha256:48dd2b6165dae690d051a9b39f92cf37f8e583c7ac64c83718d07ba7dc68a7f8"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e164002d9171a3c1dc6e256a6ab7c3c61f9e0dcb5a1eec77846e664cc1b10e6d"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:80b0330071a52a33a1d816f7058798196d613916258565ee5f1cf9d1165c95bc"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:66ea8a7fe23f7794be55e36aac538c37ddb9cd21282779ac21afb06b280d6a96"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-musllinux_1_1_i686.whl", hash = "sha256:70d9bf2fec251dcfa96443ec6710e845ebdeabf254252090c2614843a56753dd"},
-    {file = "jellyfish-1.0.3-pp38-pypy38_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:9ffdec3137b4fbeadcf3ba49b75139e3271bd0fb3fa947ebb39c9d5a3af1db9e"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-macosx_10_7_x86_64.whl", hash = "sha256:bbfd54e277ee4c72c383b9feeb8e1596466a17299508864892d76ba6a41a8d03"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-macosx_11_0_arm64.whl", hash = "sha256:8b25acc9df837be60f72841a3c658bb74fdacb108631d67cb4c92eebf6bb2729"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:335f9798c5e7d03d1af748347d69cda740b71baf23a7f03275bf7b8b13d87fba"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:fafbc56ceaf88563aaf40b00c90b3a75d2d115a01082170091cab77fb14ca8d5"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8299663d497c0357b92023cf457b485d43d2e969da287f345ab128d145e9f73d"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-musllinux_1_1_i686.whl", hash = "sha256:9a52bbd1d71f6de4fd0f24e2673deffcd93289eea6b973887ebd5d45edc865c6"},
-    {file = "jellyfish-1.0.3-pp39-pypy39_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:d606654953309a37b2f0ceaa3bfb26eeecc50d05577a037ac1f55f96f963e4a2"},
-    {file = "jellyfish-1.0.3.tar.gz", hash = "sha256:ddb22b7155f208e088352283ee78cb4ef2d2067a76e148a8bb43d177f32b37d2"},
+    {file = "jellyfish-1.0.4-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:1561cd0d1687113a5b1e4c4f0e1ab373fbc851af0c9c769a486f94f9ede27cd5"},
+    {file = "jellyfish-1.0.4-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:0d60ab87c542659bd71ed952fbc9c4186293e49016dd92ca79156fee6574a17d"},
+    {file = "jellyfish-1.0.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6ceba547f96de1f58d29f87c816aab4ec02cbeb6606a48fcad1dcf35c1f06042"},
+    {file = "jellyfish-1.0.4-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:b1457d3de969f652d6396cb0329cae3f8d75e0851b335f106624bc991c63c80b"},
+    {file = "jellyfish-1.0.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:90384f8b4446a84682bb18051cdc17a069963fff1d0af03ccd2b044b62af6d44"},
+    {file = "jellyfish-1.0.4-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:896552560dcba125db074b980ccc17e123e9444593b272edb82254e4b30f0bd1"},
+    {file = "jellyfish-1.0.4-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:47b0914f375be24976f26ff1436f22dc9fa1ecf9513dbe7ebbee6af5f85409a2"},
+    {file = "jellyfish-1.0.4-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:1529a9f1627acffda79ab490ca3f67d35ee1e15c2d30b3f9f93be895b212c4c5"},
+    {file = "jellyfish-1.0.4-cp311-none-win32.whl", hash = "sha256:4a47daa243798db689f8b1f3e6c811032075fd434e2af9dfea35a1553152e34e"},
+    {file = "jellyfish-1.0.4-cp311-none-win_amd64.whl", hash = "sha256:1d42fdf67a34a346d906b0ab8d56db9cc68bf6497382650d4581ec0fc8eef342"},
+    {file = "jellyfish-1.0.4-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:81f68a8ba074ef3630fab6e635d542708c6e7b5c504a546257b796835b28a5d5"},
+    {file = "jellyfish-1.0.4-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:535a7e99c2b6d456b06d160c950379f18cb72effeb856069eae5d024e09b4afd"},
+    {file = "jellyfish-1.0.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:76b7936b69687d788aabb86875c0780d6a77dbac9d1738503b0091af744ff79b"},
+    {file = "jellyfish-1.0.4-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:015997043c3eecbf686a71838028180d885f0dc4f7e99daf7194e1787ecd5909"},
+    {file = "jellyfish-1.0.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:66c7c6113565bcd3771882ff1c6a31573ef3ce755f882e1bf27b233c44a24f35"},
+    {file = "jellyfish-1.0.4-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:069d406850c68a43513a4ddbbf4191e83a2b8fb08119d708086a21c2cf6c406e"},
+    {file = "jellyfish-1.0.4-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:642dde8453ae45235c377ad3ce6cc990bf90fe9c4222896ab3f0f6c5609089a4"},
+    {file = "jellyfish-1.0.4-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:967723d8a1321327b3d6e9eada2db95659ff27ab6de8bb8dc82eefe1ce993333"},
+    {file = "jellyfish-1.0.4-cp312-none-win32.whl", hash = "sha256:bd33becfa61956c8ebd12bcb7227d48156d7e4c289780bcccf06e55acde12bf6"},
+    {file = "jellyfish-1.0.4-cp312-none-win_amd64.whl", hash = "sha256:c3addb4eebadd7cd4f6cdbff55a4a28caf2448333131b20661d4ff342f53e8a4"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:89f6db50049492c49b622e8e8c04c5494d4c96c92f0ae573288eefb809d60d1f"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:f5af807b15db3c7d08c30911fbe82266ff1089f28ba5a682e87e3145943936cd"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:17c7822dcb9e70b682604941852f6bba78b047b60d41d2df0e6a75a5d2b1bb78"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-musllinux_1_1_aarch64.whl", hash = "sha256:f581b0184ce7a000f38941b2c81a4480b5fd52cdeb5672f9f682d9e3adb8db84"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-musllinux_1_1_i686.whl", hash = "sha256:f5bc5e05616155306756abe2afda23caefb766b59c849d88285f67bcdcf5a5bb"},
+    {file = "jellyfish-1.0.4-pp310-pypy310_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:4de7c4e7245a2fa9d24bb75dd66aaf77b3521b2377883af0b6008740024ce598"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-macosx_10_12_x86_64.whl", hash = "sha256:e94d594b4b4902a5278346852227f9be281a4aa61907ecd00091451bce8279be"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-macosx_11_0_arm64.whl", hash = "sha256:91dc251d02dee6686a1dc31a30a0ea7d8f49781556272b1044cb1a942db75a40"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:359aa8c0a55560bd0e6d17e2098b96428d91f066120a708ad889a729801a78b9"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:02525584cb1d09f3b5b784685a63ba6e889bce240acef12161d7a6f428ea6c2e"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e9f9d82531af35123632bd02a4394c8783a6f81d89b5c1711bd4c1a6c800a8dc"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-musllinux_1_1_aarch64.whl", hash = "sha256:c54255f79a5d00a8261c48e75b483bf1ba2aa87655bd69d4cff805eab758c0f4"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-musllinux_1_1_i686.whl", hash = "sha256:209ccfbc135d150f6af2db9d3c13764f690aa6196fb74ecffd5394c367ed4938"},
+    {file = "jellyfish-1.0.4-pp38-pypy38_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:3ee641c1c68e0458cac4b9c8c4432d535de1bdd66e8514e541939094622b55cc"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-macosx_10_12_x86_64.whl", hash = "sha256:d9552ac0478d3015f93161e7d7e1a388b3204fac2a1a22aaf30d67c3670eb6f2"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-macosx_11_0_arm64.whl", hash = "sha256:2cc0a11166cb1cea0700585de63fa46252a5efa46bc31bc4d869b71e3c666ded"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6285981622d31c11994f2abcd0d35ec7661cba842538e59bfb735fbedf7b6531"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:07e10f5ab014a626048ff7cd78a6a52c81845f89d94902371278c4be66d91909"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8eaa4f2cf78f34cfd41270968954b3bc1eed433b6e7d124786b8064021c110a5"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-musllinux_1_1_aarch64.whl", hash = "sha256:83e3c4b446da02926b382f8eb8b931e266927e82162adf4c57f0c55c2bf95b35"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-musllinux_1_1_i686.whl", hash = "sha256:d88f47c5c3d97f40b4aa42b83d7ca03707bd6bebd945c9532da6e25515bbeea4"},
+    {file = "jellyfish-1.0.4-pp39-pypy39_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:a4b717a510e64773c4f882b373d4aeda7d2b2b8ffae87c16a906426b7cd02d55"},
+    {file = "jellyfish-1.0.4.tar.gz", hash = "sha256:72aabb3bedd513cdd20712242fd51173b59972c0b146b7a0b9c6f32f1656293f"},
 ]
 
 [[package]]
@@ -767,6 +773,18 @@ files = [
     {file = "lxml-5.1.0-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5e53d7e6a98b64fe54775d23a7c669763451340c3d44ad5e3a3b48a1efbdc96f"},
     {file = "lxml-5.1.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:c3cd1fc1dc7c376c54440aeaaa0dcc803d2126732ff5c6b68ccd619f2e64be4f"},
     {file = "lxml-5.1.0.tar.gz", hash = "sha256:3eea6ed6e6c918e468e693c41ef07f3c3acc310b70ddd9cc72d9ef84bc9564ca"},
+]
+
+[[package]]
+name = "lxml-html-clean"
+version = "0.1.1"
+summary = "HTML cleaner from lxml project"
+dependencies = [
+    "lxml",
+]
+files = [
+    {file = "lxml_html_clean-0.1.1-py3-none-any.whl", hash = "sha256:58c04176593c9caf72ec92e033d2f38859e918b3eff0cc0f8051ad27dc2ab8ef"},
+    {file = "lxml_html_clean-0.1.1.tar.gz", hash = "sha256:8a644ed01dbbe132fabddb9467f077f6dad12a1d4f3a6a553e280f3815fa46df"},
 ]
 
 [[package]]
@@ -1450,7 +1468,7 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.2"
+version = "2.32.3"
 requires_python = ">=3.8"
 summary = "Python HTTP for Humans."
 dependencies = [
@@ -1460,8 +1478,8 @@ dependencies = [
     "urllib3<3,>=1.21.1",
 ]
 files = [
-    {file = "requests-2.32.2-py3-none-any.whl", hash = "sha256:fc06670dd0ed212426dfeb94fc1b983d917c4f9847c863f313c9dfaaffb7c23c"},
-    {file = "requests-2.32.2.tar.gz", hash = "sha256:dd951ff5ecf3e3b3aa26b40703ba77495dab41da839ae72ef3c8e5d8e2433289"},
+    {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
+    {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
 ]
 
 [[package]]
@@ -1750,7 +1768,7 @@ files = [
 
 [[package]]
 name = "uvicorn"
-version = "0.29.0"
+version = "0.30.1"
 requires_python = ">=3.8"
 summary = "The lightning-fast ASGI server."
 dependencies = [
@@ -1758,13 +1776,13 @@ dependencies = [
     "h11>=0.8",
 ]
 files = [
-    {file = "uvicorn-0.29.0-py3-none-any.whl", hash = "sha256:2c2aac7ff4f4365c206fd773a39bf4ebd1047c238f8b8268ad996829323473de"},
-    {file = "uvicorn-0.29.0.tar.gz", hash = "sha256:6a69214c0b6a087462412670b3ef21224fa48cae0e452b5883e8e8bdfdd11dd0"},
+    {file = "uvicorn-0.30.1-py3-none-any.whl", hash = "sha256:cd17daa7f3b9d7a24de3617820e634d0933b69eed8e33a516071174427238c81"},
+    {file = "uvicorn-0.30.1.tar.gz", hash = "sha256:d46cd8e0fd80240baffbcd9ec1012a712938754afcf81bce56c024c1656aece8"},
 ]
 
 [[package]]
 name = "uvicorn"
-version = "0.29.0"
+version = "0.30.1"
 extras = ["standard"]
 requires_python = ">=3.8"
 summary = "The lightning-fast ASGI server."
@@ -1773,14 +1791,14 @@ dependencies = [
     "httptools>=0.5.0",
     "python-dotenv>=0.13",
     "pyyaml>=5.1",
-    "uvicorn==0.29.0",
+    "uvicorn==0.30.1",
     "uvloop!=0.15.0,!=0.15.1,>=0.14.0; (sys_platform != \"cygwin\" and sys_platform != \"win32\") and platform_python_implementation != \"PyPy\"",
     "watchfiles>=0.13",
     "websockets>=10.4",
 ]
 files = [
-    {file = "uvicorn-0.29.0-py3-none-any.whl", hash = "sha256:2c2aac7ff4f4365c206fd773a39bf4ebd1047c238f8b8268ad996829323473de"},
-    {file = "uvicorn-0.29.0.tar.gz", hash = "sha256:6a69214c0b6a087462412670b3ef21224fa48cae0e452b5883e8e8bdfdd11dd0"},
+    {file = "uvicorn-0.30.1-py3-none-any.whl", hash = "sha256:cd17daa7f3b9d7a24de3617820e634d0933b69eed8e33a516071174427238c81"},
+    {file = "uvicorn-0.30.1.tar.gz", hash = "sha256:d46cd8e0fd80240baffbcd9ec1012a712938754afcf81bce56c024c1656aece8"},
 ]
 
 [[package]]
