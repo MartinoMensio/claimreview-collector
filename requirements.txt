@@ -80,11 +80,11 @@ pyahocorasick==2.0.0
 pycparser==2.21; implementation_name == "pypy"
 pydantic==1.10.7
 pygments==2.15.1
-pymongo==4.7.2
+pymongo==4.7.3
 pyparsing==3.0.9
 pyrdfa3==3.5.3
 pyrsistent==0.19.3
-pytest==8.2.1
+pytest==8.2.2
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 python-multipart==0.0.9
@@ -107,7 +107,7 @@ stack-data==0.6.2
 starlette==0.37.2
 tenacity==8.2.2
 tldextract==5.1.2
-tornado==6.4
+tornado==6.4.1
 tqdm==4.66.4
 traitlets==5.9.0
 typer==0.12.3
