@@ -230,7 +230,7 @@ def get_numeric_rating(claimreview):
     except Exception as e:
         print(claimreview["url"])
         print(reviewRating)
-        raise e
+        # raise e
     if simplified_label:
         # get the numerical score
         score = simplified_labels_scores[simplified_label]
@@ -726,6 +726,8 @@ _domain_parser_map = {
 def simplify_label(label):
     """maps from the fact-checker label to the coinform label"""
     # normalise string to lowercase and strip spaces around
+    if isinstance(label, list):
+        label = label[0]
     label = label.strip().lower()
     label = label.replace("fact crescendo rating: ", "")
     label = label.replace("fact crescendo rating - ", "")
