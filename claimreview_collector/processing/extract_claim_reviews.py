@@ -241,9 +241,7 @@ def extract_ifcn_claimreviews(domains=None, recollect=True, unshorten=True):
                     "reviews": [
                         {
                             "label": claimreview.get_coinform_label(cr),
-                            "original_label": cr.get("reviewRating", {}).get(
-                                "alternateName", ""
-                            ),
+                            "original_label": claimreview.get_textual_label(cr),
                             "review_rating": cr.get("reviewRating", {}),
                             "retrieved_by": cr.get("retrieved_by", None),
                             "date_published": cr["date_published"],
@@ -449,8 +447,7 @@ def analyse_mapping():
     domains_by_label = defaultdict(set)
     for r in reviews:
         for el in r["reviews"]:
-            original_label = claimreview.get_textual_label(el)
-            m[original_label] += 1
+            m[el["label"]][el["original_label"]] += 1
             domains_by_label[el["original_label"]].add(r["fact_checker"]["domain"])
     # for k, v in m.items():
     #     m[k] = list(v)
