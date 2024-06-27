@@ -245,10 +245,10 @@ def get_numeric_rating(claimreview):
 
     # first take the textual label
     try:
-        get_textual_label(claimreview)
+        scoreTxt = get_textual_label(claimreview)
     except Exception as e:
         print(reviewRating)
-        raise e
+        scoreTxt = None
     try:
         # map it to the coinform labels
         simplified_label = simplify_label(scoreTxt)
