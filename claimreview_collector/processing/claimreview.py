@@ -197,6 +197,35 @@ label_maps = {
     "partly right": "uncertain",
 }
 
+def get_textual_label(claimreview):
+    """takes a claimReviews and outputs a textual label"""
+    # take the reviewRating
+    reviewRating = claimreview.get("reviewRating", None)
+    if not reviewRating:
+        # sometimes reviewRating is inside "properties"
+        reviewRating = claimreview.get("properties", {}).get("reviewRating", None)
+    if not reviewRating:
+        # nothing to say
+        return None
+
+    if "properties" in reviewRating:
+        reviewRating = reviewRating["properties"]
+
+    # first take the textual label
+    try:
+        scoreTxt = reviewRating.get("alternateName", "") or reviewRating.get(
+            "properties", {}
+        ).get("alternateName", "")
+        if isinstance(scoreTxt, dict):
+            scoreTxt = scoreTxt["@value"]
+        if isinstance(scoreTxt, list):
+            scoreTxt = scoreTxt[0]
+    except Exception as e:
+        print("EXCEPTION: getting textual label", reviewRating)
+        print(e)
+        # raise e
+    return scoreTxt
+
 
 def get_numeric_rating(claimreview):
     """takes a claimReviews and outputs a score of truthfulness between [0;1] or None if not verifiable"""
@@ -216,13 +245,7 @@ def get_numeric_rating(claimreview):
 
     # first take the textual label
     try:
-        scoreTxt = reviewRating.get("alternateName", "") or reviewRating.get(
-            "properties", {}
-        ).get("alternateName", "")
-        if isinstance(scoreTxt, dict):
-            scoreTxt = scoreTxt["@value"]
-        if isinstance(scoreTxt, list):
-            scoreTxt = scoreTxt[0]
+        get_textual_label(claimreview)
     except Exception as e:
         print(reviewRating)
         raise e
