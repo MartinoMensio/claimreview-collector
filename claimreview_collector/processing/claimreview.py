@@ -221,6 +221,8 @@ def get_numeric_rating(claimreview):
         ).get("alternateName", "")
         if isinstance(scoreTxt, dict):
             scoreTxt = scoreTxt["@value"]
+        if isinstance(scoreTxt, list):
+            scoreTxt = scoreTxt[0]
     except Exception as e:
         print(reviewRating)
         raise e
@@ -726,8 +728,6 @@ _domain_parser_map = {
 def simplify_label(label):
     """maps from the fact-checker label to the coinform label"""
     # normalise string to lowercase and strip spaces around
-    if isinstance(label, list):
-        label = label[0]
     label = label.strip().lower()
     label = label.replace("fact crescendo rating: ", "")
     label = label.replace("fact crescendo rating - ", "")
