@@ -255,6 +255,7 @@ def get_numeric_rating(claimreview):
     except Exception as e:
         print(claimreview["url"])
         print(reviewRating)
+        simplified_label = None
         # raise e
     if simplified_label:
         # get the numerical score
