@@ -2,20 +2,19 @@
 Module that handles the processing of claimreviews
 """
 
-import json
-from typing import Optional
-import extruct
-import requests
-import re
-import os
-from bs4 import BeautifulSoup
-import flatten_json
-from tqdm import tqdm
 import html
+import json
+import os
+import re
+from typing import Optional
 
-from . import utils
-from . import unshortener
-from . import cache_manager
+import extruct
+import flatten_json
+import requests
+from bs4 import BeautifulSoup
+from tqdm import tqdm
+
+from . import cache_manager, unshortener, utils
 
 # endpoint for dirtyjson, can be set with DIRTYJSON_REST_ENDPOINT env variable
 dirtyjson_rest_endpoint = os.environ.get(
@@ -197,6 +196,7 @@ label_maps = {
     "partly right": "uncertain",
 }
 
+
 def get_textual_label(claimreview):
     """takes a claimReviews and outputs a textual label"""
     # take the reviewRating
@@ -213,17 +213,22 @@ def get_textual_label(claimreview):
 
     # first take the textual label
     try:
-        scoreTxt = reviewRating.get("alternateName", "") or reviewRating.get(
-            "properties", {}
-        ).get("alternateName", "")
-        if isinstance(scoreTxt, dict):
-            scoreTxt = scoreTxt["@value"]
-        if isinstance(scoreTxt, list):
-            scoreTxt = scoreTxt[0]
+        if isinstance(
+            reviewRating, str
+        ):  # Fix for: 'str' object has no attribute 'get'
+            scoreTxt = reviewRating
+        else:
+            scoreTxt = reviewRating.get("alternateName", "") or reviewRating.get(
+                "properties", {}
+            ).get("alternateName", "")
+            if isinstance(scoreTxt, dict):
+                scoreTxt = scoreTxt["@value"]
+            if isinstance(scoreTxt, list):
+                scoreTxt = scoreTxt[0]
     except Exception as e:
         print("EXCEPTION: getting textual label", reviewRating)
         print(e)
-        # raise e
+        raise e  # The error needs to be raised otherwise it fails as scoreTxt is undefined.
     return scoreTxt
 
 
@@ -461,8 +466,8 @@ def retrieve_claimreview(url: str) -> dict:
             url_fixed,
             verify=verify,
             headers={
-                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36",
-                "Cookie": "wp_gdpr=1|1;",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+                # "Cookie": "wp_gdpr=1|1;", # Cookie does not work with AFP and returns 403.
             },
         )
     # page_text = fix_page(page_text)
