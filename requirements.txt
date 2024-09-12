@@ -68,8 +68,8 @@ ptyprocess==0.7.0; sys_platform != "win32" and sys_platform != "emscripten"
 pure-eval==0.2.3
 pyahocorasick==2.1.0
 pycparser==2.22; implementation_name == "pypy"
-pydantic==2.9.1
-pydantic-core==2.23.3
+pydantic==2.7.4
+pydantic-core==2.18.4
 pygments==2.18.0
 pymongo==4.8.0
 pyparsing==3.1.4
