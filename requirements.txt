@@ -24,7 +24,7 @@ dnspython==2.6.1
 docopt==0.6.2
 executing==2.1.0
 extruct==0.18.0
-fastapi==0.115.5
+fastapi==0.115.6
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
@@ -38,7 +38,7 @@ ipykernel==6.29.5
 ipython==8.27.0
 isodate==0.6.1
 jedi==0.19.1
-jellyfish==1.1.0
+jellyfish==1.1.2
 jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
 jstyleson==0.0.2
