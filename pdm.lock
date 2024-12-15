@@ -129,13 +129,13 @@ files = [
 
 [[package]]
 name = "certifi"
-version = "2024.8.30"
+version = "2024.12.14"
 requires_python = ">=3.6"
 summary = "Python package for providing Mozilla's CA Bundle."
 groups = ["default", "test"]
 files = [
-    {file = "certifi-2024.8.30-py3-none-any.whl", hash = "sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8"},
-    {file = "certifi-2024.8.30.tar.gz", hash = "sha256:bec941d2aa8195e248a60b31ff9f0558284cf01a52591ceda73ea9afffd69fd9"},
+    {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
+    {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
 ]
 
 [[package]]
@@ -628,36 +628,41 @@ files = [
 
 [[package]]
 name = "jellyfish"
-version = "1.1.2"
-requires_python = ">=3.7"
+version = "1.1.3"
+requires_python = ">=3.8"
 summary = "Approximate and phonetic matching of strings."
 groups = ["default"]
 files = [
-    {file = "jellyfish-1.1.2-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:449e92ebe6a03eeecc326c6968481042075681cdfd4e96897bcf5defada000be"},
-    {file = "jellyfish-1.1.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:1b6d55c7c50c7fccc19f90203045ee83b0283a89ad42dc5b5f76a96b78b56d55"},
-    {file = "jellyfish-1.1.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3264af25a258bdb4cc5705d151348c80974aa2b0472ccbb58f19828f4b5f71ae"},
-    {file = "jellyfish-1.1.2-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:b5aaeb270935f2c99c762c4291ca71d1ecf3e04d5b422087c14b8651896055c7"},
-    {file = "jellyfish-1.1.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:31994eea7a301543508755d366f11e0c06223fd4e6a5a2a49c8c08c6bdf358e0"},
-    {file = "jellyfish-1.1.2-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:09f8727dd100002760748edcdb052fbadefad1bb5bac8b3ace83b9d7781d07ec"},
-    {file = "jellyfish-1.1.2-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:8c541e9be9bfe44c771e3cdb276ab1ab6149c882ef70f7340ed594a5e4da0564"},
-    {file = "jellyfish-1.1.2-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:8113c343c0e6d76d9392c15ffe92cd74ebeb6934522fb6cf6e357ecf512a0876"},
-    {file = "jellyfish-1.1.2-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:1d09d47cd91e2c4b118fbc8a84fb4df65846fa6df28820c4dc8783e9b2066da5"},
-    {file = "jellyfish-1.1.2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:01cb9898b5d2f06c6bc39c745e6ef3d75156eba1684f3a130bfe6720efca05f1"},
-    {file = "jellyfish-1.1.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c0b449029d4af57000a92696812a497524c47c877a59242007459221ecf14545"},
-    {file = "jellyfish-1.1.2-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:f0ca4cfc6432af0a0f621be1daa7d54126ae054a74aee556a6bdc6dc4e596020"},
-    {file = "jellyfish-1.1.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8c9b8587cc820c9cb6a746bad8e45ad1f9566ce16f9acf3925e0b9edee39c128"},
-    {file = "jellyfish-1.1.2-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:b59263ce1b08a00ee511be3afd34d0daac3108416fa3567509fb609d0bd641c1"},
-    {file = "jellyfish-1.1.2-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:7045a3a8f0a2c3a66b29b0ce7a67f5fe38022925056ca009db4f16bece0c324c"},
-    {file = "jellyfish-1.1.2-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:b42a7acaf9c6e222c8131429dea0e86fa3b9c762aa2bfd0b6622cc87134a047e"},
-    {file = "jellyfish-1.1.2-cp313-cp313-macosx_10_12_x86_64.whl", hash = "sha256:30f8389e4d5990a0f88ff7b2a9dee547bb5992549f29763a84d367af7c91cb4b"},
-    {file = "jellyfish-1.1.2-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:440fe02572443125c443ddde9b88e0339f8e63d87ed7deac66b7cec458584081"},
-    {file = "jellyfish-1.1.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:93b4d545f0b5c6aac2bad8e961515b98899e9567d4a6b2a171136fe82ca8c0ae"},
-    {file = "jellyfish-1.1.2-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:2bc49b540c4fc19b8f20f3227a69f122bb2aefa7bed02a40e838d5c0854f1cbc"},
-    {file = "jellyfish-1.1.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bddeb1fbcdccebcf27848ddbf71512fc3afc7eca56e5f4b979e615e01c8125d1"},
-    {file = "jellyfish-1.1.2-cp313-cp313-musllinux_1_1_aarch64.whl", hash = "sha256:2ad60b3fb67cfac2f39044381965c60f738056d993bb96c2c4f7061470c67993"},
-    {file = "jellyfish-1.1.2-cp313-cp313-musllinux_1_1_i686.whl", hash = "sha256:b4e2461bc4b3c49697519d6a2f97568537e8253e55d0dde5b6b6ed3bf6129bf5"},
-    {file = "jellyfish-1.1.2-cp313-cp313-musllinux_1_1_x86_64.whl", hash = "sha256:e193653526f4f62a8e1fb30d4533700f50ab777362afbfe38feb7b61acc66e2f"},
-    {file = "jellyfish-1.1.2.tar.gz", hash = "sha256:a31de6ce7385746df3b65aa3401c30d0881b5abb518cff99090be7ef96129333"},
+    {file = "jellyfish-1.1.3-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:429e82b6527a0743358e69f10f7a913ec7c61d26bf21fe2cc2974b63dddb3384"},
+    {file = "jellyfish-1.1.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d2f1a39d2781713dea8e7402a2085c8a8f0f1b7872daf1ebfd84fde80130a20e"},
+    {file = "jellyfish-1.1.3-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:630618c5a36f40ef43b8e18cef98f40b2ec60661cb45308eb35a3950e1faaf58"},
+    {file = "jellyfish-1.1.3-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:7b1094274c11bfede3284e960027d2534145335e51795e043b0d8fd71c91736a"},
+    {file = "jellyfish-1.1.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5398d872fb1588ac0fbf03f4e2137aeac15798b8e7e0f6db38b791360d5e259c"},
+    {file = "jellyfish-1.1.3-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:db18014834731d17490d8a27be19e75ae2e3ff7d5f40792b989e915b0c2bda9d"},
+    {file = "jellyfish-1.1.3-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:08b6be37d5e99ba6e82cb45ca6e90d1fc10a6f3d7df7d3c481d1fedae8057c39"},
+    {file = "jellyfish-1.1.3-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:bcd4ada313160333f5a7e482baa3645fd44894db8034396c46e13f729cce327f"},
+    {file = "jellyfish-1.1.3-cp311-cp311-win32.whl", hash = "sha256:388abeebce8e85a2671b14d3e6fd257db470c058a446e54273495f04ac3d8b8e"},
+    {file = "jellyfish-1.1.3-cp311-cp311-win_amd64.whl", hash = "sha256:41410d38726eac341943ff9b7505d58dbf341b50d1de5f6067323fa72b8fc13d"},
+    {file = "jellyfish-1.1.3-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:89d5ccaf5adade69a4f80859f0fa13810064fe35aed57f42b210f2b30c3fbb6a"},
+    {file = "jellyfish-1.1.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:29aa2be83c3346e1cc8d84b765ac4f2d4e7830e8ddb8369caf7c8e7d4c2c58fe"},
+    {file = "jellyfish-1.1.3-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:38902e5b5a5015a5add877b9317bc8aeccee4590fbd955016a43f9147d9a1afd"},
+    {file = "jellyfish-1.1.3-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:b1c2c11ba786d1dbf5670994ba2aa0cef09a61955e298a5acb1ab3ef9e7a88d3"},
+    {file = "jellyfish-1.1.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b098603b3883cc9f38f121c872ba0cc4600d9f92020c5ddcb8f4fe84d941aa5f"},
+    {file = "jellyfish-1.1.3-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:cc3460dc0470ba277c87e6fdd3febcf052219253de748b27150884574e7179ec"},
+    {file = "jellyfish-1.1.3-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:7847238733fe9b62894270a8adeb50b0f28f79bef2ff78f8d39cfc161507d584"},
+    {file = "jellyfish-1.1.3-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:9d07f99fa95624049390eac38604edfe48aa2da7fbec96ce74a7dfaa97faf2bd"},
+    {file = "jellyfish-1.1.3-cp312-cp312-win32.whl", hash = "sha256:c98eec90d704c34f5309f65793d84edd029bc2b641dd03c3b90c2cfe00c22a4e"},
+    {file = "jellyfish-1.1.3-cp312-cp312-win_amd64.whl", hash = "sha256:c8c70b1cc92ee15031db16db0d2ca7d5841744f5f626a35c29c3dd7b4ea7002b"},
+    {file = "jellyfish-1.1.3-cp313-cp313-macosx_10_12_x86_64.whl", hash = "sha256:a1907b0382b45650a221fd6cc85afed9f75f08063e9b5c3a7a616bf95fef91be"},
+    {file = "jellyfish-1.1.3-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:7c0946909f84a1059d241fcee01032840e862746547390bfb0a4cf2f59a387ee"},
+    {file = "jellyfish-1.1.3-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2105dfb2387a203f77a49cf12d38b4157809377c3a069d8c419c3d331c181816"},
+    {file = "jellyfish-1.1.3-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:f852aa6753f5fbc6044e7d961df8015adbe68a5dd0d65ebef8c2ed24c0c35d13"},
+    {file = "jellyfish-1.1.3-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3afb5e8f327675be57f2121fb7442305c919a07317dc35fa74f6d05fe6f221e7"},
+    {file = "jellyfish-1.1.3-cp313-cp313-musllinux_1_1_aarch64.whl", hash = "sha256:93c16994e01b772d3d8049c68c5c937f7a810b39a851c15b528379f0258c54d9"},
+    {file = "jellyfish-1.1.3-cp313-cp313-musllinux_1_1_i686.whl", hash = "sha256:e6d61f1dac3d3b2121b70159a4b2cbcff92834d006e69961cf9bbb1841461d00"},
+    {file = "jellyfish-1.1.3-cp313-cp313-musllinux_1_1_x86_64.whl", hash = "sha256:5ad5e8156b58caf2e80020ac54a84eb4066ff082362b27cd7af7fa732a7181d6"},
+    {file = "jellyfish-1.1.3-cp313-cp313-win_amd64.whl", hash = "sha256:2113195a48ce8cb99d2bb2c6d9b119f58025dde1d727101518e7150c093a66da"},
+    {file = "jellyfish-1.1.3.tar.gz", hash = "sha256:650ba1ddabd716499f85fae0e1f3fa3e6532a69b68985d9294e86a1e04f08f9f"},
 ]
 
 [[package]]
@@ -1807,8 +1812,8 @@ files = [
 
 [[package]]
 name = "uvicorn"
-version = "0.32.1"
-requires_python = ">=3.8"
+version = "0.34.0"
+requires_python = ">=3.9"
 summary = "The lightning-fast ASGI server."
 groups = ["default"]
 dependencies = [
@@ -1817,8 +1822,8 @@ dependencies = [
     "typing-extensions>=4.0; python_version < \"3.11\"",
 ]
 files = [
-    {file = "uvicorn-0.32.1-py3-none-any.whl", hash = "sha256:82ad92fd58da0d12af7482ecdb5f2470a04c9c9a53ced65b9bbb4a205377602e"},
-    {file = "uvicorn-0.32.1.tar.gz", hash = "sha256:ee9519c246a72b1c084cea8d3b44ed6026e78a4a309cbedae9c37e4cb9fbb175"},
+    {file = "uvicorn-0.34.0-py3-none-any.whl", hash = "sha256:023dc038422502fa28a09c7a30bf2b6991512da7dcdb8fd35fe57cfc154126f4"},
+    {file = "uvicorn-0.34.0.tar.gz", hash = "sha256:404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9"},
 ]
 
 [[package]]
