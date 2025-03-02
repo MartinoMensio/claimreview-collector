@@ -24,7 +24,7 @@ dnspython==2.6.1
 docopt==0.6.2
 executing==2.1.0
 extruct==0.18.0
-fastapi==0.115.8
+fastapi==0.115.11
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
@@ -75,7 +75,7 @@ pygments==2.18.0
 pymongo==4.11.1
 pyparsing==3.1.4
 pyrdfa3==3.6.4
-pytest==8.3.4
+pytest==8.3.5
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.2
