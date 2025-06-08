@@ -55,7 +55,7 @@ nbformat==5.10.4
 nest-asyncio==1.6.0
 numpy==2.1.1; python_version == "3.11" or python_version >= "3.12"
 packaging==24.1
-pandas==2.2.3
+pandas==2.3.0
 parso==0.8.4
 pathspec==0.12.1
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
@@ -75,7 +75,7 @@ pygments==2.18.0
 pymongo==4.13.0
 pyparsing==3.1.4
 pyrdfa3==3.6.4
-pytest==8.3.5
+pytest==8.4.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 pytz==2024.2
