@@ -17,14 +17,14 @@ comm==0.2.2
 coverage==6.5.0
 coveralls==3.3.1
 cssselect==1.2.0
-dateparser==1.2.1
+dateparser==1.2.2
 debugpy==1.8.5
 decorator==5.1.1
 dnspython==2.6.1
 docopt==0.6.2
 executing==2.1.0
 extruct==0.18.0
-fastapi==0.115.13
+fastapi==0.115.14
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
@@ -61,7 +61,7 @@ pathspec==0.12.1
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==11.2.1
 platformdirs==4.3.2
-plotly==6.1.2
+plotly==6.2.0
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
@@ -77,7 +77,7 @@ pyparsing==3.1.4
 pyrdfa3==3.6.4
 pytest==8.4.1
 python-dateutil==2.9.0.post0
-python-dotenv==1.1.0
+python-dotenv==1.1.1
 pytz==2024.2
 pywin32==306; sys_platform == "win32" and platform_python_implementation != "PyPy"
 pyzmq==26.2.0
@@ -102,7 +102,7 @@ tzdata==2024.1
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.5.0
-uvicorn==0.34.3
+uvicorn==0.35.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
