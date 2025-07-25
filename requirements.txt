@@ -34,7 +34,7 @@ html-text==0.6.2
 html5lib==1.1
 idna==3.8
 iniconfig==2.0.0
-ipykernel==6.29.5
+ipykernel==6.30.0
 ipython==8.27.0
 isodate==0.6.1
 jedi==0.19.1
