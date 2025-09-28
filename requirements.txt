@@ -6,7 +6,7 @@ anyio==4.4.0
 appnope==0.1.4; platform_system == "Darwin"
 asttokens==2.4.1
 attrs==24.2.0
-beautifulsoup4==4.13.5
+beautifulsoup4==4.14.0
 black==25.9.0
 certifi==2025.8.3
 cffi==1.17.1; implementation_name == "pypy"
@@ -103,7 +103,7 @@ tzdata==2024.1
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.5.0
-uvicorn==0.36.0
+uvicorn==0.37.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
