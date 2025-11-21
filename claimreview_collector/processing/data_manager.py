@@ -29,6 +29,8 @@ folder = "data"
 index_path = f"{folder}/index.json"
 latest_data_path = f"{folder}/latest"
 PUBLISH_GITHUB = os.environ.get("PUBLISH_GITHUB", False)
+CREDIBILITY_BACKEND = os.environ.get("CREDIBILITY_BACKEND", None)
+print("CREDIBILITY_BACKEND", CREDIBILITY_BACKEND)
 
 random_misinforming_samples = {
     "misinforming_items": None,
@@ -350,6 +352,11 @@ def update_data():
     except Exception as e:
         print(e)
 
+    try:
+        update_credibility_origins()
+    except Exception as e:
+        print(e)
+
     return result_stats
 
 
@@ -359,6 +366,12 @@ def notify_light_instance(stats):
     print('notify_light_instance', res.status_code, res.text)
     res.raise_for_status()
 
+def update_credibility_origins():
+    """notify light instance to update credibility fact-checkers"""
+    if CREDIBILITY_BACKEND:
+        res = requests.post(f"{CREDIBILITY_BACKEND}/origins")
+        print('update_credibility_origins', res.status_code, res.text)
+        res.raise_for_status()
 
 def make_archive(source, destination):
     # http://www.seanbehan.com/how-to-use-python-shutil-make_archive-to-zip-up-a-directory-recursively-including-the-root-folder/
