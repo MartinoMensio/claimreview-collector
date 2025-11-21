@@ -21,7 +21,7 @@ from ...processing import claimreview, database_builder
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = "datacommons_research_dataset"
-        self.homepage = "https://www.datacommons.org/factcheck/download#research-data"
+        self.homepage = "https://datacommons.org/factcheck/download#research-data"
         self.name = "DataCommons - Research Dataset"
         self.description = 'The research dataset is a compilation of historical structured markup of fact checks, which follow the schema.org ClaimReview schema, from select fact checking articles on the web. The field "url" points to the original fact checking articles. The content of the fact checking articles is not part of the download file, and it resides on the publishers\' sites.'
         ScraperBase.__init__(self)
@@ -37,7 +37,7 @@ class Scraper(ScraperBase):
 
 def download_latest_release():
     # find the latest release
-    base_link = "https://www.datacommons.org"
+    base_link = "https://datacommons.org"
     response = requests.get(f"{base_link}/factcheck/download")
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "lxml")

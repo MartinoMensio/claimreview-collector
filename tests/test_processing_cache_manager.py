@@ -1,6 +1,6 @@
 from claimreview_collector.processing import cache_manager
 
-url = "https://www.datacommons.org/factcheck/download#fcmt-data"
+url = "https://datacommons.org/factcheck/download#fcmt-data"
 bitly_url = "https://bit.ly/test-bitly-datacommons"
 large_url = (
     "https://storage.googleapis.com/datacommons-feeds/factcheck/latest/data.json"

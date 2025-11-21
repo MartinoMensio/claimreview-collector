@@ -15,7 +15,7 @@ latest_feed = "claimreview/latest/data.json"
 class Scraper(ScraperBase):
     def __init__(self):
         self.id = "datacommons_feeds"
-        self.homepage = "https://www.datacommons.org/factcheck/download#fcmt-data"
+        self.homepage = "https://datacommons.org/factcheck/download#fcmt-data"
         self.name = "DataCommons - Fact Check Markup Tool Data Feed"
         self.description = "This is a data feed of ClaimReview markups created via the Google Fact Check Markup Tool and the new ClaimReview Read/Write API. The data in the feed also follows the schema.org ClaimReview standard, namely the same schema as the data in the historical research dataset. The feed itself is in DataFeed format."
         ScraperBase.__init__(self)

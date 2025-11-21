@@ -146,7 +146,7 @@ Requires env variable `GOOGLE_FACTCHECK_EXPLORER_COOKIE` in the `.env` file. Jus
 
 type: aggregator of ClaimReview items
 
-url: https://www.datacommons.org/factcheck/download
+url: https://datacommons.org/factcheck/download
 
 size: 10564 items
 
