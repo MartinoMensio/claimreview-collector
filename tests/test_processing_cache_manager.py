@@ -1,7 +1,8 @@
 from claimreview_collector.processing import cache_manager
 
 url = "https://datacommons.org/factcheck/download#fcmt-data"
-bitly_url = "https://bit.ly/test-bitly-datacommons"
+#bitly_url = "https://bit.ly/test-bitly-datacommons"
+tinyurl_url = "https://tinyurl.com/test-tinyurl-datacommons"
 large_url = (
     "https://storage.googleapis.com/datacommons-feeds/factcheck/latest/data.json"
 )
@@ -14,7 +15,7 @@ def test_get():
 
 
 def test_get_with_unshorten():
-    page = cache_manager.get(bitly_url, unshorten=True, force_refresh=True)
+    page = cache_manager.get(tinyurl_url, unshorten=True, force_refresh=True)
     assert "DataCommons.org" in page
     assert "ClaimReview" in page
 
