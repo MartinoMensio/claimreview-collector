@@ -25,7 +25,7 @@ dnspython==2.6.1
 docopt==0.6.2
 executing==2.1.0
 extruct==0.18.0
-fastapi==0.121.2
+fastapi==0.121.3
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
@@ -62,7 +62,7 @@ pathspec==0.12.1
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==12.0.0
 platformdirs==4.3.2
-plotly==6.4.0
+plotly==6.5.0
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
