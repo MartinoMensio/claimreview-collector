@@ -94,17 +94,17 @@ files = [
 
 [[package]]
 name = "beautifulsoup4"
-version = "4.14.2"
+version = "4.14.3"
 requires_python = ">=3.7.0"
 summary = "Screen-scraping library"
 groups = ["default"]
 dependencies = [
-    "soupsieve>1.2",
+    "soupsieve>=1.6.1",
     "typing-extensions>=4.0.0",
 ]
 files = [
-    {file = "beautifulsoup4-4.14.2-py3-none-any.whl", hash = "sha256:5ef6fa3a8cbece8488d66985560f97ed091e22bbc4e9c2338508a9d5de6d4515"},
-    {file = "beautifulsoup4-4.14.2.tar.gz", hash = "sha256:2a98ab9f944a11acee9cc848508ec28d9228abfd522ef0fad6a02a72e0ded69e"},
+    {file = "beautifulsoup4-4.14.3-py3-none-any.whl", hash = "sha256:0918bfe44902e6ad8d57732ba310582e98da931428d231a5ecb9e7c703a735bb"},
+    {file = "beautifulsoup4-4.14.3.tar.gz", hash = "sha256:6292b1c5186d356bba669ef9f7f051757099565ad9ada5dd630bd9de5fa7fb86"},
 ]
 
 [[package]]
@@ -596,7 +596,7 @@ files = [
 
 [[package]]
 name = "fastapi"
-version = "0.121.3"
+version = "0.123.0"
 requires_python = ">=3.8"
 summary = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 groups = ["default"]
@@ -607,8 +607,8 @@ dependencies = [
     "typing-extensions>=4.8.0",
 ]
 files = [
-    {file = "fastapi-0.121.3-py3-none-any.whl", hash = "sha256:0c78fc87587fcd910ca1bbf5bc8ba37b80e119b388a7206b39f0ecc95ebf53e9"},
-    {file = "fastapi-0.121.3.tar.gz", hash = "sha256:0055bc24fe53e56a40e9e0ad1ae2baa81622c406e548e501e717634e2dfbc40b"},
+    {file = "fastapi-0.123.0-py3-none-any.whl", hash = "sha256:cb56e69e874afa897bd3416c8a3dbfdae1730d0a308d4c63303f3f4b44136ae4"},
+    {file = "fastapi-0.123.0.tar.gz", hash = "sha256:1410678b3c44418245eec85088b15140d894074b86e66061017e2b492c09b138"},
 ]
 
 [[package]]
@@ -647,7 +647,7 @@ files = [
 
 [[package]]
 name = "goose3"
-version = "3.1.20"
+version = "3.1.21"
 requires_python = ">=3.9"
 summary = "Html Content / Article Extractor, web scrapping for Python3"
 groups = ["default"]
@@ -662,8 +662,8 @@ dependencies = [
     "requests",
 ]
 files = [
-    {file = "goose3-3.1.20-py3-none-any.whl", hash = "sha256:cde236884a4056d54a0d83a1ed0e10c709e6ae7a66ca7cb61c3d5791507b1b45"},
-    {file = "goose3-3.1.20.tar.gz", hash = "sha256:c8b01ec63a1ac081a60836dc43f4ec075a89032ef707af4b7154b8b65641ec91"},
+    {file = "goose3-3.1.21-py3-none-any.whl", hash = "sha256:16204171caef2e243e49e2954baa88059f46575ad5d4f146e804fe229911f7ad"},
+    {file = "goose3-3.1.21.tar.gz", hash = "sha256:834ec223ec2c4ceb8b9349658eb3f2c4ee85ba5a8272b73bc12abcf7bf580095"},
 ]
 
 [[package]]
