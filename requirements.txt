@@ -62,7 +62,7 @@ pathspec==0.12.1
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==12.1.0
 platformdirs==4.3.2
-plotly==6.5.0
+plotly==6.5.1
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
@@ -73,7 +73,7 @@ pycparser==2.22; implementation_name == "pypy"
 pydantic==2.7.4
 pydantic-core==2.18.4
 pygments==2.18.0
-pymongo==4.15.5
+pymongo==4.16.0
 pyparsing==3.1.4
 pyrdfa3==3.6.4
 pytest==9.0.2
@@ -103,7 +103,7 @@ typing-extensions==4.12.2
 tzdata==2024.1
 tzlocal==5.2
 unidecode==1.4.0
-urllib3==2.6.2
+urllib3==2.6.3
 uvicorn==0.40.0
 w3lib==2.2.1
 wcwidth==0.2.13
