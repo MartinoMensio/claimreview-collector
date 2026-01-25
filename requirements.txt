@@ -54,9 +54,9 @@ mypy-extensions==1.0.0
 narwhals==1.24.2
 nbformat==5.10.4
 nest-asyncio==1.6.0
-numpy==2.1.1; python_version == "3.11" or python_version >= "3.12"
+numpy==2.4.1
 packaging==24.1
-pandas==2.3.3
+pandas==3.0.0
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
@@ -100,7 +100,7 @@ tornado==6.5.4
 tqdm==4.67.1
 traitlets==5.14.3
 typing-extensions==4.12.2
-tzdata==2024.1
+tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.6.3
