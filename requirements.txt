@@ -97,10 +97,10 @@ stack-data==0.6.3
 starlette==0.41.2
 tldextract==5.3.1
 tornado==6.5.4
-tqdm==4.67.1
+tqdm==4.67.2
 traitlets==5.14.3
 typing-extensions==4.12.2
-tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.6.3
