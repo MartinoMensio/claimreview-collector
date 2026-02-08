@@ -18,14 +18,14 @@ comm==0.2.2
 coverage[toml]==7.11.2
 coveralls==4.0.2
 cssselect==1.2.0
-dateparser==1.2.2
+dateparser==1.3.0
 debugpy==1.8.5
 decorator==5.1.1
 dnspython==2.6.1
 docopt==0.6.2
 executing==2.1.0
 extruct==0.18.0
-fastapi==0.128.0
+fastapi==0.128.5
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
@@ -35,7 +35,7 @@ html-text==0.6.2
 html5lib==1.1
 idna==3.8
 iniconfig==2.0.0
-ipykernel==7.1.0
+ipykernel==7.2.0
 ipython==8.27.0
 isodate==0.6.1
 jedi==0.19.1
@@ -43,7 +43,7 @@ jellyfish==1.2.1
 jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
 jstyleson==0.0.2
-jupyter-client==8.6.2
+jupyter-client==8.8.0
 jupyter-core==5.7.2
 langdetect==1.0.9
 lxml==5.1.0
@@ -97,9 +97,10 @@ stack-data==0.6.3
 starlette==0.41.2
 tldextract==5.3.1
 tornado==6.5.4
-tqdm==4.67.2
+tqdm==4.67.3
 traitlets==5.14.3
 typing-extensions==4.12.2
+typing-inspection==0.4.2
 tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
