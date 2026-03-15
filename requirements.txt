@@ -8,7 +8,7 @@ appnope==0.1.4; platform_system == "Darwin"
 asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.14.3
-black==26.3.0
+black==26.3.1
 certifi==2026.2.25
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
@@ -99,7 +99,7 @@ soupsieve==2.6
 stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
-tornado==6.5.4
+tornado==6.5.5
 tqdm==4.67.3
 traitlets==5.14.3
 typer==0.24.1
