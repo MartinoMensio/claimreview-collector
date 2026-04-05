@@ -57,11 +57,11 @@ nbformat==5.10.4
 nest-asyncio==1.6.0
 numpy==2.4.1
 packaging==24.1
-pandas==3.0.1
+pandas==3.0.2
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
-pillow==12.1.1
+pillow==12.2.0
 platformdirs==4.3.2
 plotly==6.6.0
 pluggy==1.5.0
@@ -87,7 +87,7 @@ pyzmq==26.2.0
 rdflib==7.0.0
 referencing==0.35.1
 regex==2024.9.11
-requests==2.33.0
+requests==2.33.1
 requests-file==2.1.0
 rich==14.3.3
 rpds-py==0.20.0
@@ -105,11 +105,11 @@ traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.12.2
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.6.3
-uvicorn==0.42.0
+uvicorn==0.43.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
