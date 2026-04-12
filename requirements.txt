@@ -63,7 +63,7 @@ pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==12.2.0
 platformdirs==4.3.2
-plotly==6.6.0
+plotly==6.7.0
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
@@ -77,7 +77,7 @@ pygments==2.18.0
 pymongo==4.16.0
 pyparsing==3.1.4
 pyrdfa3==3.6.4
-pytest==9.0.2
+pytest==9.0.3
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 pytokens==0.4.1
@@ -105,11 +105,11 @@ traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.12.2
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.6.3
-uvicorn==0.43.0
+uvicorn==0.44.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
