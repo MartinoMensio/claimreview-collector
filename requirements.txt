@@ -8,8 +8,8 @@ appnope==0.1.4; platform_system == "Darwin"
 asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.14.3
-black==26.5.0
-certifi==2026.4.22
+black==26.5.1
+certifi==2026.5.20
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
 click==8.3.1
@@ -105,11 +105,11 @@ traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.12.2
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.7.0
-uvicorn==0.47.0
+uvicorn==0.48.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
