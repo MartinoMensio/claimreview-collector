@@ -99,7 +99,7 @@ soupsieve==2.6
 stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
-tornado==6.5.5
+tornado==6.5.6
 tqdm==4.67.3
 traitlets==5.14.3
 typer==0.24.1
