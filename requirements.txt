@@ -7,7 +7,7 @@ anyio==4.4.0
 appnope==0.1.4; platform_system == "Darwin"
 asttokens==2.4.1
 attrs==24.2.0
-beautifulsoup4==4.14.3
+beautifulsoup4==4.15.0
 black==26.5.1
 certifi==2026.5.20
 cffi==1.17.1; implementation_name == "pypy"
@@ -63,7 +63,7 @@ pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==12.2.0
 platformdirs==4.3.2
-plotly==6.7.0
+plotly==6.8.0
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
@@ -100,7 +100,7 @@ stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
 tornado==6.5.6
-tqdm==4.67.3
+tqdm==4.68.1
 traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.12.2
@@ -109,7 +109,7 @@ tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platf
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.7.0
-uvicorn==0.48.0
+uvicorn==0.49.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
