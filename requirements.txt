@@ -9,7 +9,7 @@ asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.15.0
 black==26.5.1
-certifi==2026.5.20
+certifi==2026.6.17
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
 click==8.3.1
@@ -18,7 +18,7 @@ comm==0.2.2
 coverage[toml]==7.11.2
 coveralls==4.1.0
 cssselect==1.2.0
-dateparser==1.4.0
+dateparser==1.4.1
 debugpy==1.8.5
 decorator==5.1.1
 dnspython==2.6.1
@@ -77,7 +77,7 @@ pygments==2.18.0
 pymongo==4.17.0
 pyparsing==3.1.4
 pyrdfa3==3.6.4
-pytest==9.1.0
+pytest==9.1.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 pytokens==0.4.1
@@ -100,7 +100,7 @@ stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
 tornado==6.5.7
-tqdm==4.68.2
+tqdm==4.68.3
 traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.15.0
