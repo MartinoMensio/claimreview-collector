@@ -57,7 +57,7 @@ nbformat==5.10.4
 nest-asyncio2==1.7.2
 numpy==2.4.1
 packaging==24.1
-pandas==3.0.3
+pandas==3.0.4
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
@@ -105,7 +105,7 @@ traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.15.0
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.7.0
