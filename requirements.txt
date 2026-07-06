@@ -57,11 +57,11 @@ nbformat==5.10.4
 nest-asyncio2==1.7.2
 numpy==2.4.1
 packaging==24.1
-pandas==3.0.4
+pandas==3.0.3
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
-pillow==12.2.0
+pillow==12.3.0
 platformdirs==4.3.2
 plotly==6.8.0
 pluggy==1.5.0
@@ -109,7 +109,7 @@ tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platf
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.7.0
-uvicorn==0.49.0
+uvicorn==0.50.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
