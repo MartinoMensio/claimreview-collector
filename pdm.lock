@@ -1391,7 +1391,7 @@ files = [
 
 [[package]]
 name = "plotly"
-version = "6.8.0"
+version = "6.9.0"
 requires_python = ">=3.8"
 summary = "An open-source interactive data visualization library for Python"
 groups = ["test"]
@@ -1400,8 +1400,8 @@ dependencies = [
     "packaging",
 ]
 files = [
-    {file = "plotly-6.8.0-py3-none-any.whl", hash = "sha256:13c5c4a0f70b74cab1913eda0de49b826df5931708eb6f9c3010040614700ec8"},
-    {file = "plotly-6.8.0.tar.gz", hash = "sha256:e088e7ddc68d4f70e3d66659224727a45296d71d2b8284181862d3d8f1f0d88f"},
+    {file = "plotly-6.9.0-py3-none-any.whl", hash = "sha256:36bebe2f1bb13884774fe61689c329071446f6ce4a8927fb1f0d6fb24f581236"},
+    {file = "plotly-6.9.0.tar.gz", hash = "sha256:967ad33e8c704fed051800d11d985eb206a9c795c14206b30a6f463ed9c67d0d"},
 ]
 
 [[package]]
@@ -2121,7 +2121,7 @@ files = [
 
 [[package]]
 name = "tqdm"
-version = "4.68.3"
+version = "4.68.4"
 requires_python = ">=3.8"
 summary = "Fast, Extensible Progress Meter"
 groups = ["default"]
@@ -2129,8 +2129,8 @@ dependencies = [
     "colorama; platform_system == \"Windows\"",
 ]
 files = [
-    {file = "tqdm-4.68.3-py3-none-any.whl", hash = "sha256:39832cc2def2789a6f29df83f172db7416cea70052c0907a57801c5f2fdccb03"},
-    {file = "tqdm-4.68.3.tar.gz", hash = "sha256:00dfa48452b6b6cfae3dd9885636c23d3422d1ec97c66d96818cbd5e0821d482"},
+    {file = "tqdm-4.68.4-py3-none-any.whl", hash = "sha256:5168118b2368f48c561afda8020fd79195b1bdb0bdf8086b88442c267a315dc2"},
+    {file = "tqdm-4.68.4.tar.gz", hash = "sha256:19829c9673638f2a0b8617da4cdcb927e831cd88bcfcb6e78d42a4d1af131520"},
 ]
 
 [[package]]
@@ -2192,7 +2192,7 @@ version = "2024.1"
 requires_python = ">=2"
 summary = "Provider of IANA time zone data"
 groups = ["default", "test"]
-marker = "sys_platform == \"win32\" or sys_platform == \"emscripten\" or platform_system == \"Windows\""
+marker = "sys_platform == \"emscripten\" or sys_platform == \"win32\" or platform_system == \"Windows\""
 files = [
     {file = "tzdata-2024.1-py2.py3-none-any.whl", hash = "sha256:9068bc196136463f5245e51efda838afa15aaeca9903f49050dfa2679db4d252"},
     {file = "tzdata-2024.1.tar.gz", hash = "sha256:2674120f8d891909751c38abcdfd386ac0a5a1127954fbc332af6b5ceae07efd"},
@@ -2237,7 +2237,7 @@ files = [
 
 [[package]]
 name = "uvicorn"
-version = "0.50.0"
+version = "0.51.0"
 requires_python = ">=3.10"
 summary = "The lightning-fast ASGI server."
 groups = ["default"]
@@ -2247,8 +2247,8 @@ dependencies = [
     "typing-extensions>=4.0; python_version < \"3.11\"",
 ]
 files = [
-    {file = "uvicorn-0.50.0-py3-none-any.whl", hash = "sha256:05f0eb19edf38208f79f43df8a63081b48df31b0cd1e5997be957a4dc97d1b19"},
-    {file = "uvicorn-0.50.0.tar.gz", hash = "sha256:0c92e1bc2259cb7faa4fcef774a5966588f2e88542744550b66799fba10b76f1"},
+    {file = "uvicorn-0.51.0-py3-none-any.whl", hash = "sha256:5d38af6cd620f2ae3849fb44fd4879e0890aa1febe8d47eb355fb45d93fe6a5b"},
+    {file = "uvicorn-0.51.0.tar.gz", hash = "sha256:f6f4b69b657c312f516dd2d268ab9ae6f254b11e4bac504f37b2ab58b24dd0b0"},
 ]
 
 [[package]]
