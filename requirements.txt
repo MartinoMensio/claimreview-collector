@@ -100,7 +100,7 @@ stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
 tornado==6.5.7
-tqdm==4.68.4
+tqdm==4.69.0
 traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.15.0
