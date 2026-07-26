@@ -9,7 +9,7 @@ asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.15.0
 black==26.5.1
-certifi==2026.6.17
+certifi==2026.7.22
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
 click==8.3.1
@@ -28,7 +28,7 @@ fastapi==0.135.1
 fastjsonschema==2.20.0
 filelock==3.16.0
 flatten-json==0.1.14
-goose3==3.1.21
+goose3==3.1.22
 h11==0.14.0
 html-text==0.6.2
 html5lib==1.1
@@ -57,7 +57,7 @@ nbformat==5.10.4
 nest-asyncio2==1.7.2
 numpy==2.4.1
 packaging==24.1
-pandas==3.0.3
+pandas==3.0.5
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
@@ -100,12 +100,12 @@ stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.1
 tornado==6.5.7
-tqdm==4.69.0
+tqdm==4.69.1
 traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.15.0
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
 urllib3==2.7.0
