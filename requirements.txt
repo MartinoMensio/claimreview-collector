@@ -57,13 +57,13 @@ nbformat==5.11.1
 nest-asyncio2==1.7.2
 numpy==2.4.1
 packaging==24.1
-pandas==3.0.5
+pandas==3.0.6
 parso==0.8.4
 pathspec==1.0.3
 pexpect==4.9.0; sys_platform != "win32" and sys_platform != "emscripten"
 pillow==12.3.0
 platformdirs==4.3.2
-plotly==7.0.0
+plotly==7.1.0
 pluggy==1.5.0
 prompt-toolkit==3.0.47
 psutil==6.0.0
@@ -99,17 +99,17 @@ soupsieve==2.6
 stack-data==0.6.3
 starlette==0.52.1
 tldextract==5.3.2
-tornado==6.5.8
+tornado==6.5.10
 tqdm==4.70.1
 traitlets==5.14.3
 typer==0.24.1
 typing-extensions==4.15.0
 typing-inspection==0.4.2
-tzdata==2024.1; sys_platform == "emscripten" or sys_platform == "win32" or platform_system == "Windows"
+tzdata==2024.1; sys_platform == "win32" or sys_platform == "emscripten" or platform_system == "Windows"
 tzlocal==5.2
 unidecode==1.4.0
-urllib3==2.7.0
-uvicorn==0.52.4
+urllib3==2.8.0
+uvicorn==0.53.0
 w3lib==2.2.1
 wcwidth==0.2.13
 webencodings==0.5.1
