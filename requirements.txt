@@ -8,7 +8,7 @@ appnope==0.1.4; platform_system == "Darwin"
 asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.15.0
-black==26.10.0
+black==26.10.1
 certifi==2026.7.22
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
@@ -73,7 +73,7 @@ pycparser==2.22; implementation_name == "pypy"
 pydantic==2.7.4
 pydantic-core==2.18.4
 pygments==2.18.0
-pymongo==4.18.2
+pymongo==4.18.3
 pyparsing==3.1.4
 pyrdfa3==3.6.4
 pytest==9.1.1
