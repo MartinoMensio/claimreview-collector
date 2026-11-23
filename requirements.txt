@@ -9,7 +9,7 @@ asttokens==2.4.1
 attrs==24.2.0
 beautifulsoup4==4.15.0
 black==26.10.1
-certifi==2026.10.23
+certifi==2026.11.20
 cffi==1.17.1; implementation_name == "pypy"
 charset-normalizer==3.3.2
 click==8.3.1
@@ -18,7 +18,7 @@ comm==0.2.2
 coverage[toml]==7.11.2
 coveralls==4.1.0
 cssselect==1.2.0
-dateparser==1.5.0
+dateparser==1.5.1
 debugpy==1.8.5
 decorator==5.1.1
 dnspython==2.8.0
@@ -73,7 +73,7 @@ pycparser==2.22; implementation_name == "pypy"
 pydantic==2.7.4
 pydantic-core==2.18.4
 pygments==2.18.0
-pymongo==4.20.0
+pymongo==4.20.1
 pyparsing==3.1.4
 pyrdfa3==3.6.4
 pytest==9.2.0
